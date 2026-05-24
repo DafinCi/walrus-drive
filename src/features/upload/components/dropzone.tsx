@@ -9,12 +9,17 @@ import {
 import { executeWalrusUpload } from "../services/upload.service";
 import { UploadStatus, WalrusUploadResult } from "../types/upload.types";
 import { UploadCloud, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function Dropzone() {
+  const queryClient = useQueryClient();
   const account = useCurrentAccount();
   const suiClient = useSuiClient();
   const { mutateAsync: signAndExecuteTransaction } =
     useSignAndExecuteTransaction();
+  const params = useParams();
+  const workspaceId = params.workspaceId as string;
 
   // Local State Management yang lu minta
   const [status, setStatus] = useState<UploadStatus>("idle");
@@ -46,6 +51,7 @@ export function Dropzone() {
       const uploadResult = await executeWalrusUpload({
         file,
         ownerAddress: account.address,
+        workspaceId: workspaceId,
         signAndExecuteTransaction,
         suiClient,
         onProgress: (msg) => {
@@ -60,6 +66,34 @@ export function Dropzone() {
             setStatus("processing");
           }
         },
+      });
+
+      setProgressText("Menyimpan metadata file ke database...");
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          blobId: uploadResult.blobId,
+          registerTx: uploadResult.txDigest.register,
+          certifyTx: uploadResult.txDigest.certify,
+          fileName: uploadResult.metadata.name,
+          mimeType: uploadResult.metadata.type,
+          fileSize: uploadResult.metadata.size,
+          walletAddress: account.address,
+          workspaceId: workspaceId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(
+          errData.error || "Gagal menyimpan metadata ke database.",
+        );
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: ["workspace-files", workspaceId],
       });
 
       setResult(uploadResult);
