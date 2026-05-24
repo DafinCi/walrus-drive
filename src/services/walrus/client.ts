@@ -1,18 +1,26 @@
 // src/services/walrus/client.ts
-import { SuiGrpcClient } from "@mysten/sui/grpc"; // (Atau sesuaikan import path jika ada perubahan di package Sui)
+import { SuiGrpcClient } from "@mysten/sui/grpc";
 import { walrus } from "@mysten/walrus";
 
-// Menggunakan pola Extension (Sui Client + Walrus Plugin)
-export const walrusClient = new SuiGrpcClient({
+// 1. Inisialisasi SuiGrpcClient menggunakan Node Resmi Testnet Mysten (Sesuai Docs)
+// Ini menjamin koneksi gRPC-Web dari browser aman dari error 'Failed to fetch'
+const baseGrpcClient = new SuiGrpcClient({
   network: "testnet",
   baseUrl: "https://fullnode.testnet.sui.io:443",
-}).$extend(
+});
+
+// 2. Extend client dengan modul Walrus + Konfigurasi Upload Relay & WASM CDN
+export const walrusClient = baseGrpcClient.$extend(
   walrus({
+    // Konfigurasi Relay Node untuk menghemat request di browser
     uploadRelay: {
       host: "https://upload-relay.testnet.walrus.space",
       sendTip: {
-        max: 10_000, // Biarkan SDK otomatis menghitung tip (max 10.000 MIST)
+        max: 10000, // Batas maksimal tip dalam satuan MIST
       },
     },
+    // 🔥 PENTING UNTUK BROWSER: Muat modul WASM dari CDN Resmi agar proses encode lancar
+    wasmUrl:
+      "https://unpkg.com/@mysten/walrus-wasm@latest/web/walrus_wasm_bg.wasm",
   }),
 );

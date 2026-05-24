@@ -128,9 +128,16 @@ export function Dropzone() {
           id="file-upload"
           type="file"
           onChange={onFileInput}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+          // [UBAHAN 1] Tambahkan dinamis class: sembunyikan input (hidden) saat statusnya success
+          className={`absolute inset-0 w-full h-full opacity-0 disabled:cursor-not-allowed ${
+            status === "success" ? "hidden" : "cursor-pointer"
+          }`}
+          // [UBAHAN 2] Tambahkan 'status === "success"' ke dalam list disabled
           disabled={
-            status === "processing" || status === "action_required" || !account
+            status === "processing" ||
+            status === "action_required" ||
+            status === "success" ||
+            !account
           }
           title="Pilih file untuk diupload"
           aria-label="Pilih file untuk diupload"
@@ -199,7 +206,7 @@ export function Dropzone() {
               <CheckCircle2 className="w-10 h-10 text-green-500" />
               <div>
                 <p className="font-semibold text-green-400">Upload Sukses!</p>
-                <div className="mt-3 p-3 bg-black/50 rounded-lg text-left text-xs space-y-1 overflow-hidden">
+                <div className="mt-3 p-3 bg-black/50 rounded-lg text-left text-xs space-y-1 overflow-hidden relative z-10 pointer-events-auto">
                   <p className="text-gray-400 truncate">
                     <span className="font-bold">File:</span>{" "}
                     {result.metadata.name}
@@ -209,22 +216,39 @@ export function Dropzone() {
                     {result.blobId}
                   </p>
 
+                  {/* LINK AGGREGATOR YANG SUDAH KEBAL DARI INPUT LAYER */}
                   <a
                     href={`https://aggregator.walrus-testnet.walrus.space/v1/blobs/${result.blobId}`}
                     target="_blank"
                     rel="noreferrer"
                     className="block mt-2 text-blue-400 underline hover:text-blue-300 font-mono"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     🔗 Buka File di Walrus Aggregator
                   </a>
+
+                  {result.metadata.type.startsWith("image/") && (
+                    <div className="mt-4 p-2 bg-black border border-gray-800 rounded-lg">
+                      <p className="text-gray-500 mb-2 font-mono">
+                        Live Preview:
+                      </p>
+                      {/* Kita panggil langsung URL aggregatornya ke dalam tag img */}
+                      <img
+                        src={`https://aggregator.walrus-testnet.walrus.space/v1/blobs/${result.blobId}`}
+                        alt="Walrus Blob Preview"
+                        className="w-full h-auto max-h-48 object-contain rounded"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               <button
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   resetState();
                 }}
-                className="mt-4 px-4 py-2 text-xs bg-gray-800 text-white rounded pointer-events-auto hover:bg-gray-700"
+                className="mt-4 px-4 py-2 text-xs bg-gray-800 text-white rounded pointer-events-auto hover:bg-gray-700 relative z-10"
               >
                 Upload File Lain
               </button>

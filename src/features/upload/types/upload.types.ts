@@ -23,5 +23,5 @@ export interface WalrusUploadResult {
     certify: string;
   };
   metadata: UploadMetadata;
-  raw?: unknown;
+  raw?: any;
 }
