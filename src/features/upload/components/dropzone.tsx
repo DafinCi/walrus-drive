@@ -183,7 +183,7 @@ export function Dropzone() {
               <UploadCloud className="w-10 h-10 text-gray-400" />
               <div>
                 <p className="font-semibold text-white">
-                  Drag & drop file Anda ke sini
+                  Drag & drop file Anda ke sini (test doang)
                 </p>
                 <p className="text-sm text-gray-400">
                   Atau klik untuk memilih file dari komputer

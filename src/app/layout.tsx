@@ -1,9 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Chakra_Petch } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/providers/app-provider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const chakraPetch = Chakra_Petch({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-chakra",
+});
 
 export const metadata: Metadata = {
   title: "Walrus Drive",
@@ -30,8 +39,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${chakraPetch.variable}`}
+    >
+      <body className={`${inter.className} antialiased`}>
         <AppProvider>{children}</AppProvider>
       </body>
     </html>
