@@ -14,40 +14,49 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Wallet, LogOut, ChevronDown, Copy, Check } from "lucide-react";
-import { useState } from "react";
+import {
+  Wallet,
+  LogOut,
+  ChevronDown,
+  Copy,
+  Check,
+  Loader2,
+} from "lucide-react";
+import { useState, useEffect } from "react"; // 🔥 Tambahkan useEffect di sini
 
-/**
- * Shorten a Sui address for display.
- * e.g. 0x1234...abcd
- */
 function shortenAddress(address: string): string {
   if (address.length < 12) return address;
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
-/**
- * WalletConnectButton
- *
- * Two states:
- * 1. Disconnected — shows available wallets as connect targets
- * 2. Connected — shows shortened address with copy + disconnect actions
- *
- * useWallets() returns all wallets registered via the Wallet Standard.
- * We render each wallet as a separate connect option rather than auto-picking
- * wallet[0] — this gives users control and avoids silently connecting to
- * the wrong wallet in multi-wallet environments (Slippage, Suiet, etc).
- *
- * useConnectWallet / useDisconnectWallet are mutation hooks — they expose
- * .mutate() for fire-and-forget and .mutateAsync() for awaited flows.
- * We use .mutate() here since we don't need post-connect navigation.
- */
 export function WalletConnectButton() {
   const account = useCurrentAccount();
   const wallets = useWallets();
   const { mutate: connect, isPending: isConnecting } = useConnectWallet();
   const { mutate: disconnect } = useDisconnectWallet();
   const [copied, setCopied] = useState(false);
+
+  // 🔥 1. Tambahkan state guard untuk mendeteksi status mount di client
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // 🔥 2. Jika masih di fase SSR atau hidrasi awal, tampilkan skeleton/loading state yang konsisten
+  if (!mounted) {
+    return (
+      <Button
+        variant="outline"
+        size="sm"
+        disabled
+        className="gap-2 min-w-[120px]"
+      >
+        <Loader2 className="h-3.5 w-3.5 animate-spin opacity-50" />
+        <span>Memuat...</span>
+      </Button>
+    );
+  }
 
   // ── Connected state ─────────────────────────────────────────────────────
   if (account) {

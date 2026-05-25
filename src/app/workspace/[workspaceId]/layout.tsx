@@ -1,50 +1,52 @@
+import { WorkspaceNavbar } from "@/components/layout/workspace-navbar";
 import Link from "next/link";
 import { LayoutDashboard, Settings, ShieldCheck } from "lucide-react";
-import { QueryClientProvider } from "@tanstack/react-query";
 
 export default async function WorkspaceLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { workspaceId: string };
+  params: Promise<{ workspaceId: string }>; // Next.js 15 Async Params fix
 }) {
   const { workspaceId } = await params;
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gray-950 text-white">
-      {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 border-r border-gray-800 bg-gray-900/50 p-6 flex flex-col space-y-6">
-        <div className="font-bold text-xl tracking-wider text-blue-500">
-          Walrus Drive
-        </div>
-        <nav className="flex flex-col space-y-2">
-          <Link
-            href={`/workspace/${workspaceId}`}
-            className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-800 text-gray-300 hover:text-white transition"
-          >
-            <LayoutDashboard className="w-5 h-5 text-gray-400" />
-            <span>Dashboard</span>
-          </Link>
-          <Link
-            href={`/workspace/${workspaceId}/verify`}
-            className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-800 text-gray-300 hover:text-white transition"
-          >
-            <ShieldCheck className="w-5 h-5 text-gray-400" />
-            <span>Verify Proof</span>
-          </Link>
-          <Link
-            href={`/workspace/${workspaceId}/settings`}
-            className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-800 text-gray-300 hover:text-white transition"
-          >
-            <Settings className="w-5 h-5 text-gray-400" />
-            <span>Settings</span>
-          </Link>
-        </nav>
-      </aside>
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      {/* 1. Persistent Global App Shell Navbar */}
+      <WorkspaceNavbar />
 
-      {/* Main Content Area */}
-      <main className="flex-1 w-full relative">{children}</main>
+      <div className="flex-1 flex flex-col md:flex-row">
+        {/* 2. Sidebar Navigation Layer */}
+        <aside className="w-full md:w-64 border-r border-border bg-card p-6 flex flex-col space-y-6 shrink-0">
+          <nav className="flex flex-col space-y-1">
+            <Link
+              href={`/workspace/${workspaceId}`}
+              className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors font-medium text-sm"
+            >
+              <LayoutDashboard className="w-4 h-4 text-muted-foreground" />
+              <span>Dashboard</span>
+            </Link>
+            <Link
+              href={`/workspace/${workspaceId}/verify`}
+              className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors font-medium text-sm"
+            >
+              <ShieldCheck className="w-4 h-4 text-muted-foreground" />
+              <span>Verify Proof</span>
+            </Link>
+            <Link
+              href={`/workspace/${workspaceId}/settings`}
+              className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors font-medium text-sm"
+            >
+              <Settings className="w-4 h-4 text-muted-foreground" />
+              <span>Settings</span>
+            </Link>
+          </nav>
+        </aside>
+
+        {/* 3. Dynamic Page Content Wrapper */}
+        <main className="flex-1 w-full relative bg-background">{children}</main>
+      </div>
     </div>
   );
 }
