@@ -21,14 +21,12 @@ export function Dropzone() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
 
-  // Local State Management yang lu minta
   const [status, setStatus] = useState<UploadStatus>("idle");
   const [progressText, setProgressText] = useState<string>("");
   const [errorText, setErrorText] = useState<string | null>(null);
   const [result, setResult] = useState<WalrusUploadResult | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  // Helper untuk reset state
   const resetState = () => {
     setStatus("idle");
     setProgressText("");
@@ -43,11 +41,11 @@ export function Dropzone() {
       return;
     }
 
-    // Reset error dan mulai flow
     resetState();
     setStatus("preparing");
 
     try {
+      // Jalankan core upload service (Di dalamnya sudah termasuk hitung checksum & save ke DB)
       const uploadResult = await executeWalrusUpload({
         file,
         ownerAddress: account.address,
@@ -56,7 +54,6 @@ export function Dropzone() {
         suiClient,
         onProgress: (msg) => {
           setProgressText(msg);
-          // Ganti status ke action_required jika sedang menunggu wallet
           if (
             msg.toLowerCase().includes("approve") ||
             msg.toLowerCase().includes("tanda tangan")
@@ -68,32 +65,10 @@ export function Dropzone() {
         },
       });
 
-      setProgressText("Menyimpan metadata file ke database...");
-
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          blobId: uploadResult.blobId,
-          registerTx: uploadResult.txDigest.register,
-          certifyTx: uploadResult.txDigest.certify,
-          fileName: uploadResult.metadata.name,
-          mimeType: uploadResult.metadata.type,
-          fileSize: uploadResult.metadata.size,
-          walletAddress: account.address,
-          workspaceId: workspaceId,
-        }),
-      });
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(
-          errData.error || "Gagal menyimpan metadata ke database.",
-        );
-      }
-
+      // 🔥 FIX 1: COCOKKAN QUERY KEY DENGAN HOOK TANSTACK KITA
+      // Ini memicu TanStack Query menarik ulang bundle data komplit (workspace, files, members)
       queryClient.invalidateQueries({
-        queryKey: ["workspace-files", workspaceId],
+        queryKey: ["workspace-detail", workspaceId],
       });
 
       setResult(uploadResult);
@@ -108,7 +83,6 @@ export function Dropzone() {
     }
   };
 
-  // --- HTML5 Drag & Drop Handlers ---
   const onDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -123,13 +97,11 @@ export function Dropzone() {
     (e: React.DragEvent) => {
       e.preventDefault();
       setIsDragging(false);
-
       if (status === "processing" || status === "action_required") return;
-
       const file = e.dataTransfer.files?.[0];
       if (file) processFile(file);
     },
-    [status, account],
+    [status, account, workspaceId],
   );
 
   const onFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,7 +109,6 @@ export function Dropzone() {
     if (file) processFile(file);
   };
 
-  // --- Rendering Conditional Styles ---
   const borderStyles = isDragging
     ? "border-blue-500 bg-blue-500/10"
     : status === "error"
@@ -148,25 +119,19 @@ export function Dropzone() {
 
   return (
     <div className="w-full max-w-xl mx-auto space-y-4">
-      {/* Area Dropzone */}
       <div
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         className={`relative flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-xl transition-all duration-200 ${borderStyles}`}
       >
-        <label htmlFor="file-upload" className="sr-only">
-          Pilih file untuk diupload
-        </label>
         <input
           id="file-upload"
           type="file"
           onChange={onFileInput}
-          // [UBAHAN 1] Tambahkan dinamis class: sembunyikan input (hidden) saat statusnya success
           className={`absolute inset-0 w-full h-full opacity-0 disabled:cursor-not-allowed ${
             status === "success" ? "hidden" : "cursor-pointer"
           }`}
-          // [UBAHAN 2] Tambahkan 'status === "success"' ke dalam list disabled
           disabled={
             status === "processing" ||
             status === "action_required" ||
@@ -174,7 +139,6 @@ export function Dropzone() {
             !account
           }
           title="Pilih file untuk diupload"
-          aria-label="Pilih file untuk diupload"
         />
 
         <div className="flex flex-col items-center space-y-3 pointer-events-none text-center">
@@ -183,7 +147,7 @@ export function Dropzone() {
               <UploadCloud className="w-10 h-10 text-gray-400" />
               <div>
                 <p className="font-semibold text-white">
-                  Drag & drop file Anda ke sini (test doang)
+                  Drag & drop file Anda ke sini
                 </p>
                 <p className="text-sm text-gray-400">
                   Atau klik untuk memilih file dari komputer
@@ -249,8 +213,11 @@ export function Dropzone() {
                     <span className="font-bold text-gray-400">Blob ID:</span>{" "}
                     {result.blobId}
                   </p>
+                  <p className="text-green-400 truncate">
+                    <span className="font-bold text-gray-400">Checksum:</span>{" "}
+                    {result.metadata.checksum.substring(0, 15)}...
+                  </p>
 
-                  {/* LINK AGGREGATOR YANG SUDAH KEBAL DARI INPUT LAYER */}
                   <a
                     href={`https://aggregator.walrus-testnet.walrus.space/v1/blobs/${result.blobId}`}
                     target="_blank"
@@ -266,7 +233,6 @@ export function Dropzone() {
                       <p className="text-gray-500 mb-2 font-mono">
                         Live Preview:
                       </p>
-                      {/* Kita panggil langsung URL aggregatornya ke dalam tag img */}
                       <img
                         src={`https://aggregator.walrus-testnet.walrus.space/v1/blobs/${result.blobId}`}
                         alt="Walrus Blob Preview"

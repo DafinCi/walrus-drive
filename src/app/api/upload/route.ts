@@ -15,6 +15,8 @@ export async function POST(request: Request) {
       fileSize,
       walletAddress,
       workspaceId,
+      checksum,
+      storageEpoch,
     } = body;
 
     // Validasi input minimal
@@ -38,6 +40,8 @@ export async function POST(request: Request) {
           wallet_address: walletAddress,
           register_tx_digest: registerTx,
           certify_tx_digest: certifyTx,
+          checksum: checksum,
+          storage_epoch: storageEpoch || 1,
         },
       ])
       .select()

@@ -1,6 +1,6 @@
-// src/features/upload/services/upload.service.ts
 import { walrusClient } from "@/services/walrus/client";
 import { WalrusFile, RetryableWalrusClientError } from "@mysten/walrus";
+import { calculateFileChecksum } from "@/lib/checksum";
 
 export interface WalrusUploadResult {
   blobId: string;
@@ -13,6 +13,7 @@ export interface WalrusUploadResult {
     size: number;
     type: string;
     uploadedAt: number;
+    checksum: string;
   };
   raw: {
     filesInfo: unknown;
@@ -21,11 +22,10 @@ export interface WalrusUploadResult {
   };
 }
 
-// 1. TAMBAH: workspaceId di parameter
 interface UploadParams {
   file: File;
   ownerAddress: string;
-  workspaceId: string; // <--- Wajib ada sekarang
+  workspaceId: string;
   signAndExecuteTransaction: (params: {
     transaction: any;
   }) => Promise<{ digest: string }>;
@@ -49,7 +49,11 @@ export async function executeWalrusUpload({
   };
 
   try {
-    logProgress("Mempersiapkan dan mengonversi file ke format WalrusFile...");
+    logProgress(
+      "Mempersiapkan file dan menghitung Integrity Checksum SHA-256...",
+    );
+    const fileChecksum = await calculateFileChecksum(file); // 👈 HITUNG SEBELUM UPLOAD
+
     const fileBuffer = await file.arrayBuffer();
     const walrusFile = WalrusFile.from({
       contents: new Uint8Array(fileBuffer),
@@ -98,8 +102,7 @@ export async function executeWalrusUpload({
     const filesInfo = await flow.listFiles();
     const finalBlobId = filesInfo[0].blobId;
 
-    // 2. TAMBAH: Langkah ke-5 Persistence Database (API Route)
-    logProgress("Langkah 5/5: Menyimpan metadata ke database...");
+    logProgress("Langkah 5/5: Menyimpan metadata ke database terpusat...");
     const apiResponse = await fetch("/api/upload", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -112,12 +115,13 @@ export async function executeWalrusUpload({
         fileSize: file.size,
         walletAddress: ownerAddress,
         workspaceId: workspaceId,
+        checksum: fileChecksum, // 👈 KIRIM CHECKSUM KE API
+        storageEpoch: 1, // 👈 KIRIM METADATA WALRUS EPOCH
       }),
     });
 
     if (!apiResponse.ok) {
       const errData = await apiResponse.json().catch(() => ({}));
-      // Melempar error spesifik agar ditangkap catch block di bawah
       throw new Error(
         `[DB_ERROR] Gagal menyimpan metadata: ${errData.error || apiResponse.statusText}`,
       );
@@ -134,8 +138,9 @@ export async function executeWalrusUpload({
       metadata: {
         name: file.name,
         size: file.size,
-        type: file.type,
+        type: file.type || "application/octet-stream",
         uploadedAt: Date.now(),
+        checksum: fileChecksum, // 👈 MASUKKAN KE RESULT OBJECT
       },
       raw: {
         filesInfo,
@@ -151,48 +156,12 @@ export async function executeWalrusUpload({
 
 export function parseWalrusError(error: any): string {
   console.error("--- RAW ERROR DI CATCH ---", error);
-
   const errorMessage = error?.message || String(error);
-
-  // Filter Error Database kita sendiri agar teksnya tidak ditimpa
-  if (errorMessage.includes("[DB_ERROR]")) {
+  if (errorMessage.includes("[DB_ERROR]"))
     return errorMessage.replace("[DB_ERROR] ", "");
-  }
-
-  if (error instanceof RetryableWalrusClientError) {
-    try {
-      walrusClient.walrus.reset();
-    } catch (e) {}
-    return "Koneksi ke node Walrus terputus karena perubahan siklus jaringan (Epoch). Sistem telah mereset client, silakan coba upload kembali.";
-  }
-
-  if (
-    errorMessage.includes("Rejected by user") ||
-    errorMessage.includes("User rejected") ||
-    errorMessage.includes("Reject")
-  ) {
-    return "Transaksi dibatalkan. Anda harus menyetujui tanda tangan di wallet untuk melanjutkan upload.";
-  }
-
-  if (
-    errorMessage.includes("Insufficient balance") ||
-    errorMessage.includes("InsufficientBalance")
-  ) {
-    if (errorMessage.includes("wal::WAL") || errorMessage.includes("WAL")) {
-      return "Saldo koin WAL Anda tidak cukup untuk membayar biaya sewa storage file ini.";
-    }
-    return "Saldo koin SUI Anda tidak cukup untuk membayar Gas Fee atau Tip Relay.";
-  }
-
-  if (
-    errorMessage.includes("Failed to fetch") ||
-    errorMessage.includes("Network Error")
-  ) {
-    return "Gagal menghubungi server Walrus Relay. Periksa koneksi internet Anda atau server Relay sedang overload.";
-  }
-
-  return (
-    errorMessage ||
-    "Terjadi kesalahan internal yang tidak diketahui saat mengunggah file ke Walrus."
-  );
+  if (error instanceof RetryableWalrusClientError)
+    return "Koneksi node terputus, silakan coba kembali.";
+  if (errorMessage.includes("Rejected by user"))
+    return "Transaksi dibatalkan oleh pengguna.";
+  return errorMessage || "Terjadi kesalahan internal.";
 }

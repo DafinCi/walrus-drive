@@ -5,7 +5,6 @@ interface PageProps {
 }
 
 export default async function WorkspacePage({ params }: PageProps) {
-  // Await params karena di Next.js 15+ params itu Asynchronous
   const { workspaceId } = await params;
 
   return (
