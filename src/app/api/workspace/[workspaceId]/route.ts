@@ -6,21 +6,60 @@ export async function GET(
   { params }: { params: Promise<{ workspaceId: string }> },
 ) {
   try {
-    const { workspaceId } = await params; // Ingat Next.js 15 rules
+    const { workspaceId } = await params;
 
-    const { data, error } = await supabaseAdmin
+    if (!workspaceId) {
+      return NextResponse.json(
+        { success: false, error: "Workspace ID diperlukan" },
+        { status: 400 },
+      );
+    }
+
+    // 1. Fetch Workspace Metadata
+    const { data: workspace, error: wsError } = await supabaseAdmin
+      .from("workspaces")
+      .select("*")
+      .eq("id", workspaceId)
+      .maybeSingle();
+
+    if (wsError) throw wsError;
+    if (!workspace) {
+      return NextResponse.json(
+        { success: false, error: "Workspace tidak ditemukan" },
+        { status: 404 },
+      );
+    }
+
+    // 2. Fetch Files di dalam Workspace (Urutan terbaru di atas)
+    const { data: files, error: filesError } = await supabaseAdmin
       .from("files")
       .select("*")
       .eq("workspace_id", workspaceId)
       .order("created_at", { ascending: false });
 
-    if (error) throw error;
+    if (filesError) throw filesError;
 
-    return NextResponse.json({ success: true, data });
+    // 3. Fetch Members di dalam Workspace
+    const { data: members, error: membersError } = await supabaseAdmin
+      .from("workspace_members")
+      .select("*")
+      .eq("workspace_id", workspaceId)
+      .order("joined_at", { ascending: true });
+
+    if (membersError) throw membersError;
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        workspace,
+        files,
+        members,
+      },
+    });
   } catch (error: any) {
-    console.error("Fetch Files Error:", error);
+    console.error("Fetch Workspace Full Data Error:", error);
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: error.message || "Internal Server Error" },
       { status: 500 },
     );
   }
