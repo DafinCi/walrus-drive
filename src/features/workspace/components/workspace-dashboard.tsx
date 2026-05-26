@@ -1,154 +1,201 @@
 "use client";
 
-import { useState } from "react";
-import { useWorkspaceQuery } from "../hooks/use-workspace-query";
+import { useState, Suspense } from "react";
+import {
+  useParams,
+  useRouter,
+  usePathname,
+  useSearchParams,
+} from "next/navigation";
+import { Loader2, AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+// Import Lego Components Presentational
+import { WorkspaceHeader } from "./workspace-header";
+import { WorkspaceToolbar } from "./workspace-toolbar";
+import { WorkspaceEmpty } from "./workspace-empty";
+import { WorkspaceGrid } from "./workspace-grid";
+import { WorkspaceTable } from "./workspace-table";
+import { InviteModal } from "@/features/invite/components/invite-modal";
+
+// Import Dropzone Core Upload Service
 import { Dropzone } from "@/features/upload/components/dropzone";
-import { Loader2, HardDrive, Users, FileIcon, Grid, List } from "lucide-react";
 
-interface WorkspaceDashboardProps {
-  workspaceId: string;
-}
+// Import Single Source of Truth Query Hook
+import { useWorkspaceQuery } from "../hooks/use-workspace-query";
 
-export function WorkspaceDashboard({ workspaceId }: WorkspaceDashboardProps) {
-  // State untuk toggle tampilan (Grid vs Table) nanti di Step 5
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+function DashboardContent() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const params = useParams();
 
-  // Panggil single source of truth dari TanStack Hook
+  const workspaceId = params.workspaceId as string;
+
+  // State Lokal Pengendali Modals Portal
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+
+  // 1. CONSUME DATA UTAMA NATIVE FROM TANSTACK QUERY
   const { data, isLoading, error } = useWorkspaceQuery(workspaceId);
 
-  // 1. Handling Loading State
+  // 2. READ & DERIVE URL SELECTION STATE
+  const view = (searchParams.get("view") === "table" ? "table" : "grid") as
+    | "grid"
+    | "table";
+  const searchQuery = searchParams.get("search") ?? "";
+
+  // 3. SAFE DERIVE SUB-DATA SESUAI TIPE WorkspaceFullPayload
+  const workspaceData = data?.workspace;
+  const rawFiles = data?.files ?? [];
+  const members = data?.members ?? [];
+
+  // 4. DATA MAPPING: Ubah snake_case (DB) ke camelCase (UI Component)
+  // Ini mencegah error di dalam FileCard dan FileRow
+  const uiFiles = rawFiles.map((f) => ({
+    id: f.id,
+    blobId: f.blob_id,
+    name: f.file_name,
+    mimeType: f.mime_type,
+    size: f.file_size,
+    uploader: f.wallet_address,
+    createdAt: f.created_at,
+  }));
+
+  // 5. URL MUTATION HANDLER
+  const handleViewChange = (newView: "grid" | "table") => {
+    const currentParams = new URLSearchParams(searchParams.toString());
+    currentParams.set("view", newView);
+    router.push(`${pathname}?${currentParams.toString()}`);
+  };
+
+  // 6. DATA RUNTIME FILTERING (Reaktif terhadap pencarian URL global)
+  const filteredFiles = uiFiles.filter((file) =>
+    file.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  // =========================================================================
+  // STATE RENDERING MATRIX
+  // =========================================================================
+
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
-        <p className="text-sm text-gray-400 font-mono animate-pulse">
-          Synchronizing decentralized state...
+      <div className="flex flex-col items-center justify-center min-h-[75vh] gap-3">
+        <Loader2 className="h-8 w-8 text-primary animate-spin" />
+        <p className="text-sm text-muted-foreground animate-pulse font-medium">
+          Sinkronisasi arsitektur runtime workspace...
         </p>
       </div>
     );
   }
 
-  // 2. Handling Error State
-  if (error || !data) {
+  if (error || !data || !workspaceData) {
     return (
-      <div className="p-6 border border-red-900/50 bg-red-950/20 rounded-xl max-w-2xl mx-auto mt-12 text-center">
-        <h3 className="text-red-400 font-semibold text-lg">
-          Gagal Memuat Workspace
+      <div className="flex flex-col items-center justify-center min-h-[75vh] max-w-md mx-auto text-center p-6 border border-destructive/20 bg-destructive/5 rounded-2xl shadow-xl">
+        <AlertTriangle className="h-10 w-10 text-destructive mb-3" />
+        <h3 className="text-lg font-bold text-foreground">
+          Akses Komando Workspace Gagal
         </h3>
-        <p className="text-gray-400 text-sm mt-1">
-          {error instanceof Error
-            ? error.message
-            : "Pastikan ID Workspace benar atau Anda memiliki hak akses."}
+        <p className="text-sm text-muted-foreground mt-1 mb-5 leading-relaxed">
+          Gagal memuat data dari API. Pastikan parameter URL valid atau muat
+          ulang jika terjadi kendala jaringan.
         </p>
+        <Button
+          size="sm"
+          onClick={() => window.location.reload()}
+          className="cursor-pointer font-medium"
+        >
+          Coba Muat Ulang
+        </Button>
       </div>
     );
   }
 
-  // Destrukturisasi data hasil payload terpadu
-  const { workspace, files, members } = data;
+  const isEmpty = uiFiles.length === 0;
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
-      {/* SECTION INFO: Metadata Workspace */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between p-6 bg-gray-900/30 border border-gray-800 rounded-2xl gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-100">{workspace.name}</h1>
-          <p className="text-xs text-gray-500 font-mono mt-1">
-            Owner: {workspace.owner_address}
-          </p>
-        </div>
-        <div className="flex items-center space-x-6 shrink-0 bg-gray-900/60 px-4 py-2.5 rounded-xl border border-gray-800/80">
-          <div className="flex items-center space-x-2">
-            <HardDrive className="w-4 h-4 text-blue-400" />
-            <span className="text-sm text-gray-300 font-medium">
-              {files.length} Files
-            </span>
-          </div>
-          <div className="h-4 w-[1px] bg-gray-800" />
-          <div className="flex items-center space-x-2">
-            <Users className="w-4 h-4 text-purple-400" />
-            <span className="text-sm text-gray-300 font-medium">
-              {members.length} Members
-            </span>
-          </div>
-        </div>
-      </div>
+    <div className="flex flex-col w-full max-w-[1400px] mx-auto px-4 py-6 md:px-8 animate-in fade-in duration-300">
+      {/* SECTION LAYER 1: Header Informasi */}
+      <WorkspaceHeader
+        workspaceName={workspaceData.name}
+        totalFiles={rawFiles.length}
+        totalMembers={members.length}
+        // Jika ada logic untuk cek current wallet address vs owner, bisa dimasukkan di sini.
+        // Untuk sekarang default ke "member"
+        userRole="member"
+        createdAt={workspaceData.created_at}
+      />
 
-      {/* SECTION CORE: Upload Zone (Dropzone) */}
-      <div className="bg-gray-900/20 p-6 rounded-2xl border border-gray-800/60">
-        <div className="mb-4">
-          <h3 className="text-sm font-semibold text-gray-300 tracking-wide uppercase">
-            Decentralized Storage Layer
-          </h3>
-          <p className="text-xs text-gray-500 mt-0.5">
-            File yang Anda jatuhkan di sini akan langsung di-stream ke Walrus
-            Protocol.
-          </p>
-        </div>
-        <Dropzone />
-      </div>
+      {/* SECTION LAYER 2: Action Bar Toolbar */}
+      <WorkspaceToolbar
+        view={view}
+        onViewChange={handleViewChange}
+        onUploadClick={() => setIsUploadModalOpen(true)}
+        onInviteClick={() => setIsInviteModalOpen(true)}
+      />
 
-      {/* SECTION EXPLORER: Toolbar & List Rendering */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between border-b border-gray-800 pb-3">
-          <h3 className="font-semibold text-gray-200">File Explorer</h3>
-
-          {/* View Mode Switcher Minimalis */}
-          <div className="flex items-center bg-gray-900 border border-gray-800 p-1 rounded-lg space-x-1">
-            <button
-              onClick={() => setViewMode("list")}
-              className={`p-1.5 rounded-md transition ${viewMode === "list" ? "bg-gray-800 text-blue-400" : "text-gray-500 hover:text-gray-300"}`}
-            >
-              <List className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`p-1.5 rounded-md transition ${viewMode === "grid" ? "bg-gray-800 text-blue-400" : "text-gray-500 hover:text-gray-300"}`}
-            >
-              <Grid className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-
-        {/* Conditional Rendering untuk Empty State */}
-        {files.length === 0 ? (
-          <div className="text-center py-16 border border-dashed border-gray-800 rounded-2xl bg-gray-900/10">
-            <FileIcon className="w-12 h-12 text-gray-600 mx-auto stroke-[1.5]" />
-            <h4 className="text-gray-400 font-medium mt-4">Workspace Kosong</h4>
-            <p className="text-gray-500 text-xs mt-1 max-w-xs mx-auto">
-              Belum ada file terdesentralisasi yang diindeks di dalam workspace
-              ini.
-            </p>
-          </div>
+      {/* SECTION LAYER 3: Dynamic Render Viewport */}
+      <main className="flex-1 mt-2">
+        {isEmpty ? (
+          <WorkspaceEmpty />
+        ) : view === "grid" ? (
+          <WorkspaceGrid files={filteredFiles} />
         ) : (
-          /* TEMPORARY RENDERER (Lifecycle Check): Memastikan Data Mengalir Tanpa Crash */
-          <div className="bg-gray-900/40 border border-gray-800 rounded-xl divide-y divide-gray-800/60">
-            {files.map((file) => (
-              <div
-                key={file.id}
-                className="p-4 flex items-center justify-between hover:bg-gray-900/80 transition group"
-              >
-                <div className="flex items-center space-x-4 min-w-0">
-                  <div className="p-2 bg-blue-500/10 text-blue-400 rounded-lg shrink-0">
-                    <FileIcon className="w-5 h-5" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-200 truncate group-hover:text-blue-400 transition">
-                      {file.file_name}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-0.5 font-mono truncate">
-                      Blob ID: {file.blob_id}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-xs text-gray-500 font-mono hidden sm:block shrink-0 pl-4">
-                  {new Date(file.created_at).toLocaleDateString()}
-                </div>
-              </div>
-            ))}
-          </div>
+          <WorkspaceTable files={filteredFiles} />
         )}
-      </div>
+      </main>
+
+      {/* =========================================================================
+          GLOBAL MODAL PORTALS
+         ========================================================================= */}
+
+      <Dialog open={isUploadModalOpen} onOpenChange={setIsUploadModalOpen}>
+        <DialogContent className="sm:max-w-xl bg-card border border-border">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold text-foreground">
+              Unggah Berkas Baru
+            </DialogTitle>
+          </DialogHeader>
+          <div className="pt-2">
+            <Dropzone />
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog>
+        <InviteModal
+          open={isInviteModalOpen}
+          onOpenChange={setIsInviteModalOpen}
+        />
+        <DialogContent className="sm:max-w-md bg-card border border-border">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold text-foreground">
+              Undang Anggota Kolaborasi
+            </DialogTitle>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
+  );
+}
+
+// Composition Root Wrapper
+export function WorkspaceDashboard() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex flex-col items-center justify-center min-h-[75vh]">
+          <Loader2 className="h-8 w-8 text-primary animate-spin" />
+        </div>
+      }
+    >
+      <DashboardContent />
+    </Suspense>
   );
 }

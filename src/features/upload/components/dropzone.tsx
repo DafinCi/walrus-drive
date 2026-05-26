@@ -110,12 +110,12 @@ export function Dropzone() {
   };
 
   const borderStyles = isDragging
-    ? "border-blue-500 bg-blue-500/10"
+    ? "border-primary bg-primary/10"
     : status === "error"
-      ? "border-red-500 bg-red-500/10"
+      ? "border-destructive bg-destructive/10"
       : status === "success"
         ? "border-green-500 bg-green-500/10"
-        : "border-gray-600 bg-gray-900/50 hover:border-gray-400 hover:bg-gray-800/50";
+        : "border-border bg-muted/30 hover:border-muted-foreground/50 hover:bg-muted/50";
 
   return (
     <div className="w-full max-w-xl mx-auto space-y-4">
