@@ -8,73 +8,71 @@ export async function POST(request: Request) {
 
     if (!token || !walletAddress) {
       return NextResponse.json(
-        { success: false, error: "Token dan Wallet Address wajib diisi." },
+        { success: false, error: "Payload pendaftaran tidak lengkap." },
         { status: 400 },
       );
     }
 
-    // 1. Ambil data invite berdasarkan token
+    // 1. Re-validasi Token demi keamanan berlapis
     const { data: invite, error: inviteError } = await supabaseAdmin
       .from("workspace_invites")
-      .select("workspace_id, expires_at")
+      .select("*")
       .eq("token", token)
       .single();
 
     if (inviteError || !invite) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Tautan undangan tidak valid atau sudah dihapus.",
-        },
-        { status: 404 },
+        { success: false, error: "Tautan undangan tidak sah." },
+        { status: 400 },
       );
     }
 
-    // 2. Cek apakah token sudah expired
-    const isExpired = new Date(invite.expires_at) < new Date();
+    const isExpired =
+      new Date(invite.expires_at).getTime() < new Date().getTime();
     if (isExpired) {
       return NextResponse.json(
-        { success: false, error: "Tautan undangan telah kedaluwarsa." },
-        { status: 410 }, // HTTP Gone
+        { success: false, error: "Tautan undangan sudah kedaluwarsa." },
+        { status: 400 },
       );
     }
 
-    // 3. Cek apakah user SUDAH BERGABUNG (Idempotency Check)
+    // 2. Cek apakah wallet address ini sebenarnya sudah terdaftar
     const { data: existingMember } = await supabaseAdmin
       .from("workspace_members")
       .select("id")
       .eq("workspace_id", invite.workspace_id)
       .eq("wallet_address", walletAddress)
-      .maybeSingle();
+      .single();
 
     if (existingMember) {
       return NextResponse.json({
         success: true,
-        message: "Anda sudah menjadi anggota di workspace ini.",
         workspaceId: invite.workspace_id,
+        message: "Anda sudah tergabung.",
       });
     }
 
-    // 4. Masukkan user sebagai 'member' baru
-    const { error: joinError } = await supabaseAdmin
+    // 3. Masukkan record member baru ke dalam database
+    const { error: insertError } = await supabaseAdmin
       .from("workspace_members")
       .insert([
         {
           workspace_id: invite.workspace_id,
           wallet_address: walletAddress,
           role: "member",
+          joined_at: new Date().toISOString(),
         },
       ]);
 
-    if (joinError) throw joinError;
+    if (insertError) throw insertError;
 
     return NextResponse.json({
       success: true,
-      message: "Berhasil bergabung ke workspace!",
       workspaceId: invite.workspace_id,
+      message: "Berhasil bergabung ke workspace kolaboratif.",
     });
   } catch (error: any) {
-    console.error("Join Workspace Error:", error);
+    console.error("Join Workspace API Error:", error);
     return NextResponse.json(
       { success: false, error: error.message || "Internal Server Error" },
       { status: 500 },
