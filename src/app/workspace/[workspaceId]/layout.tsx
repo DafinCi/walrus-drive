@@ -1,13 +1,14 @@
 import { WorkspaceNavbar } from "@/components/layout/workspace-navbar";
 import Link from "next/link";
 import { LayoutDashboard, Settings, ShieldCheck } from "lucide-react";
+import { UploadQueue } from "@/features/upload/components/upload-queue";
 
 export default async function WorkspaceLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ workspaceId: string }>; // Next.js 15 Async Params fix
+  params: Promise<{ workspaceId: string }>;
 }) {
   const { workspaceId } = await params;
 
@@ -46,6 +47,8 @@ export default async function WorkspaceLayout({
 
         {/* 3. Dynamic Page Content Wrapper */}
         <main className="flex-1 w-full relative bg-background">{children}</main>
+
+        <UploadQueue />
       </div>
     </div>
   );

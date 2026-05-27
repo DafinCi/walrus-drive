@@ -25,3 +25,29 @@ export interface WalrusUploadResult {
   metadata: UploadMetadata;
   raw?: any;
 }
+
+// --- GLOBAL UPLOAD QUEUE TYPES ---
+
+// Status granular untuk tracking background upload
+export type QueueUploadStatus =
+  | "idle"
+  | "encoding"
+  | "registering"
+  | "uploading"
+  | "certifying"
+  | "syncing_db"
+  | "completed"
+  | "failed";
+
+// Bentuk data antrean yang kaya untuk Global Zustand Store
+export interface QueueUploadItem {
+  id: string; // ID unik untuk tracking antrean (UUID)
+  workspaceId: string;
+  fileName: string;
+  fileSize: number;
+  status: QueueUploadStatus;
+  progressMessage: string; // Menyimpan string log dari upload.service.ts
+  blobId?: string;
+  error?: string;
+  createdAt: number;
+}
