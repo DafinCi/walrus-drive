@@ -45,7 +45,7 @@ export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-md bg-card border-border text-xs text-foreground shadow-2xl">
+      <DialogContent className="sm:max-w-md bg-card border-border text-xs text-foreground shadow-2xl z-[70]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-sm font-bold text-foreground">
             <FileText className="h-4 w-4 text-primary" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react"; // 👈 Tambahkan useRef & useEffect
 import { useParams } from "next/navigation";
 import { UploadCloud } from "lucide-react";
 import { useUpload } from "../hooks/use-upload";
@@ -14,6 +14,14 @@ export function Dropzone() {
 
   const workspaceId = params.workspaceId as string;
   const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 🔥 UX SHORTCUT: Pemicu Native File Picker Otomatis saat Modal Dropzone Terbuka
+  useEffect(() => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  }, []);
 
   const processFile = async (file: File) => {
     if (!account) {
@@ -24,10 +32,8 @@ export function Dropzone() {
     }
 
     try {
-      // Tembak ke core orchestrator, biarkan antrean Zustand yang mengelola sisanya
       await startUpload(file, workspaceId);
     } catch (err: any) {
-      // Error esensial awal (misal wallet putus di tengah jalan)
       console.error("Dropzone trigger error:", err);
     }
   };
@@ -71,6 +77,7 @@ export function Dropzone() {
         }`}
       >
         <input
+          ref={fileInputRef} // 👈 Pasang Ref di sini
           id="file-upload"
           type="file"
           onChange={onFileInput}

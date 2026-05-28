@@ -15,7 +15,7 @@ export function UploadQueue() {
   if (uploads.length === 0) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 w-80 bg-card border border-border rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col transition-all duration-300">
+    <div className="fixed bottom-4 right-4 w-80 bg-card border border-border rounded-xl shadow-2xl z-60 overflow-hidden flex flex-col transition-all duration-300">
       {/* Header Widget */}
       <div
         onClick={() => setIsExpanded(!isExpanded)}
