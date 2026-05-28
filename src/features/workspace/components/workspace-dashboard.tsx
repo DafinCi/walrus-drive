@@ -15,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
+import { useCurrentAccount } from "@mysten/dapp-kit";
 // Import Lego Components Presentational
 import { WorkspaceHeader } from "./workspace-header";
 import { WorkspaceToolbar } from "./workspace-toolbar";
@@ -29,13 +29,14 @@ import { Dropzone } from "@/features/upload/components/dropzone";
 
 // Import Single Source of Truth Query Hook & UI Zustand Store
 import { useWorkspaceQuery } from "../hooks/use-workspace-query";
-import { useWorkspaceStore } from "../store/workspace-store"; // 👈 Hubungkan Store Baru
+import { useWorkspaceStore } from "../store/workspace-store";
 
 function DashboardContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const params = useParams();
+  const account = useCurrentAccount(); // 👈 2. AMBIL ACC WALLET YANG SEDANG AKTIF
 
   const workspaceId = params.workspaceId as string;
 
@@ -60,6 +61,11 @@ function DashboardContent() {
   const workspaceData = data?.workspace;
   const rawFiles = data?.files ?? [];
   const members = data?.members ?? [];
+
+  // 🔥 3. FIX ERROR: Ekstrak role spesifik milik user yang sedang buka halaman ini
+  const currentUserRole =
+    members.find((m) => m.wallet_address === account?.address)?.role ??
+    "member"; // Default ke "member" jika data belum sinkron
 
   // 5. DATA MAPPING: Ubah snake_case (DB) ke camelCase (UI Component)
   const uiFiles = rawFiles.map((f) => ({
@@ -130,7 +136,7 @@ function DashboardContent() {
         workspaceName={workspaceData.name}
         totalFiles={rawFiles.length}
         totalMembers={members.length}
-        userRole="member"
+        userRole={currentUserRole}
         createdAt={workspaceData.created_at}
       />
 
@@ -138,8 +144,8 @@ function DashboardContent() {
       <WorkspaceToolbar
         view={view}
         onViewChange={handleViewChange}
-        onUploadClick={() => setUploadModalOpen(true)} // 👈 Tembak langsung ke Zustand
-        onInviteClick={() => setInviteModalOpen(true)} // 👈 Tembak langsung ke Zustand
+        onUploadClick={() => setUploadModalOpen(true)}
+        onInviteClick={() => setInviteModalOpen(true)}
       />
 
       {/* SECTION LAYER 3: Dynamic Render Viewport */}
@@ -171,7 +177,7 @@ function DashboardContent() {
         </DialogContent>
       </Dialog>
 
-      {/* Modal Invite (Sudah difix struktur Dialog-nya agar bersih) */}
+      {/* 👈 5. FIX GLITCH: Panggil InviteModal secara direct tanpa double Dialog wrapper */}
       <InviteModal open={isInviteModalOpen} onOpenChange={setInviteModalOpen} />
     </div>
   );

@@ -24,8 +24,8 @@ export function WorkspaceHeader({
       })
     : null;
 
-  // Helper untuk warna badge role agar dinamis sesuai level akses
-  const getRoleBadgeColor = (role: string) => {
+  // 👈 2. AMANKAN DENGAN DEFAULT VALUE "member" PADA PARAMETER FUNGSI
+  const getRoleBadgeColor = (role: string = "member") => {
     switch (role.toLowerCase()) {
       case "owner":
         return "bg-primary/20 text-primary border-primary/30";
