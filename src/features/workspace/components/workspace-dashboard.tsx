@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { Suspense } from "react";
 import {
   useParams,
   useRouter,
@@ -27,8 +27,9 @@ import { InviteModal } from "@/features/invite/components/invite-modal";
 // Import Dropzone Core Upload Service
 import { Dropzone } from "@/features/upload/components/dropzone";
 
-// Import Single Source of Truth Query Hook
+// Import Single Source of Truth Query Hook & UI Zustand Store
 import { useWorkspaceQuery } from "../hooks/use-workspace-query";
+import { useWorkspaceStore } from "../store/workspace-store"; // 👈 Hubungkan Store Baru
 
 function DashboardContent() {
   const router = useRouter();
@@ -38,26 +39,29 @@ function DashboardContent() {
 
   const workspaceId = params.workspaceId as string;
 
-  // State Lokal Pengendali Modals Portal
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  // 1. CONSUME INTERACTION STATE FROM ZUSTAND STORE
+  const {
+    isUploadModalOpen,
+    isInviteModalOpen,
+    setUploadModalOpen,
+    setInviteModalOpen,
+  } = useWorkspaceStore();
 
-  // 1. CONSUME DATA UTAMA NATIVE FROM TANSTACK QUERY
+  // 2. CONSUME SERVER DATA STATE FROM TANSTACK QUERY
   const { data, isLoading, error } = useWorkspaceQuery(workspaceId);
 
-  // 2. READ & DERIVE URL SELECTION STATE
+  // 3. READ & DERIVE URL SELECTION STATE
   const view = (searchParams.get("view") === "table" ? "table" : "grid") as
     | "grid"
     | "table";
   const searchQuery = searchParams.get("search") ?? "";
 
-  // 3. SAFE DERIVE SUB-DATA SESUAI TIPE WorkspaceFullPayload
+  // 4. SAFE DERIVE SUB-DATA SESUAI TIPE WorkspaceFullPayload
   const workspaceData = data?.workspace;
   const rawFiles = data?.files ?? [];
   const members = data?.members ?? [];
 
-  // 4. DATA MAPPING: Ubah snake_case (DB) ke camelCase (UI Component)
-  // Ini mencegah error di dalam FileCard dan FileRow
+  // 5. DATA MAPPING: Ubah snake_case (DB) ke camelCase (UI Component)
   const uiFiles = rawFiles.map((f) => ({
     id: f.id,
     blobId: f.blob_id,
@@ -68,14 +72,14 @@ function DashboardContent() {
     createdAt: f.created_at,
   }));
 
-  // 5. URL MUTATION HANDLER
+  // 6. URL MUTATION HANDLER
   const handleViewChange = (newView: "grid" | "table") => {
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.set("view", newView);
     router.push(`${pathname}?${currentParams.toString()}`);
   };
 
-  // 6. DATA RUNTIME FILTERING (Reaktif terhadap pencarian URL global)
+  // 7. DATA RUNTIME FILTERING (Reaktif terhadap pencarian URL global)
   const filteredFiles = uiFiles.filter((file) =>
     file.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
@@ -126,8 +130,6 @@ function DashboardContent() {
         workspaceName={workspaceData.name}
         totalFiles={rawFiles.length}
         totalMembers={members.length}
-        // Jika ada logic untuk cek current wallet address vs owner, bisa dimasukkan di sini.
-        // Untuk sekarang default ke "member"
         userRole="member"
         createdAt={workspaceData.created_at}
       />
@@ -136,8 +138,8 @@ function DashboardContent() {
       <WorkspaceToolbar
         view={view}
         onViewChange={handleViewChange}
-        onUploadClick={() => setIsUploadModalOpen(true)}
-        onInviteClick={() => setIsInviteModalOpen(true)}
+        onUploadClick={() => setUploadModalOpen(true)} // 👈 Tembak langsung ke Zustand
+        onInviteClick={() => setInviteModalOpen(true)} // 👈 Tembak langsung ke Zustand
       />
 
       {/* SECTION LAYER 3: Dynamic Render Viewport */}
@@ -152,10 +154,11 @@ function DashboardContent() {
       </main>
 
       {/* =========================================================================
-          GLOBAL MODAL PORTALS
+          GLOBAL MODAL PORTALS (ORCHESTRATED BY ZUSTAND)
          ========================================================================= */}
 
-      <Dialog open={isUploadModalOpen} onOpenChange={setIsUploadModalOpen}>
+      {/* Modal Upload */}
+      <Dialog open={isUploadModalOpen} onOpenChange={setUploadModalOpen}>
         <DialogContent className="sm:max-w-xl bg-card border border-border">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold text-foreground">
@@ -168,19 +171,8 @@ function DashboardContent() {
         </DialogContent>
       </Dialog>
 
-      <Dialog>
-        <InviteModal
-          open={isInviteModalOpen}
-          onOpenChange={setIsInviteModalOpen}
-        />
-        <DialogContent className="sm:max-w-md bg-card border border-border">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-bold text-foreground">
-              Undang Anggota Kolaborasi
-            </DialogTitle>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+      {/* Modal Invite (Sudah difix struktur Dialog-nya agar bersih) */}
+      <InviteModal open={isInviteModalOpen} onOpenChange={setInviteModalOpen} />
     </div>
   );
 }
