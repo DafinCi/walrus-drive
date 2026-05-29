@@ -1,31 +1,75 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/services/supabase/admin";
+import { createWorkspaceSchema } from "@/features/workspace/validations/create-workspace-schema";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, ownerAddress } = body;
+    const { ownerAddress, ...formData } = body;
 
-    if (!name || !ownerAddress) {
+    // 1. Validasi Alamat Wallet (Wajib ada untuk konteks Web3 platform)
+    if (!ownerAddress) {
       return NextResponse.json(
         {
           success: false,
-          error: "Nama workspace dan alamat wallet wajib diisi.",
+          error: "Alamat wallet pembuat (ownerAddress) wajib disertakan.",
         },
         { status: 400 },
       );
     }
+    // 2. Jalankan Validasi Sisi Server menggunakan Single Source Zod Schema
+    const validationResult = createWorkspaceSchema.safeParse(formData);
 
-    // 1. Insert ke tabel workspaces
+    if (!validationResult.success) {
+      // Ganti .errors menjadi .issues agar TypeScript aman dan tidak ngambek lagi
+      const firstError =
+        validationResult.error.issues[0]?.message || "Payload data tidak valid";
+      return NextResponse.json(
+        { success: false, error: firstError },
+        { status: 400 },
+      );
+    }
+
+    const { name, slug, description, visibility, upload_policy } =
+      validationResult.data;
+
+    // 3. Otomatisasi Avatar URL menggunakan platform DiceBear berbasis Seed Slug
+    // Ini memangkas kebutuhan sistem storage upload gambar di fase MVP SaaS
+    const generatedAvatarUrl = `https://api.dicebear.com/9.x/identicon/svg?seed=${slug}`;
+
+    // 4. Operasi Database Tahap 1: Menyisipkan Kontainer Workspace Baru
     const { data: workspace, error: wsError } = await supabaseAdmin
       .from("workspaces")
-      .insert([{ name, owner_address: ownerAddress }])
+      .insert([
+        {
+          name,
+          slug,
+          description: description || null,
+          avatar_url: generatedAvatarUrl,
+          owner_address: ownerAddress,
+          is_public: visibility === "public",
+          upload_policy: upload_policy,
+        },
+      ])
       .select()
       .single();
 
-    if (wsError) throw wsError;
+    if (wsError) {
+      // Deteksi error PostgreSQL Code 23505 (Unique Violation untuk Slug)
+      if (wsError.code === "23505") {
+        return NextResponse.json(
+          {
+            success: false,
+            error:
+              "Slug sudah digunakan oleh organisasi lain. Silakan pilih nama/slug lain.",
+          },
+          { status: 409 },
+        );
+      }
+      throw wsError;
+    }
 
-    // 2. Otomatis daftarkan pembuat sebagai 'owner' di workspace_members
+    // 5. Operasi Database Tahap 2: Otomatis Daftarkan Wallet Pembuat sebagai Role 'owner'
     const { error: memberError } = await supabaseAdmin
       .from("workspace_members")
       .insert([
@@ -37,16 +81,25 @@ export async function POST(request: Request) {
       ]);
 
     if (memberError) {
-      // Rollback data workspace jika pendaftaran member gagal (mencegah data yatim)
+      // PENYELAMAT DATA (Rollback Manusiawi): Hapus baris workspace yatim jika pendaftaran member gagal
       await supabaseAdmin.from("workspaces").delete().eq("id", workspace.id);
+
       throw memberError;
     }
 
-    return NextResponse.json({ success: true, workspaceId: workspace.id });
+    // 6. Return Data Sukses Lengkap (Mengirimkan slug untuk kebutuhan routing frontend)
+    return NextResponse.json({
+      success: true,
+      workspaceId: workspace.id,
+      slug: workspace.slug,
+    });
   } catch (error: any) {
-    console.error("Create Workspace Error:", error);
+    console.error("⛔ [CRITICAL] Create Workspace API Error:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Internal Server Error" },
+      {
+        success: false,
+        error: error.message || "Terjadi kegagalan internal pada server.",
+      },
       { status: 500 },
     );
   }
