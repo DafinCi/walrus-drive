@@ -1,9 +1,12 @@
 export interface Workspace {
   id: string;
+  slug: string; // Tambahan Baru: Routing berbasis slug /workspace/tresto-labs
   name: string;
+  description: string | null; // Tambahan Baru: Deskripsi opsional organisasi
+  avatar_url: string | null; // Tambahan Baru: URL otomatis untuk identitas visual switcher
   owner_address: string;
   is_public: boolean;
-  allow_public_upload: boolean;
+  upload_policy: "owner_only" | "admins_only" | "members_only" | "public"; // Pengganti allow_public_upload (Lebih Scalable)
   created_at: string;
   updated_at: string;
 }

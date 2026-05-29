@@ -18,7 +18,7 @@ export function WorkspaceHubHero({
       {/* Bagian Sapaan */}
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-          Selamat Datang Kembali! 👋
+          Selamat Datang Kembali!
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
           Kelola ruang kerja terdesentralisasi Anda dengan aman di jaringan Sui.
