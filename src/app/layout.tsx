@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Chakra_Petch } from "next/font/google";
+import { Inter, Lexend } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/providers/app-provider";
 
@@ -8,7 +8,7 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const chakraPetch = Chakra_Petch({
+const chakraPetch = Lexend({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-chakra",
