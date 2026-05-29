@@ -1,7 +1,9 @@
+// src/app/workspace/page.tsx
 "use client";
 
 import { useState, useMemo } from "react";
 import { useCurrentAccount } from "@mysten/dapp-kit";
+import { useRouter } from "next/navigation"; // 🌟 TAMBAHAN: Gunakan Next.js Router untuk migrasi halaman
 import { Loader2, Wallet } from "lucide-react";
 
 // Hook & Store
@@ -15,25 +17,18 @@ import { WorkspaceListEmpty } from "@/features/workspace/components/workspace-li
 import { WorkspaceHubHero } from "@/features/workspace/components/hub/workspace-hub-hero";
 import { WorkspaceHubToolbar } from "@/features/workspace/components/hub/workspace-hub-toolbar";
 
-// Modals (Pastikan lu sudah punya komponen modal ini, atau buat mockupnya dulu)
-// import { CreateWorkspaceModal } from "@/features/workspace/components/create-workspace-modal";
-// import { JoinWorkspaceModal } from "@/features/workspace/components/join-workspace-modal";
-
 export default function WorkspaceHubPage() {
   const account = useCurrentAccount();
+  const router = useRouter(); // 🌟 INISIALISASI: Pemicu navigasi rute halaman
+
   const {
     data: workspaces,
     isLoading,
     error,
   } = useWorkspaces(account?.address);
 
-  // Zustand Modals State
-  const {
-    isCreateModalOpen,
-    setCreateModalOpen,
-    isJoinModalOpen,
-    setJoinModalOpen,
-  } = useWorkspaceStore();
+  // Zustand Modals State (Kita pertahankan JoinModal jika ke depan masih butuh modal untuk join via token)
+  const { isJoinModalOpen, setJoinModalOpen } = useWorkspaceStore();
 
   // Local Search State
   const [searchQuery, setSearchQuery] = useState("");
@@ -102,8 +97,9 @@ export default function WorkspaceHubPage() {
         {hasNoWorkspace ? (
           // STATE 2: EMPTY ONBOARDING
           <div className="mt-10">
+            {/* 🌟 SEKARANG: Tombol di empty state akan langsung mengarahkan ke halaman /workspace/create */}
             <WorkspaceListEmpty
-              onCreateClick={() => setCreateModalOpen(true)}
+              onCreateClick={() => router.push("/workspace/create")}
             />
           </div>
         ) : (
@@ -115,10 +111,11 @@ export default function WorkspaceHubPage() {
               totalMembers={totalMembers}
             />
 
+            {/* 🌟 SEKARANG: Tombol create di toolbar dashboard ikut dialihkan ke halaman onboarding */}
             <WorkspaceHubToolbar
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
-              onCreateClick={() => setCreateModalOpen(true)}
+              onCreateClick={() => router.push("/workspace/create")}
               onJoinClick={() => setJoinModalOpen(true)}
             />
 
@@ -128,15 +125,9 @@ export default function WorkspaceHubPage() {
       </main>
 
       {/* =========================================================================
-          GLOBAL MODAL PORTALS
+          GLOBAL MODAL PORTALS (Hanya memuat portal JoinWorkspaceModal jika diperlukan)
          ========================================================================= */}
-
-      {/* <CreateWorkspaceModal 
-          open={isCreateModalOpen} 
-          onOpenChange={setCreateModalOpen} 
-        />
-        
-        <JoinWorkspaceModal 
+      {/* <JoinWorkspaceModal 
           open={isJoinModalOpen} 
           onOpenChange={setJoinModalOpen} 
         /> 
