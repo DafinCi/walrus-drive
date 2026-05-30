@@ -92,11 +92,11 @@ export function InviteLinkCard({
 
   return (
     <div
-      className={`flex flex-col gap-2 p-3 rounded-lg border ${isExpired ? "bg-muted/30 border-border/50 opacity-60" : "bg-muted/50 border-border"} transition-all`}
+      className={`flex flex-col gap-2 p-3 rounded-sm border ${isExpired ? "bg-muted/30 border-border/50 opacity-60" : "bg-muted/50 border-border"} transition-all`}
     >
       <div className="flex items-center justify-between gap-2">
         {/* Tautan Box */}
-        <div className="flex-1 bg-background border border-border/60 rounded-md h-8 px-2.5 flex items-center min-w-0 overflow-hidden">
+        <div className="flex-1 bg-background border border-border/60 rounded-sm h-8 px-2.5 flex items-center min-w-0 overflow-hidden">
           <span
             className={`text-xs font-mono truncate select-all ${isExpired ? "text-muted-foreground" : "text-foreground"}`}
           >

@@ -11,14 +11,14 @@ export function ShardingPipeline() {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="w-full bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-6 flex flex-col justify-between overflow-hidden relative min-h-[180px] cursor-pointer group"
+      className="w-full bg-zinc-950/60 border border-zinc-800/80 rounded-sm p-6 flex flex-col justify-between overflow-hidden relative min-h-[180px] cursor-pointer group"
     >
       <div className="flex items-center justify-between w-full z-10">
         {/* Source File */}
         <div className="flex flex-col items-center gap-1.5 w-16">
           <div
             className={cn(
-              "p-2.5 bg-zinc-900 border rounded-lg transition-all duration-300",
+              "p-2.5 bg-zinc-900 border rounded-sm transition-all duration-300",
               isHovered
                 ? "border-sky-500/40 bg-sky-950/10 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.1)]"
                 : "border-zinc-800 text-zinc-400",
@@ -58,7 +58,7 @@ export function ShardingPipeline() {
             <div
               key={node}
               className={cn(
-                "p-1.5 bg-zinc-900/50 border rounded-md flex items-center justify-center transition-all duration-500",
+                "p-1.5 bg-zinc-900/50 border rounded-sm flex items-center justify-center transition-all duration-500",
                 isHovered
                   ? "border-indigo-500/30 text-indigo-400 bg-indigo-950/10 translate-x-0.5 scale-105"
                   : "border-zinc-800 text-zinc-600",

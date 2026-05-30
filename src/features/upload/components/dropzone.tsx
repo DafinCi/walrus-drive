@@ -73,7 +73,7 @@ export function Dropzone({ workspaceId }: DropzoneProps) {
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
-        className={`relative flex flex-col items-center justify-center p-10 border-2 border-dashed rounded-xl transition-all duration-200 min-h-[180px] ${
+        className={`relative flex flex-col items-center justify-center p-10 border-2 border-dashed rounded-sm transition-all duration-200 min-h-[180px] ${
           isDragging
             ? "border-primary bg-primary/10 scale-[1.01]"
             : "border-border bg-muted/20 hover:border-muted-foreground/40 hover:bg-muted/40"

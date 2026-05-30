@@ -17,7 +17,7 @@ export function LandingNavbar() {
           href="/"
           className="flex items-center gap-2 hover:opacity-90 transition-opacity"
         >
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white text-black">
+          <div className="flex h-7 w-7 items-center justify-center rounded-sm bg-white text-black">
             <Box className="h-4 w-4 stroke-[2.5]" />
           </div>
           <span className="font-bold text-base tracking-tight text-white">

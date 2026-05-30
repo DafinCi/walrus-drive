@@ -20,7 +20,7 @@ export default async function VerifyPage({
         </div>
       </div>
 
-      <div className="bg-gray-900/40 border border-gray-800 p-6 rounded-xl flex items-start space-x-4">
+      <div className="bg-gray-900/40 border border-gray-800 p-6 rounded-sm flex items-start space-x-4">
         <Info className="w-6 h-6 text-blue-400 shrink-0 mt-1" />
         <div>
           <h3 className="text-lg font-medium text-gray-200">

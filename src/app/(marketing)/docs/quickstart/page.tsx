@@ -27,7 +27,7 @@ export default function QuickstartPage() {
     code: string;
     id: string;
   }) => (
-    <div className="mt-4 rounded-xl overflow-hidden border border-zinc-800 bg-[#0a0a0a] shadow-2xl transition-all hover:border-zinc-700">
+    <div className="mt-4 rounded-sm overflow-hidden border border-zinc-800 bg-[#0a0a0a] shadow-2xl transition-all hover:border-zinc-700">
       {/* Terminal Header */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-zinc-950 border-b border-zinc-900/50">
         <div className="flex gap-1.5">
@@ -121,10 +121,10 @@ export default function QuickstartPage() {
           </p>
 
           {/* Tab Switcher */}
-          <div className="inline-flex items-center p-1 bg-zinc-950 border border-zinc-800 rounded-lg mb-2">
+          <div className="inline-flex items-center p-1 bg-zinc-950 border border-zinc-800 rounded-sm mb-2">
             <button
               onClick={() => setNetwork("testnet")}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-sm transition-all ${
                 network === "testnet"
                   ? "bg-sky-500/10 text-sky-400"
                   : "text-zinc-500 hover:text-zinc-300"
@@ -134,7 +134,7 @@ export default function QuickstartPage() {
             </button>
             <button
               onClick={() => setNetwork("mainnet")}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-sm transition-all ${
                 network === "mainnet"
                   ? "bg-emerald-500/10 text-emerald-400"
                   : "text-zinc-500 hover:text-zinc-300"

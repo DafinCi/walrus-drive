@@ -13,7 +13,7 @@ export function InviteErrorState({ type }: InviteErrorStateProps) {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-[400px] border border-border bg-card p-6 rounded-xl shadow-xl text-center space-y-5">
+      <div className="w-full max-w-[400px] border border-border bg-card p-6 rounded-sm shadow-xl text-center space-y-5">
         <div className="mx-auto h-12 w-12 rounded-full bg-destructive/10 flex items-center justify-center text-destructive">
           {isExpired ? (
             <ShieldX className="h-6 w-6" />

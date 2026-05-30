@@ -9,7 +9,7 @@ interface WorkspaceListEmptyProps {
 
 export function WorkspaceListEmpty({ onCreateClick }: WorkspaceListEmptyProps) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[50vh] max-w-md mx-auto text-center p-8 border border-border/60 bg-muted/10 rounded-2xl shadow-sm">
+    <div className="flex flex-col items-center justify-center min-h-[50vh] max-w-md mx-auto text-center p-8 border border-border/60 bg-muted/10 rounded-sm shadow-sm">
       <div className="p-4 bg-primary/10 rounded-full mb-4">
         <Layers className="h-8 w-8 text-primary" />
       </div>
