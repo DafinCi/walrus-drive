@@ -101,10 +101,10 @@ export function FileCard({ file }: FileCardProps) {
   const aggregatorUrl = `https://aggregator.walrus-testnet.walrus.space/v1/blobs/${file.blobId}`;
 
   return (
-    <div className="group relative border border-border bg-card/40 hover:bg-muted/30 hover:border-border/80 rounded-xl p-4 flex flex-col justify-between gap-4 transition-all duration-200 hover:shadow-lg hover:shadow-primary/5">
+    <div className="group relative border border-border bg-card/40 hover:bg-muted/30 hover:border-border/80 rounded-sm p-4 flex flex-col justify-between gap-4 transition-all duration-200 hover:shadow-lg hover:shadow-primary/5">
       {/* BAGIAN ATAS: Ikon & Aksi Utama Dropdown */}
       <div className="flex items-start justify-between w-full">
-        <div className="p-2.5 bg-muted/60 border border-border/50 rounded-lg group-hover:bg-background transition-colors">
+        <div className="p-2.5 bg-muted/60 border border-border/50 rounded-sm group-hover:bg-background transition-colors">
           {getFileIcon(file.mimeType)}
         </div>
 

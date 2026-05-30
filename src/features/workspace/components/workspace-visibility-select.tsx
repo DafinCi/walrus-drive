@@ -1,7 +1,6 @@
 // src/features/workspace/components/workspace-visibility-select.tsx
 import {
   FormControl,
-  FormDescription,
   FormItem,
   FormLabel,
   FormMessage,
@@ -14,44 +13,40 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface VisibilitySelectProps {
-  value: "private" | "public";
-  onValueChange: (value: "private" | "public") => void;
-}
-
 export function WorkspaceVisibilitySelect({
   value,
   onValueChange,
-}: VisibilitySelectProps) {
+}: {
+  value: "private" | "public";
+  onValueChange: (v: "private" | "public") => void;
+}) {
   return (
-    <FormItem>
-      <FormLabel className="text-sm font-semibold">
-        Workspace Visibility
+    <FormItem className="space-y-1.5">
+      <FormLabel className="text-xs font-semibold text-foreground">
+        Visibility Mode
       </FormLabel>
       <Select value={value} onValueChange={onValueChange}>
         <FormControl>
-          <SelectTrigger className="bg-background/50 border-muted-foreground/20">
-            <SelectValue placeholder="Pilih visibilitas" />
+          <SelectTrigger className="bg-background border-input h-9 text-xs rounded-sm shadow-none">
+            <SelectValue placeholder="Select visibility" />
           </SelectTrigger>
         </FormControl>
-        <SelectContent>
-          <SelectItem value="private" className="py-2.5">
-            <div className="font-medium text-sm">🔒 Private Workspace</div>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Hanya wallet yang terdaftar sebagai anggota yang bisa mengakses
-              storage metadata.
-            </p>
+        <SelectContent className="rounded-sm">
+          <SelectItem value="private" className="rounded-none text-xs py-2">
+            <span className="font-semibold block">Private</span>
+            <span className="text-[10px] text-muted-foreground block mt-0.5">
+              Restricted token-gated metadata access.
+            </span>
           </SelectItem>
-          <SelectItem value="public" className="py-2.5">
-            <div className="font-medium text-sm">🌐 Public Space</div>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Siapapun bisa melihat isi metadata file di platform. Cocok untuk
-              open archive / verification.
-            </p>
+          <SelectItem value="public" className="rounded-none text-xs py-2">
+            <span className="font-semibold block">Public</span>
+            <span className="text-[10px] text-muted-foreground block mt-0.5">
+              Openly indexable storage manifests.
+            </span>
           </SelectItem>
         </SelectContent>
       </Select>
-      <FormMessage />
+      <FormMessage className="text-[11px]" />
     </FormItem>
   );
 }

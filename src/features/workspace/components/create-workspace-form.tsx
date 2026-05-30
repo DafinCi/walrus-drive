@@ -25,7 +25,7 @@ import { WorkspaceUploadPolicySelect } from "./workspace-upload-policy-select";
 import { useCreateWorkspace } from "../hooks/use-create-workspace";
 import { workspaceService } from "../services/workspace.service";
 import { useDebounce } from "@/hooks/use-debounce";
-import { Loader2, CheckCircle2, XCircle } from "lucide-react";
+import { Loader2, Check, AlertTriangle } from "lucide-react";
 
 interface CreateWorkspaceFormProps {
   walletAddress: string | undefined;
@@ -56,16 +56,15 @@ export function CreateWorkspaceForm({
 
   const currentName = watch("name");
   const currentSlug = watch("slug");
-  const debouncedSlug = useDebounce(currentSlug, 500);
+  const currentDescription = watch("description") || "";
+  const debouncedSlug = useDebounce(currentSlug, 400);
 
-  // Efek 1: Auto-generate slug dari nama secara real-time jika user belum meng-custom manual
   React.useEffect(() => {
     if (!isSlugEditable && currentName) {
       setValue("slug", generateSlug(currentName), { shouldValidate: true });
     }
   }, [currentName, isSlugEditable, setValue]);
 
-  // Efek 2: Debounced Checker untuk ketersediaan slug via backend endpoint
   React.useEffect(() => {
     async function checkSlug() {
       if (!debouncedSlug || debouncedSlug.length < 3) {
@@ -73,7 +72,6 @@ export function CreateWorkspaceForm({
         return;
       }
 
-      // Ambil validasi format dasar dari Regex Zod sebelum hit API
       const isValidFormat = /^[a-z0-9-]+$/.test(debouncedSlug);
       if (!isValidFormat) {
         setIsSlugAvailable(false);
@@ -96,7 +94,7 @@ export function CreateWorkspaceForm({
   }, [debouncedSlug]);
 
   const onSubmit = (data: CreateWorkspaceInput) => {
-    if (isSlugAvailable === false) return; // Kunci submit jika slug bentrok
+    if (isSlugAvailable === false) return;
     mutation.mutate(data, {
       onError: (err: any) => {
         form.setError("root", { message: err.message });
@@ -106,133 +104,129 @@ export function CreateWorkspaceForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-left">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 text-left">
         {formState.errors.root && (
-          <div className="p-3 text-sm bg-destructive/10 border border-destructive/20 text-destructive rounded-lg font-medium">
-            ⚠️ {formState.errors.root.message}
+          <div className="p-3 text-xs bg-destructive/5 border border-destructive/20 text-destructive rounded-sm font-medium flex items-center gap-2">
+            <AlertTriangle className="h-3.5 w-3.5 flex-shrink-0" />
+            <span>{formState.errors.root.message}</span>
           </div>
         )}
 
-        {/* 1. INPUT FIELD: NAMA WORKSPACE */}
+        {/* 1. NAME FIELD */}
         <FormField
           control={control}
           name="name"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-sm font-semibold">
+            <FormItem className="space-y-1.5">
+              <FormLabel className="text-xs font-semibold text-foreground">
                 Workspace Name
               </FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Tresto Labs"
-                  className="h-11 bg-background/50"
+                  placeholder="Acme Corp"
+                  className="h-9 bg-background rounded-sm border-input text-xs"
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                Gunakan nama brand, tim, atau proyek desentralisasi lu.
-              </FormDescription>
-              <FormMessage />
+              <FormMessage className="text-[11px]" />
             </FormItem>
           )}
         />
 
-        {/* 2. INPUT FIELD: SLUG URL (WITH INLINE AVAILABILITY INDICATOR) */}
+        {/* 2. COMPOSITE SLUG FIELD (NO OVERLAPPING LOGIC) */}
         <FormField
           control={control}
           name="slug"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <FormLabel className="text-sm font-semibold">
-                  Custom Slug URL
+                <FormLabel className="text-xs font-semibold text-foreground">
+                  Workspace URL
                 </FormLabel>
                 {!isSlugEditable && currentName && (
                   <button
                     type="button"
                     onClick={() => setIsSlugEditable(true)}
-                    className="text-xs text-primary font-medium hover:underline"
+                    className="text-[10px] text-muted-foreground hover:text-foreground font-mono underline underline-offset-2"
                   >
                     Edit Manual
                   </button>
                 )}
               </div>
+
               <FormControl>
-                <div className="relative flex items-center">
-                  <span className="absolute left-3 text-sm text-muted-foreground/60 select-none">
+                <div className="flex rounded-sm shadow-none">
+                  {/* Prefix Box Ganti Posisi Absolute */}
+                  <span className="inline-flex items-center px-3 rounded-l-sm border border-r-0 border-input bg-muted text-muted-foreground text-[11px] font-mono select-none">
                     trestospace.io/
                   </span>
-                  <Input
-                    className="pl-[104px] pr-10 h-11 bg-background/50 font-mono text-sm"
-                    disabled={!isSlugEditable && !!currentName}
-                    placeholder="tresto-labs"
-                    {...field}
-                    onChange={(e) => {
-                      setIsSlugEditable(true);
-                      field.onChange(e);
-                    }}
-                  />
-                  {/* Blok Aksesoris UI Status Ketersediaan Slug */}
-                  <div className="absolute right-3">
-                    {slugChecking && (
-                      <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                    )}
-                    {!slugChecking && isSlugAvailable === true && (
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                    )}
-                    {!slugChecking && isSlugAvailable === false && (
-                      <XCircle className="h-4 w-4 text-destructive" />
-                    )}
+
+                  {/* Input Box murni sebelah kanan */}
+                  <div className="relative flex-1">
+                    <Input
+                      className="rounded-r-sm rounded-l-none border-l-0 h-9 bg-background font-mono text-xs pr-9"
+                      disabled={!isSlugEditable && !!currentName}
+                      placeholder="acme-corp"
+                      {...field}
+                      onChange={(e) => {
+                        setIsSlugEditable(true);
+                        field.onChange(e);
+                      }}
+                    />
+                    {/* Status Indicator inside right input edge */}
+                    <div className="absolute inset-y-0 right-2.5 flex items-center">
+                      {slugChecking && (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+                      )}
+                      {!slugChecking && isSlugAvailable === true && (
+                        <Check className="h-3.5 w-3.5 text-emerald-500 stroke-[3]" />
+                      )}
+                      {!slugChecking && isSlugAvailable === false && (
+                        <span className="text-[10px] text-destructive font-bold font-mono">
+                          TAKEN
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </FormControl>
-              {isSlugAvailable === false && (
-                <p className="text-xs font-medium text-destructive mt-1">
-                  Slug ini sudah diklaim oleh wallet lain.
-                </p>
-              )}
-              <FormDescription>
-                Alamat publik unik yang akan digunakan untuk berbagi tautan
-                workspace.
-              </FormDescription>
-              <FormMessage />
+              <FormMessage className="text-[11px]" />
             </FormItem>
           )}
         />
 
-        {/* 3. INPUT FIELD: DESKRIPSI ORGANISASI */}
+        {/* 3. DESCRIPTION FIELD */}
         <FormField
           control={control}
           name="description"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-sm font-semibold">
-                Description{" "}
-                <span className="text-xs text-muted-foreground/60">
-                  (Opsional)
+            <FormItem className="space-y-1.5">
+              <div className="flex justify-between items-baseline">
+                <FormLabel className="text-xs font-semibold text-foreground">
+                  Description{" "}
+                  <span className="text-[10px] text-muted-foreground font-normal">
+                    (Optional)
+                  </span>
+                </FormLabel>
+                <span className="text-[10px] font-mono text-muted-foreground/60">
+                  {currentDescription.length}/160
                 </span>
-              </FormLabel>
+              </div>
               <FormControl>
                 <Input
-                  placeholder="Build secure collaborative storage..."
-                  className="h-11 bg-background/50"
+                  placeholder="Repository for shared organization assets."
+                  className="h-9 bg-background rounded-sm text-xs"
                   maxLength={160}
                   {...field}
                 />
               </FormControl>
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Ringkasan singkat fungsi workspace lu.</span>
-                <span className="font-mono">
-                  {(currentDescription || "").length}/160
-                </span>
-              </div>
-              <FormMessage />
+              <FormMessage className="text-[11px]" />
             </FormItem>
           )}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-muted-foreground/10 pt-5">
-          {/* 4. VISIBILITY SELECTOR */}
+        {/* SELECTORS GRID */}
+        <div className="flex gap-4 border-t border-border pt-4 mt-2 ">
           <FormField
             control={control}
             name="visibility"
@@ -244,7 +238,6 @@ export function CreateWorkspaceForm({
             )}
           />
 
-          {/* 5. UPLOAD POLICY SELECTOR */}
           <FormField
             control={control}
             name="upload_policy"
@@ -257,29 +250,26 @@ export function CreateWorkspaceForm({
           />
         </div>
 
-        {/* BUTTON SUBMIT DENGAN PERLINDUNGAN STATUS CONNECTION & MUTATION */}
+        {/* SUBMIT BUTTON */}
         <Button
           type="submit"
-          className="w-full h-11 font-medium mt-2"
+          className="w-full h-9 font-semibold text-xs rounded-sm shadow-none mt-2 uppercase tracking-wider"
           disabled={
             mutation.isPending || isSlugAvailable === false || !walletAddress
           }
         >
           {mutation.isPending ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Menyebarkan Kontainer Workspace...
+              <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+              Deploying Container...
             </>
           ) : !walletAddress ? (
-            "Harap Hubungkan Wallet Lu"
+            "Wallet Disconnected"
           ) : (
-            "Buat Workspace Baru"
+            "Initialize Workspace"
           )}
         </Button>
       </form>
     </Form>
   );
 }
-
-// Helper internal kecil agar form tidak crash menghitung karakter deskripsi yang kosong
-const currentDescription = "";
