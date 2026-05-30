@@ -10,16 +10,17 @@ import {
   Clock,
   FolderLock,
 } from "lucide-react";
-import { cn } from "@/lib/utils"; // Pastikan lu punya helper ini (biasanya bawaan shadcn)
+import { cn } from "@/lib/utils";
 
 export function WorkspaceSidebar() {
   const pathname = usePathname();
   const params = useParams();
 
-  // Baca parameter dari URL. Jika ada workspaceId, berarti kita di dalam Level 2 (Detail).
+  // 🌟 PERBAIKAN: Baca parameter 'slug' dari URL, bukan 'workspaceId'.
+  // Jika ada slug, berarti kita di dalam Level 2 (Detail).
   // Jika tidak ada, berarti kita di Level 1 (Hub).
-  const workspaceId = params?.workspaceId as string | undefined;
-  const isHubMode = !workspaceId;
+  const slug = params?.slug as string | undefined;
+  const isHubMode = !slug;
 
   // Konfigurasi Navigasi Level 1 (Workspace Hub)
   const hubLinks = [
@@ -27,22 +28,22 @@ export function WorkspaceSidebar() {
     { name: "Aktivitas Terakhir", href: "/workspace/recent", icon: Clock },
   ];
 
-  // Konfigurasi Navigasi Level 2 (Internal Workspace)
-  const workspaceLinks = workspaceId
+  // 🌟 PERBAIKAN: Konfigurasi Navigasi Level 2 menggunakan 'slug'
+  const workspaceLinks = slug
     ? [
         {
           name: "Dasbor Data",
-          href: `/workspace/${workspaceId}`,
+          href: `/workspace/${slug}`,
           icon: LayoutDashboard,
         },
         {
           name: "Verifikasi Bukti",
-          href: `/workspace/${workspaceId}/verify`,
+          href: `/workspace/${slug}/verify`,
           icon: ShieldCheck,
         },
         {
           name: "Pengaturan Ruang",
-          href: `/workspace/${workspaceId}/settings`,
+          href: `/workspace/${slug}/settings`,
           icon: Settings,
         },
       ]
@@ -71,7 +72,7 @@ export function WorkspaceSidebar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-all text-sm font-medium",
+                  "flex items-center space-x-3 px-3 py-2.5 rounded-sm transition-all text-sm font-medium",
                   isActive
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -92,7 +93,7 @@ export function WorkspaceSidebar() {
 
       {/* Bagian Bawah Opsional (Misal untuk status Walrus Storage dsb) */}
       <div className="p-4 border-t border-border/50">
-        <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50 border border-border/50">
+        <div className="flex items-center gap-2 p-2 rounded-sm bg-muted/50 border border-border/50">
           <FolderLock className="w-4 h-4 text-emerald-500" />
           <div className="flex flex-col">
             <span className="text-[10px] font-bold">Walrus Network</span>

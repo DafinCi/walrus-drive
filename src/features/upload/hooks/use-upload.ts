@@ -57,15 +57,11 @@ export function useUpload() {
         progressMessage: "Upload berhasil!",
       });
 
-      // 🔥 FIX ISSUE 2: INVALIDASI SEMUA KEMUNGKINAN QUERY KEY DASHBOARD LU
-      // Menghapus cache spesifik berkas
-      queryClient.invalidateQueries({
-        queryKey: ["workspace-files", workspaceId],
-      });
-      // Menghapus cache detail data komplit workspace (agar kartu file lu langsung menyembul otomatis!)
-      queryClient.invalidateQueries({
-        queryKey: ["workspace-detail", workspaceId],
-      });
+      // 🌟 PERBAIKAN: Invalidate secara "fuzzy" (cukup prefix-nya saja)
+      // Karena dashboard sekarang pakai 'slug', kalau kita tembak ID spesifik, cache nggak ker-reset.
+      // Dengan cara ini, semua cache list file & detail workspace akan di-refresh otomatis.
+      queryClient.invalidateQueries({ queryKey: ["workspace-files"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-detail"] });
 
       return result;
     } catch (error: any) {

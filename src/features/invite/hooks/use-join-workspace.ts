@@ -1,9 +1,16 @@
+// src/features/invite/hooks/use-join-workspace.ts
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 export interface ValidateInviteResponse {
   success: boolean;
   invite: { valid: boolean; expired: boolean };
-  workspace: { id: string; name: string; owner_address: string } | null;
+  // 🌟 FIX: Tambahkan 'slug' di tipe data response
+  workspace: {
+    id: string;
+    name: string;
+    owner_address: string;
+    slug: string;
+  } | null;
   membership: { alreadyMember: boolean; role: string | null };
 }
 
@@ -48,7 +55,7 @@ export function useJoinWorkspace() {
       if (!response.ok || !result.success) {
         throw new Error(result.error || "Gagal mendaftarkan diri Anda.");
       }
-      return result; // Mengembalikan { success: true, workspaceId }
+      return result; // Ekspektasi pengembalian: { success: true, workspaceId, slug } 🌟
     },
   });
 }

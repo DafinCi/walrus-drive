@@ -1,6 +1,6 @@
 // src/app/api/upload/route.ts
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/services/supabase/admin"; // Pastikan path ini sesuai servis lu
+import { supabaseAdmin } from "@/services/supabase/admin";
 
 export async function POST(request: Request) {
   try {
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       storageEpoch,
     } = body;
 
-    // Validasi input minimal
+    // 1. Validasi input minimal
     if (!blobId || !walletAddress || !workspaceId) {
       return NextResponse.json(
         { error: "Missing required metadata fields" },
@@ -27,7 +27,34 @@ export async function POST(request: Request) {
       );
     }
 
-    // Insert data metadata file ke Supabase
+    // 2. 🌟 UPGRADE KEAMANAN: Validasi Hak Akses (Membership Verification)
+    // Karena menggunakan supabaseAdmin, kita harus cek manual apakah wallet ini berhak mengupload di workspace ini
+    const { data: membership, error: membershipError } = await supabaseAdmin
+      .from("workspace_members")
+      .select("role")
+      .eq("workspace_id", workspaceId)
+      .eq("wallet_address", walletAddress)
+      .maybeSingle();
+
+    if (membershipError) {
+      console.error("Membership Check Error:", membershipError);
+      return NextResponse.json(
+        { error: "Gagal memverifikasi hak akses ruang kerja." },
+        { status: 500 },
+      );
+    }
+
+    if (!membership) {
+      return NextResponse.json(
+        {
+          error:
+            "Akses ditolak. Wallet Anda tidak terdaftar di ruang kerja ini.",
+        },
+        { status: 403 }, // Forbidden
+      );
+    }
+
+    // 3. Insert data metadata file ke Supabase (Aman & Terverifikasi)
     const { data, error } = await supabaseAdmin
       .from("files")
       .insert([

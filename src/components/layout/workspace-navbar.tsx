@@ -16,7 +16,7 @@ export function WorkspaceNavbar() {
             href="/"
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-foreground text-background">
+            <div className="flex h-7 w-7 items-center justify-center rounded-sm bg-foreground text-background">
               <Box className="h-4 w-4" />
             </div>
             <span className="font-heading font-bold text-base tracking-tight hidden sm:block">

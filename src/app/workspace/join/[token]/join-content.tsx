@@ -31,11 +31,12 @@ export default function JoinWorkspaceContent() {
   useEffect(() => {
     if (isLoading || !data) return;
 
-    if (data.membership?.alreadyMember && data.workspace?.id) {
+    // 🌟 FIX: Gunakan workspace.slug, BUKAN workspace.id
+    if (data.membership?.alreadyMember && data.workspace?.slug) {
       toast.info("Akses Terdeteksi", {
         description: `Anda sudah menjadi anggota di ${data.workspace.name}. Mengalihkan langsung...`,
       });
-      router.replace(`/workspace/${data.workspace.id}`);
+      router.replace(`/workspace/${data.workspace.slug}`);
     }
   }, [data, isLoading, router]);
 
@@ -80,7 +81,8 @@ export default function JoinWorkspaceContent() {
           toast.success("Berhasil Bergabung!", {
             description: "Kunci akses ruang kerja Anda telah dikonfigurasi.",
           });
-          router.replace(`/workspace/${result.workspaceId}`);
+          // 🌟 FIX: Pastikan API mengembalikan 'slug' saat join sukses dan redirect pakai slug!
+          router.replace(`/workspace/${result.slug}`);
         },
         onError: (err: any) => {
           toast.error("Gagal Masuk", {

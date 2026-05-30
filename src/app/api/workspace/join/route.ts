@@ -36,6 +36,20 @@ export async function POST(request: Request) {
       );
     }
 
+    // 🌟 FIX: Kita ambil 'slug' dari tabel workspaces berdasarkan workspace_id
+    const { data: workspaceData, error: workspaceError } = await supabaseAdmin
+      .from("workspaces")
+      .select("slug")
+      .eq("id", invite.workspace_id)
+      .single();
+
+    if (workspaceError || !workspaceData) {
+      return NextResponse.json(
+        { success: false, error: "Data kluster workspace tidak ditemukan." },
+        { status: 404 },
+      );
+    }
+
     // 2. Cek apakah wallet address ini sebenarnya sudah terdaftar
     const { data: existingMember } = await supabaseAdmin
       .from("workspace_members")
@@ -48,6 +62,7 @@ export async function POST(request: Request) {
       return NextResponse.json({
         success: true,
         workspaceId: invite.workspace_id,
+        slug: workspaceData.slug, // 🔥 AMAN! Slug dikirim ke frontend
         message: "Anda sudah tergabung.",
       });
     }
@@ -69,6 +84,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       workspaceId: invite.workspace_id,
+      slug: workspaceData.slug, // 🔥 AMAN! Slug dikirim ke frontend untuk keperluan redirect
       message: "Berhasil bergabung ke workspace kolaboratif.",
     });
   } catch (error: any) {

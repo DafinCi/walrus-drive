@@ -180,7 +180,11 @@ function DashboardContent({ slug }: { slug: string }) {
 
       {/* Modal Invite */}
       {/* 🌟 Sama seperti dropzone, pastikan modal ini menerima ID jika ia melakukan query database internal */}
-      <InviteModal open={isInviteModalOpen} onOpenChange={setInviteModalOpen} />
+      <InviteModal
+        open={isInviteModalOpen}
+        onOpenChange={setInviteModalOpen}
+        workspaceId={workspaceData.id}
+      />
     </div>
   );
 }

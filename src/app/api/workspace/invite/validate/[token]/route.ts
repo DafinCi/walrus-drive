@@ -3,10 +3,10 @@ import { supabaseAdmin } from "@/services/supabase/admin";
 
 export async function GET(
   request: Request,
-  { params }: { params: { token: string } },
+  { params }: { params: { token: string } }, // Perhatikan: di Next.js 15+ ini mungkin perlu di-await, tapi kita ikuti struktur lu yang sekarang
 ) {
   try {
-    const { token } = params;
+    const { token } = await params;
     const { searchParams } = new URL(request.url);
     const walletAddress = searchParams.get("walletAddress");
 
@@ -46,9 +46,10 @@ export async function GET(
     }
 
     // 3. Ambil metadata singkat Workspace tujuan
+    // 🌟 FIX: Tambahkan kolom "slug" pada operasi select!
     const { data: workspace, error: workspaceError } = await supabaseAdmin
       .from("workspaces")
-      .select("id, name, owner_address")
+      .select("id, name, owner_address, slug")
       .eq("id", invite.workspace_id)
       .single();
 
@@ -84,6 +85,7 @@ export async function GET(
         id: workspace.id,
         name: workspace.name,
         owner_address: workspace.owner_address,
+        slug: workspace.slug, // 🌟 FIX: Sertakan slug ke dalam payload JSON response!
       },
       membership: {
         alreadyMember,

@@ -19,9 +19,11 @@ import {
   ExternalLink,
   ShieldCheck,
   Clock,
+  Wallet,
 } from "lucide-react";
 import { toast } from "sonner";
 import { formatTruncateWallet } from "@/lib/formatters";
+import { useCurrentAccount } from "@mysten/dapp-kit"; // 🌟 TAMBAHAN
 
 interface UploadModalProps {
   item: QueueUploadItem | null;
@@ -31,6 +33,7 @@ interface UploadModalProps {
 
 export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const account = useCurrentAccount();
 
   if (!item) return null;
 
@@ -58,21 +61,33 @@ export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
 
         <div className="space-y-4 pt-2 z-50">
           {/* Section 1: Keterangan Berkas */}
-          <div className="p-3 bg-muted/40 border border-border/50 rounded-lg space-y-1.5">
-            <div className="flex justify-between">
+          <div className="p-3 bg-muted/40 border border-border/50 rounded-lg space-y-2">
+            <div className="flex justify-between items-center">
               <span className="text-muted-foreground">Nama Berkas:</span>
               <span
-                className="font-medium text-right truncate max-w-[220px]"
+                className="font-medium text-right truncate max-w-[200px]"
                 title={item.fileName}
               >
                 {item.fileName}
               </span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="text-muted-foreground">Ukuran:</span>
               <span className="font-medium">{fileSizeInMB} MB</span>
             </div>
-            <div className="flex justify-between">
+
+            {/* 🌟 TAMBAHAN: Penggunaan formatTruncateWallet */}
+            <div className="flex justify-between items-center">
+              <span className="text-muted-foreground">Pengunggah:</span>
+              <span className="font-mono bg-muted px-1.5 py-0.5 rounded text-[11px] flex items-center gap-1.5 border border-border">
+                <Wallet className="w-3 h-3 text-muted-foreground" />
+                {account?.address
+                  ? formatTruncateWallet(account.address)
+                  : "Tidak diketahui"}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center pt-1 border-t border-border/40 mt-1">
               <span className="text-muted-foreground">Status Siklus:</span>
               <span className="font-mono uppercase text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded font-bold">
                 {item.status}
@@ -118,9 +133,6 @@ export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
                 </div>
               </div>
             )}
-
-            {/* Note: Jika data Tx Digest dikembalikan dari API upload service lu, lu bisa passing ke store. 
-                Tapi kalau untuk visual juri, menampilkan Blob ID dan Checksum saja sudah sangat killer! */}
 
             {/* Waktu Masuk Antrean */}
             <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground pt-1">

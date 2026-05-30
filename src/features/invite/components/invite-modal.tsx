@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import {
   Copy,
@@ -32,7 +31,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 
-// Import Hooks dan Presentational Card yang telah direfaktorisasi
+// Import Hooks dan Presentational Card
 import { InviteLinkCard } from "./invite-link-card";
 import { MemberList } from "./member-list";
 import {
@@ -44,14 +43,18 @@ import {
 interface InviteModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  workspaceId: string; // 🌟 FIX: Sekarang menjadi PROPS WAJIB dari parent yang memegang UUID asli
 }
 
 type TabType = "invites" | "members";
 
-export function InviteModal({ open, onOpenChange }: InviteModalProps) {
-  const params = useParams();
+export function InviteModal({
+  open,
+  onOpenChange,
+  workspaceId,
+}: InviteModalProps) {
+  // 🌟 FIX: Hapus useParams() agar modal tidak pusing memikirkan slug/UUID di URL browser
   const account = useCurrentAccount();
-  const workspaceId = params.workspaceId as string;
 
   // State Kontrol Navigasi Tab Internal
   const [activeTab, setActiveTab] = useState<TabType>("invites");
