@@ -1,4 +1,6 @@
-export type WorkspaceRole = "owner" | "admin" | "member";
+// src/features/workspace/types/member.types.ts
+
+import { WorkspaceRole } from "@/features/auth/types/auth.types";
 
 export interface WorkspaceMember {
   id: string;

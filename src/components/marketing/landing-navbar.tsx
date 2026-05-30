@@ -10,7 +10,7 @@ export function LandingNavbar() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-zinc-900 bg-black/70 backdrop-blur-md">
+    <header className="fixed top-0 z-50 w-full border-b border-border bg-background/70 backdrop-blur-md">
       <div className="max-w-6xl mx-auto flex h-16 items-center justify-between px-4 md:px-8">
         {/* Sisi Kiri: Logo Identitas */}
         <Link
@@ -80,7 +80,7 @@ export function LandingNavbar() {
           <Button
             asChild
             size="sm"
-            className="font-semibold text-xs bg-white text-black hover:bg-zinc-200 rounded-full px-4 cursor-pointer"
+            className="font-semibold text-xs bg-white text-black hover:bg-zinc-200 rounded-sm px-4 cursor-pointer"
           >
             <Link href="/workspace">Launch App</Link>
           </Button>

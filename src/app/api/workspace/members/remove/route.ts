@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/services/supabase/admin";
-import { canRemove } from "@/features/workspace/utils/permissions";
+import { canManageRole } from "@/features/auth/services/auth.service"; // 🔥 Panggil dari service terpusat
 
 export async function POST(request: Request) {
   try {
@@ -48,8 +48,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Evaluasi Aturan Keamanan Berkas Kebijakan
-    if (!canRemove(actor.role, target.role, isSelf)) {
+    // 3. 🔥 Evaluasi Aturan Keamanan Berkas Kebijakan dengan canManageRole
+    if (isSelf || !canManageRole(actor.role, target.role)) {
       let errorMessage =
         "Anda tidak memiliki hak akses tingkat tinggi untuk mengeluarkan anggota ini.";
       if (isSelf)
@@ -73,9 +73,6 @@ export async function POST(request: Request) {
       .eq("wallet_address", targetWallet);
 
     if (deleteError) throw deleteError;
-
-    // Catatan: Data berkas unggahan di tabel 'files' aman tidak tersentuh karena
-    // relasi file diikat ke workspace_id, bukan personal user!
 
     return NextResponse.json({
       success: true,

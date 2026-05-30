@@ -6,7 +6,7 @@ export default function MarketingRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-black min-h-screen text-white font-sans antialiased selection:bg-sky-500/30 selection:text-sky-200">
+    <div className="min-h-screen text-foreground font-sans antialiased selection:bg-sky-500/30 selection:text-sky-200">
       {/* Navbar global untuk seluruh ranah marketing */}
       <LandingNavbar />
 

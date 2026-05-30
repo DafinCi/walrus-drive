@@ -142,6 +142,7 @@ function DashboardContent({ slug }: { slug: string }) {
 
       {/* SECTION LAYER 2: Action Bar Toolbar */}
       <WorkspaceToolbar
+        workspaceId={workspaceData.id}
         view={view}
         onViewChange={handleViewChange}
         onUploadClick={() => setUploadModalOpen(true)}

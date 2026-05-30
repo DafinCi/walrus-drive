@@ -23,6 +23,11 @@ import {
 } from "@/features/workspace/hooks/use-workspace-members";
 import { formatTruncateWallet, formatTimeAgo } from "@/lib/formatters";
 import {
+  canManageRole,
+  isOwner as checkIsOwner,
+  isAdmin as checkIsAdmin,
+} from "@/features/auth/services/auth.service"; // 🔥 Import dari auth.service
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -52,69 +57,55 @@ function getDeterministicGradient(address: string) {
 export function MemberRow({ member, currentUserRole }: MemberRowProps) {
   const params = useParams();
   const account = useCurrentAccount();
-
   const workspaceId = params.workspaceId as string;
   const actorWallet = account?.address;
 
-  // Inisialisasi Mutasi TanStack
   const promoteMutation = usePromoteMember();
   const removeMutation = useRemoveMember();
-
   const isMutating = promoteMutation.isPending || removeMutation.isPending;
-
   const gradientClass = getDeterministicGradient(member.wallet_address);
   const initials = member.wallet_address.slice(2, 4).toUpperCase();
 
-  const isOwner = member.role === "owner";
-  const isAdmin = member.role === "admin";
+  // 🔥 Pakai helper dari auth.service
+  const isOwner = checkIsOwner(member.role);
+  const isAdmin = checkIsAdmin(member.role);
 
+  // 🔥 Logic permission UI jauh lebih bersih
   const canManage =
-    !member.isCurrentUser &&
-    !isOwner &&
-    (currentUserRole === "owner" ||
-      (currentUserRole === "admin" && member.role === "member"));
+    !member.isCurrentUser && canManageRole(currentUserRole, member.role);
 
-  // HANDLER: Promosi ke Admin
   const handlePromote = () => {
     if (!actorWallet || isMutating) return;
-
     promoteMutation.mutate(
       { workspaceId, targetWallet: member.wallet_address, actorWallet },
       {
-        onSuccess: (res) => {
-          toast.success("Otoritas Diperbarui", { description: res.message });
-        },
-        onError: (err) => {
-          toast.error("Gagal Mempromosikan", { description: err.message });
-        },
+        onSuccess: (res) =>
+          toast.success("Otoritas Diperbarui", { description: res.message }),
+        onError: (err) =>
+          toast.error("Gagal Mempromosikan", { description: err.message }),
       },
     );
   };
 
-  // HANDLER: Tendang Member
   const handleRemove = () => {
     if (!actorWallet || isMutating) return;
-
     toast.loading("Memutuskan akses kriptografi...", {
       id: `remove-${member.id}`,
     });
-
     removeMutation.mutate(
       { workspaceId, targetWallet: member.wallet_address, actorWallet },
       {
-        onSuccess: () => {
+        onSuccess: () =>
           toast.success("Akses Dicabut", {
             id: `remove-${member.id}`,
             description:
               "Kolaborator berhasil dikeluarkan dari struktur organisasi.",
-          });
-        },
-        onError: (err) => {
+          }),
+        onError: (err) =>
           toast.error("Aksi Gagal", {
             id: `remove-${member.id}`,
             description: err.message,
-          });
-        },
+          }),
       },
     );
   };
@@ -127,7 +118,6 @@ export function MemberRow({ member, currentUserRole }: MemberRowProps) {
         >
           {initials}
         </div>
-
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
             <span className="text-xs font-mono font-medium text-foreground truncate">
@@ -160,7 +150,6 @@ export function MemberRow({ member, currentUserRole }: MemberRowProps) {
           </span>
         )}
 
-        {/* Dropdown Tindakan Akses Kontrol */}
         {canManage && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

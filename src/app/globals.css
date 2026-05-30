@@ -47,6 +47,7 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 }
+
 :root {
   /* 🌟 BACKGROUND & TEXT (Lebih empuk di mata, gak bikin silau/perih) */
   --background: oklch(0.17 0.01 285);
