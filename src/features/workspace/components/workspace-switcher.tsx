@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
-import { ChevronDown, Layers, Plus, Loader2 } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { ChevronDown, Layers, Plus, Loader2, Check } from "lucide-react";
 import { useWorkspaceQuery } from "../hooks/use-workspace-query";
+import { useWorkspaces } from "../hooks/use-workspaces"; // 🌟 TAMBAHAN: Untuk narik list semua workspace
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,27 +15,34 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
-// Import Modal Pembuat Workspace yang baru kita rakit
 import { CreateWorkspaceModal } from "./create-workspace-modal";
+import { useCurrentAccount } from "@mysten/dapp-kit";
 
 export function WorkspaceSwitcher() {
+  const router = useRouter();
   const params = useParams();
-  const workspaceId = params.workspaceId as string;
+  const slug = params.slug as string; // 🌟 PERBAIKAN: Tangkap slug
+  const account = useCurrentAccount();
 
-  // State lokal untuk mengontrol visibilitas Modal
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  // 1. Ambil data payload utuh dari TanStack Query
-  const { data, isLoading, error } = useWorkspaceQuery(workspaceId);
+  // 1. Ambil data workspace SAAT INI
+  const { data: currentData, isLoading: isLoadingCurrent } =
+    useWorkspaceQuery(slug);
 
-  // 2. Ekstrak sub-objek metadata workspace
-  const workspaceInfo = data?.workspace;
+  // 2. 🌟 TAMBAHAN: Ambil data LIST SEMUA WORKSPACE milik user
+  const { data: allWorkspaces, isLoading: isLoadingList } = useWorkspaces(
+    account?.address,
+  );
 
-  // Helper untuk memotong inisial nama (contoh: "Walrus Team" -> "WA")
+  const workspaceInfo = currentData?.workspace;
+
   const getInitials = (name: string) => {
     if (!name) return "WS";
     return name.slice(0, 2).toUpperCase();
   };
+
+  const isLoading = isLoadingCurrent || isLoadingList;
 
   return (
     <>
@@ -54,11 +62,8 @@ export function WorkspaceSwitcher() {
               )}
             </div>
 
-            {/* Efek Skeleton Loading jika data belum siap */}
             {isLoading ? (
               <div className="h-4 w-24 bg-muted animate-pulse rounded" />
-            ) : error ? (
-              <span className="text-destructive text-xs">Error memuat</span>
             ) : (
               <span className="truncate max-w-[140px] font-semibold tracking-wide">
                 {workspaceInfo?.name || "Unknown Workspace"}
@@ -71,27 +76,38 @@ export function WorkspaceSwitcher() {
 
         <DropdownMenuContent
           align="start"
-          className="w-56 mt-1 border-border bg-popover text-popover-foreground"
+          className="w-64 mt-1 border-border bg-popover text-popover-foreground rounded-sm"
         >
           <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-muted-foreground">
-            Workspace Saat Ini
+            Daftar Workspace
           </DropdownMenuLabel>
 
-          {!isLoading && workspaceInfo && (
-            <DropdownMenuItem className="gap-2 cursor-default font-medium text-sm focus:bg-transparent">
-              <div className="flex h-4 w-4 items-center justify-center rounded bg-primary/20 text-primary text-[10px] font-bold">
-                {getInitials(workspaceInfo.name)}
-              </div>
-              <span className="truncate">{workspaceInfo.name}</span>
-            </DropdownMenuItem>
-          )}
+          {/* 🌟 PERBAIKAN: Render list dari allWorkspaces */}
+          <div className="max-h-[300px] overflow-y-auto py-1">
+            {allWorkspaces?.map((ws) => (
+              <DropdownMenuItem
+                key={ws.id}
+                onClick={() => router.push(`/workspace/${ws.slug}`)} // 🌟 Navigasi via SLUG
+                className="gap-2 cursor-pointer font-medium text-sm focus:bg-muted rounded-sm mb-0.5"
+              >
+                <div className="flex h-5 w-5 items-center justify-center rounded bg-primary/10 text-primary text-[10px] font-bold">
+                  {getInitials(ws.name)}
+                </div>
+                <div className="flex flex-col flex-1 truncate">
+                  <span className="truncate">{ws.name}</span>
+                </div>
+                {ws.slug === slug && (
+                  <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                )}
+              </DropdownMenuItem>
+            ))}
+          </div>
 
           <DropdownMenuSeparator className="bg-border" />
 
-          {/* Tombol Aksi: Sekarang memicu state modal lokal, bukan redirect page */}
           <DropdownMenuItem
             onClick={() => setIsCreateModalOpen(true)}
-            className="gap-2 cursor-pointer text-muted-foreground hover:text-foreground text-sm focus:bg-muted font-medium"
+            className="gap-2 cursor-pointer text-muted-foreground hover:text-foreground text-sm focus:bg-muted font-medium rounded-sm"
           >
             <Plus className="h-3.5 w-3.5 text-primary" />
             Buat Workspace Baru
@@ -99,8 +115,6 @@ export function WorkspaceSwitcher() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* RENDER MODAL DI LUAR DROPDOWN PORTAL */}
-      {/* Ini krusial agar element focus trap Dialog Shadcn tidak bentrok dengan Dropdown */}
       <CreateWorkspaceModal
         open={isCreateModalOpen}
         onOpenChange={setIsCreateModalOpen}

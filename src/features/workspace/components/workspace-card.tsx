@@ -15,7 +15,6 @@ interface WorkspaceCardProps {
 }
 
 export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
-  // Helper penentu warna badge berdasarkan tingkatan role di blockchain/DB
   const getRoleBadgeStyles = (role: string) => {
     switch (role) {
       case "owner":
@@ -38,7 +37,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
 
   return (
     <Link
-      href={`/workspace/${workspace.id}`}
+      href={`/workspace/${workspace.slug}`} // 🌟 PERBAIKAN: Gunakan slug untuk routing
       className="group relative flex flex-col justify-between p-5 bg-card border border-border/70 rounded-sm shadow-xs transition-all duration-300 hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5 cursor-pointer overflow-hidden"
     >
       {/* Efek Garis Dekoratif Glossy saat Hover */}

@@ -8,9 +8,9 @@ import {
 
 // Core Fetcher Function
 async function fetchWorkspaceFullData(
-  workspaceId: string,
+  slug: string, // 🌟 PERBAIKAN: Ubah parameter jadi slug
 ): Promise<WorkspaceFullPayload> {
-  const response = await fetch(`/api/workspace/${workspaceId}`);
+  const response = await fetch(`/api/workspace/${slug}`);
   const result = await response.json();
 
   if (!response.ok || !result.success) {
@@ -24,11 +24,11 @@ async function fetchWorkspaceFullData(
  * 1. HOOK UTAMA: Mengambil semua data utuh workspace (Metadata, Files, Members)
  * Bagus dipakai di level Orchestrator Component (workspace-dashboard.tsx)
  */
-export function useWorkspaceQuery(workspaceId: string) {
+export function useWorkspaceQuery(slug: string) {
   return useQuery({
-    queryKey: ["workspace-detail", workspaceId],
-    queryFn: () => fetchWorkspaceFullData(workspaceId),
-    enabled: !!workspaceId, // Hanya jalan jika workspaceId valid
+    queryKey: ["workspace-detail", slug], // 🌟 PERBAIKAN: Gunakan slug sebagai cache key
+    queryFn: () => fetchWorkspaceFullData(slug),
+    enabled: !!slug, // Hanya jalan jika slug valid
     staleTime: 1000 * 60 * 2, // Data dianggap segar selama 2 menit
   });
 }
@@ -37,11 +37,11 @@ export function useWorkspaceQuery(workspaceId: string) {
  * 2. HOOK KHUSUS FILES: Mengambil sub-data files secara terisolasi
  * Memanfaatkan selektor cache TanStack Query tanpa memicu request API ganda
  */
-export function useWorkspaceFiles(workspaceId: string) {
+export function useWorkspaceFiles(slug: string) {
   return useQuery({
-    queryKey: ["workspace-detail", workspaceId],
-    queryFn: () => fetchWorkspaceFullData(workspaceId),
-    enabled: !!workspaceId,
+    queryKey: ["workspace-detail", slug],
+    queryFn: () => fetchWorkspaceFullData(slug),
+    enabled: !!slug,
     select: (data): WorkspaceFile[] => data.files, // 🔥 Mengambil array files saja
   });
 }
@@ -49,11 +49,11 @@ export function useWorkspaceFiles(workspaceId: string) {
 /**
  * 3. HOOK KHUSUS MEMBERS: Mengambil sub-data daftar anggota kolaborator
  */
-export function useWorkspaceMembers(workspaceId: string) {
+export function useWorkspaceMembers(slug: string) {
   return useQuery({
-    queryKey: ["workspace-detail", workspaceId],
-    queryFn: () => fetchWorkspaceFullData(workspaceId),
-    enabled: !!workspaceId,
+    queryKey: ["workspace-detail", slug],
+    queryFn: () => fetchWorkspaceFullData(slug),
+    enabled: !!slug,
     select: (data): WorkspaceMember[] => data.members, // 🔥 Mengambil array members saja
   });
 }

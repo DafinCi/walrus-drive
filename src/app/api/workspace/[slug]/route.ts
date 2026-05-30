@@ -3,23 +3,23 @@ import { supabaseAdmin } from "@/services/supabase/admin";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ workspaceId: string }> },
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
-    const { workspaceId } = await params;
+    const { slug } = await params;
 
-    if (!workspaceId) {
+    if (!slug) {
       return NextResponse.json(
-        { success: false, error: "Workspace ID diperlukan" },
+        { success: false, error: "Workspace slug diperlukan" },
         { status: 400 },
       );
     }
 
-    // 1. Fetch Workspace Metadata
+    // 1. Fetch Workspace Metadata berdasarkan SLUG (bukan ID)
     const { data: workspace, error: wsError } = await supabaseAdmin
       .from("workspaces")
       .select("*")
-      .eq("id", workspaceId)
+      .eq("slug", slug) // 🌟 PERBAIKAN: Cari di kolom slug
       .maybeSingle();
 
     if (wsError) throw wsError;
@@ -30,7 +30,10 @@ export async function GET(
       );
     }
 
-    // 2. Fetch Files di dalam Workspace (Urutan terbaru di atas)
+    // 🌟 PERBAIKAN: Ekstrak UUID asli untuk mencari data relasi di tabel lain
+    const workspaceId = workspace.id;
+
+    // 2. Fetch Files di dalam Workspace menggunakan UUID (Urutan terbaru di atas)
     const { data: files, error: filesError } = await supabaseAdmin
       .from("files")
       .select("*")
@@ -39,7 +42,7 @@ export async function GET(
 
     if (filesError) throw filesError;
 
-    // 3. Fetch Members di dalam Workspace
+    // 3. Fetch Members di dalam Workspace menggunakan UUID
     const { data: members, error: membersError } = await supabaseAdmin
       .from("workspace_members")
       .select("*")

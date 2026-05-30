@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useCurrentAccount } from "@mysten/dapp-kit";
+
 // Import Lego Components Presentational
 import { WorkspaceHeader } from "./workspace-header";
 import { WorkspaceToolbar } from "./workspace-toolbar";
@@ -31,14 +32,12 @@ import { Dropzone } from "@/features/upload/components/dropzone";
 import { useWorkspaceQuery } from "../hooks/use-workspace-query";
 import { useWorkspaceStore } from "../store/workspace-store";
 
-function DashboardContent() {
+function DashboardContent({ slug }: { slug: string }) {
+  // 🌟 PERBAIKAN: Menerima prop slug
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const params = useParams();
-  const account = useCurrentAccount(); // 👈 2. AMBIL ACC WALLET YANG SEDANG AKTIF
-
-  const workspaceId = params.workspaceId as string;
+  const account = useCurrentAccount();
 
   // 1. CONSUME INTERACTION STATE FROM ZUSTAND STORE
   const {
@@ -49,7 +48,8 @@ function DashboardContent() {
   } = useWorkspaceStore();
 
   // 2. CONSUME SERVER DATA STATE FROM TANSTACK QUERY
-  const { data, isLoading, error } = useWorkspaceQuery(workspaceId);
+  // 🌟 PERBAIKAN: Fetch data menggunakan slug
+  const { data, isLoading, error } = useWorkspaceQuery(slug);
 
   // 3. READ & DERIVE URL SELECTION STATE
   const view = (searchParams.get("view") === "table" ? "table" : "grid") as
@@ -62,10 +62,10 @@ function DashboardContent() {
   const rawFiles = data?.files ?? [];
   const members = data?.members ?? [];
 
-  // 🔥 3. FIX ERROR: Ekstrak role spesifik milik user yang sedang buka halaman ini
+  // 3. FIX ERROR: Ekstrak role spesifik milik user yang sedang buka halaman ini
   const currentUserRole =
     members.find((m) => m.wallet_address === account?.address)?.role ??
-    "member"; // Default ke "member" jika data belum sinkron
+    "member";
 
   // 5. DATA MAPPING: Ubah snake_case (DB) ke camelCase (UI Component)
   const uiFiles = rawFiles.map((f) => ({
@@ -172,19 +172,22 @@ function DashboardContent() {
             </DialogTitle>
           </DialogHeader>
           <div className="pt-2">
-            <Dropzone />
+            {/* 🌟 PENTING: Passing ID asli dari database, BUKAN slug, agar fungsi upload tidak error! */}
+            <Dropzone workspaceId={workspaceData.id} />
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* 👈 5. FIX GLITCH: Panggil InviteModal secara direct tanpa double Dialog wrapper */}
+      {/* Modal Invite */}
+      {/* 🌟 Sama seperti dropzone, pastikan modal ini menerima ID jika ia melakukan query database internal */}
       <InviteModal open={isInviteModalOpen} onOpenChange={setInviteModalOpen} />
     </div>
   );
 }
 
 // Composition Root Wrapper
-export function WorkspaceDashboard() {
+export function WorkspaceDashboard({ slug }: { slug: string }) {
+  // 🌟 PERBAIKAN: Menerima dan meneruskan prop slug dari page.tsx
   return (
     <Suspense
       fallback={
@@ -193,7 +196,7 @@ export function WorkspaceDashboard() {
         </div>
       }
     >
-      <DashboardContent />
+      <DashboardContent slug={slug} />
     </Suspense>
   );
 }

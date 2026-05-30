@@ -1,18 +1,20 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react"; // 👈 Tambahkan useRef & useEffect
-import { useParams } from "next/navigation";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { UploadCloud } from "lucide-react";
 import { useUpload } from "../hooks/use-upload";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { toast } from "sonner";
 
-export function Dropzone() {
-  const params = useParams();
+// 🌟 PERBAIKAN: Paksa komponen menerima workspaceId murni (UUID)
+interface DropzoneProps {
+  workspaceId: string;
+}
+
+export function Dropzone({ workspaceId }: DropzoneProps) {
   const account = useCurrentAccount();
   const { startUpload } = useUpload();
 
-  const workspaceId = params.workspaceId as string;
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -32,6 +34,7 @@ export function Dropzone() {
     }
 
     try {
+      // 🌟 Aman: workspaceId di sini sekarang adalah UUID asli, bukan slug
       await startUpload(file, workspaceId);
     } catch (err: any) {
       console.error("Dropzone trigger error:", err);
@@ -56,7 +59,7 @@ export function Dropzone() {
       const file = e.dataTransfer.files?.[0];
       if (file) processFile(file);
     },
-    [account, workspaceId],
+    [account, workspaceId], // 🌟 Update dependency
   );
 
   const onFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +80,7 @@ export function Dropzone() {
         }`}
       >
         <input
-          ref={fileInputRef} // 👈 Pasang Ref di sini
+          ref={fileInputRef}
           id="file-upload"
           type="file"
           onChange={onFileInput}

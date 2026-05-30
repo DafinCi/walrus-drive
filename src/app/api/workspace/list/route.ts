@@ -22,11 +22,12 @@ export async function GET(request: NextRequest) {
         joined_at,
         workspaces (
           id,
+          slug,
           name,
           owner_address,
           created_at
         )
-      `,
+        `,
       )
       .eq("wallet_address", wallet);
 
@@ -54,6 +55,7 @@ export async function GET(request: NextRequest) {
 
         return {
           id: ws.id,
+          slug: ws.slug,
           name: ws.name,
           ownerAddress: ws.owner_address,
           createdAt: ws.created_at,

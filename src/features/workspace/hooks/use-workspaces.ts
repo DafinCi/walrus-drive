@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export interface WorkspaceHubItem {
   id: string;
+  slug: string;
   name: string;
   ownerAddress: string;
   createdAt: string;
