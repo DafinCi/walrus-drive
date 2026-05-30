@@ -52,7 +52,7 @@ export function WorkspaceSidebar() {
   const activeLinks = isHubMode ? hubLinks : workspaceLinks;
 
   return (
-    <aside className="w-full h-full md:w-64 border-r border-border bg-card flex flex-col shrink-0 transition-all duration-300">
+    <aside className="w-full h-full md:w-64 border-r border-border bg-background flex flex-col shrink-0 transition-all duration-300">
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
         {/* Label Contextual */}
         <div className="px-2 mb-2">
