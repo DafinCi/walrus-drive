@@ -6,24 +6,26 @@ import { useUpload } from "../hooks/use-upload";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { toast } from "sonner";
 
-// 🌟 PERBAIKAN: Paksa komponen menerima workspaceId murni (UUID)
 interface DropzoneProps {
   workspaceId: string;
+  autoOpen?: boolean; // 🌟 TAMBAHAN: Prop kendali otomatis biner
 }
 
-export function Dropzone({ workspaceId }: DropzoneProps) {
+export function Dropzone({ workspaceId, autoOpen = false }: DropzoneProps) {
+  // 🌟 Fallback ke false
   const account = useCurrentAccount();
   const { startUpload } = useUpload();
 
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 🔥 UX SHORTCUT: Pemicu Native File Picker Otomatis saat Modal Dropzone Terbuka
   useEffect(() => {
-    if (fileInputRef.current) {
+    if (autoOpen && fileInputRef.current) {
+      // Beri fokus ke input terlebih dahulu agar browser mengizinkan trigger klik programmatic
+      fileInputRef.current.focus();
       fileInputRef.current.click();
     }
-  }, []);
+  }, [autoOpen]);
 
   const processFile = async (file: File) => {
     if (!account) {
@@ -34,7 +36,6 @@ export function Dropzone({ workspaceId }: DropzoneProps) {
     }
 
     try {
-      // 🌟 Aman: workspaceId di sini sekarang adalah UUID asli, bukan slug
       await startUpload(file, workspaceId);
     } catch (err: any) {
       console.error("Dropzone trigger error:", err);
@@ -59,7 +60,7 @@ export function Dropzone({ workspaceId }: DropzoneProps) {
       const file = e.dataTransfer.files?.[0];
       if (file) processFile(file);
     },
-    [account, workspaceId], // 🌟 Update dependency
+    [account, workspaceId],
   );
 
   const onFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {

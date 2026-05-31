@@ -170,7 +170,7 @@ function DashboardContent({ slug }: { slug: string }) {
       {/* SECTION LAYER 3: Dynamic Render Viewport */}
       <main className="flex-1 mt-2">
         {isEmpty ? (
-          <WorkspaceEmpty />
+          <WorkspaceEmpty workspaceId={workspaceData.id} />
         ) : view === "grid" ? (
           <WorkspaceGrid files={filteredFiles} />
         ) : (
@@ -187,7 +187,10 @@ function DashboardContent({ slug }: { slug: string }) {
             </DialogTitle>
           </DialogHeader>
           <div className="pt-2">
-            <Dropzone workspaceId={workspaceData.id} />
+            {/* 🌟 PERBAIKAN: Hapus properti key. Pembungkus '&&' ini sudah otomatis mereset komponen! */}
+            {isUploadModalOpen && (
+              <Dropzone workspaceId={workspaceData.id} autoOpen={true} />
+            )}
           </div>
         </DialogContent>
       </Dialog>
