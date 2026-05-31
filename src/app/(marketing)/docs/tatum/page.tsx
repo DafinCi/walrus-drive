@@ -48,7 +48,7 @@ export default function TatumDocsPage() {
         timestamp: 1780054020,
         events: [
           {
-            type: "TrestoSpace::document::ManifestCreated",
+            type: "WalSpace::document::ManifestCreated",
             walrusBlobId: "walrus-blob-abc-98765-xyz",
             fileHash:
               "sha256-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -98,7 +98,7 @@ export default function TatumDocsPage() {
           Infrastruktur Tatum API
         </h1>
         <p className="text-zinc-400 text-sm leading-relaxed">
-          Bagaimana TrestoSpace mengoptimalkan API terpadu Tatum untuk melakukan
+          Bagaimana WalSpace mengoptimalkan API terpadu Tatum untuk melakukan
           agregasi data blockchain secepat kilat.
         </p>
       </div>

@@ -3,7 +3,7 @@ export default function DocsIntroductionPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">
-          Pengantar TrestoSpace
+          Pengantar WalSpace
         </h1>
         <p className="text-zinc-400 text-sm">
           Platform kolaborasi dan penyimpanan terdesentralisasi berbasis
@@ -22,7 +22,7 @@ export default function DocsIntroductionPage() {
           penuh atas file Anda pada server terpusat.
           <span className="text-zinc-200">
             {" "}
-            TrestoSpace hadir sebagai solusi hibrida
+            WalSpace hadir sebagai solusi hibrida
           </span>{" "}
           yang menggabungkan kenyamanan manajemen tim ala SaaS modern dengan
           keamanan mutakhir infrastruktur Web3.

@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image"; // 🌟 TAMBAHAN: Import Image dari Next.js
 import { WorkspaceSwitcher } from "@/features/workspace/components/workspace-switcher";
 import { SearchInput } from "@/components/shared/search-input";
 import { WalletConnectButton } from "@/features/auth/components/wallet-connect-btn";
-import { Box } from "lucide-react";
 
 export function WorkspaceNavbar() {
   return (
@@ -16,11 +16,15 @@ export function WorkspaceNavbar() {
             href="/"
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-sm bg-foreground text-background">
-              <Box className="h-4 w-4" />
-            </div>
+            <Image
+              src="/walrus-drive.png"
+              alt="Walrus Drive Logo"
+              width={30}
+              height={30}
+              className="object-contain"
+            />
             <span className="font-heading font-bold text-base tracking-tight hidden sm:block">
-              TrestoSpace
+              WalSpace
             </span>
           </Link>
           <div className="h-4 w-[1px] bg-border hidden sm:block" />

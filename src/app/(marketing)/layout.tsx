@@ -15,7 +15,7 @@ export default function MarketingRootLayout({
       {/* Footer global untuk seluruh ranah marketing */}
       <footer className="w-full border-t border-zinc-900 py-8 text-center text-[11px] text-zinc-600">
         <p>
-          © 2026 TrestoSpace. Built exclusively for Tatum x Walrus Global
+          © 2026 WalSpace. Built exclusively for Tatum x Walrus Global
           Hackathon.
         </p>
       </footer>

@@ -158,7 +158,7 @@ export function CreateWorkspaceForm({
                 <div className="flex rounded-sm shadow-none">
                   {/* Prefix Box Ganti Posisi Absolute */}
                   <span className="inline-flex items-center px-3 rounded-l-sm border border-r-0 border-input bg-muted text-muted-foreground text-[11px] font-mono select-none">
-                    trestospace.io/
+                    WalSpace.io/
                   </span>
 
                   {/* Input Box murni sebelah kanan */}

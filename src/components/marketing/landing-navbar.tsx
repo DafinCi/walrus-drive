@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"; // Ditambahkan untuk deteksi hala
 import { Box } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils"; // Pastikan utilitas shadcn ini ada, atau ganti pakai string biasa
+import Image from "next/image";
 
 export function LandingNavbar() {
   const pathname = usePathname();
@@ -17,11 +18,15 @@ export function LandingNavbar() {
           href="/"
           className="flex items-center gap-2 hover:opacity-90 transition-opacity"
         >
-          <div className="flex h-7 w-7 items-center justify-center rounded-sm bg-white text-black">
-            <Box className="h-4 w-4 stroke-[2.5]" />
-          </div>
+          <Image
+            src="/walrus-drive.png"
+            alt="Walrus Drive Logo"
+            width={30}
+            height={30}
+            className="object-contain"
+          />
           <span className="font-bold text-base tracking-tight text-white">
-            TrestoSpace
+            WalSpace
           </span>
         </Link>
 

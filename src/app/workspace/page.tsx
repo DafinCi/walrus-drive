@@ -62,7 +62,7 @@ export default function WorkspaceHubPage() {
             Gerbang Kredensial Terkunci
           </h3>
           <p className="text-xs text-muted-foreground mt-1.5 mb-6 leading-relaxed">
-            TrestoSpace memerlukan tanda tangan kriptografi dompet Anda untuk
+            WalSpace memerlukan tanda tangan kriptografi dompet Anda untuk
             memetakan kepemilikan enkripsi data workspace.
           </p>
           <WalletConnectButton />

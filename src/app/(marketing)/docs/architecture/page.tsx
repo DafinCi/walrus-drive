@@ -24,7 +24,7 @@ export default function ArchitecturePage() {
       {/* HEADER SECTION */}
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2 font-heading">
-          Arsitektur Hibrida TrestoSpace
+          Arsitektur Hibrida WalSpace
         </h1>
         <p className="text-zinc-400 text-sm leading-relaxed max-w-2xl">
           Memadukan kecepatan manajemen data tradisional dengan keamanan
@@ -231,8 +231,7 @@ export default function ArchitecturePage() {
           Ringkasan Teknis bagi Juri
         </h3>
         <p className="text-[11px] text-zinc-500 leading-relaxed">
-          TrestoSpace tidak membebani blockchain dengan data besar. Kami
-          memisahkan{" "}
+          WalSpace tidak membebani blockchain dengan data besar. Kami memisahkan{" "}
           <strong className="text-zinc-300">ketersediaan data</strong> (Walrus)
           dari <strong className="text-zinc-300">otoritas data</strong> (Sui).
           Supabase digunakan sebagai cache metadata yang sinkron dengan on-chain

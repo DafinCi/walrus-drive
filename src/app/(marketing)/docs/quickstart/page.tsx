@@ -87,7 +87,7 @@ export default function QuickstartPage() {
             1. Kloning Repositori
           </h3>
           <p className="text-xs text-zinc-400 mb-3 leading-relaxed">
-            Unduh kode sumber TrestoSpace ke mesin lokal Anda dan masuk ke dalam
+            Unduh kode sumber WalSpace ke mesin lokal Anda dan masuk ke dalam
             direktori proyek.
           </p>
 
