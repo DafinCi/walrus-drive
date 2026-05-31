@@ -43,7 +43,7 @@ import {
 interface InviteModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  workspaceId: string; // 🌟 FIX: Sekarang menjadi PROPS WAJIB dari parent yang memegang UUID asli
+  workspaceId: string;
 }
 
 type TabType = "invites" | "members";
@@ -53,13 +53,13 @@ export function InviteModal({
   onOpenChange,
   workspaceId,
 }: InviteModalProps) {
-  // 🌟 FIX: Hapus useParams() agar modal tidak pusing memikirkan slug/UUID di URL browser
   const account = useCurrentAccount();
 
   // State Kontrol Navigasi Tab Internal
   const [activeTab, setActiveTab] = useState<TabType>("invites");
 
   // State Management untuk form pembuatan
+  const [role, setRole] = useState("member"); // 🌟 PERBAIKAN: State role
   const [expiresInHours, setExpiresInHours] = useState("24");
   const [inviteUrl, setInviteUrl] = useState("");
   const [copied, setCopied] = useState(false);
@@ -90,6 +90,7 @@ export function InviteModal({
         workspaceId,
         createdBy: account.address,
         expiresInHours: Number(expiresInHours),
+        role, // 🌟 PERBAIKAN: Kirim role ke API
       },
       {
         onSuccess: (result) => {
@@ -164,6 +165,7 @@ export function InviteModal({
       setTimeout(() => {
         setInviteUrl("");
         setExpiresAtDate(null);
+        setRole("member"); // Reset role ke default
         setActiveTab("invites"); // Kembalikan ke tab utama default
       }, 300);
     }
@@ -216,26 +218,51 @@ export function InviteModal({
               {/* SEKSI PEMBUATAN LINK BARU */}
               <div className="space-y-4">
                 {!inviteUrl && (
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold text-foreground/80 flex items-center gap-1.5">
-                      <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                      Masa Berlaku Tautan
-                    </label>
-                    <Select
-                      value={expiresInHours}
-                      onValueChange={setExpiresInHours}
-                      disabled={isGenerating}
-                    >
-                      <SelectTrigger className="w-full bg-background border-border text-xs h-9.5">
-                        <SelectValue placeholder="Pilih masa kedaluwarsa" />
-                      </SelectTrigger>
-                      <SelectContent className="text-xs">
-                        <SelectItem value="1">1 Jam</SelectItem>
-                        <SelectItem value="12">12 Jam</SelectItem>
-                        <SelectItem value="24">1 Hari (24 Jam)</SelectItem>
-                        <SelectItem value="168">7 Hari (1 Minggu)</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="space-y-3">
+                    {/* 🌟 PERBAIKAN: Input Pemilihan Peran (Role) */}
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold text-foreground/80 flex items-center gap-1.5">
+                        <Users className="h-3.5 w-3.5 text-muted-foreground" />
+                        Peran Anggota (Role)
+                      </label>
+                      <Select
+                        value={role}
+                        onValueChange={setRole}
+                        disabled={isGenerating}
+                      >
+                        <SelectTrigger className="w-full bg-background border-border text-xs h-9.5">
+                          <SelectValue placeholder="Pilih Peran" />
+                        </SelectTrigger>
+                        <SelectContent className="text-xs">
+                          <SelectItem value="member">Member (Biasa)</SelectItem>
+                          <SelectItem value="admin">
+                            Admin (Pengelola)
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold text-foreground/80 flex items-center gap-1.5">
+                        <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+                        Masa Berlaku Tautan
+                      </label>
+                      <Select
+                        value={expiresInHours}
+                        onValueChange={setExpiresInHours}
+                        disabled={isGenerating}
+                      >
+                        <SelectTrigger className="w-full bg-background border-border text-xs h-9.5">
+                          <SelectValue placeholder="Pilih masa kedaluwarsa" />
+                        </SelectTrigger>
+                        <SelectContent className="text-xs">
+                          <SelectItem value="1">1 Jam</SelectItem>
+                          <SelectItem value="12">12 Jam</SelectItem>
+                          <SelectItem value="24">1 Hari (24 Jam)</SelectItem>
+                          <SelectItem value="168">7 Hari (1 Minggu)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 )}
 

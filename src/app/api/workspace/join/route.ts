@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // 🌟 FIX: Kita ambil 'slug' dari tabel workspaces berdasarkan workspace_id
+    // 🌟 Ambil 'slug' dari tabel workspaces berdasarkan workspace_id
     const { data: workspaceData, error: workspaceError } = await supabaseAdmin
       .from("workspaces")
       .select("slug")
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     // 2. Cek apakah wallet address ini sebenarnya sudah terdaftar
     const { data: existingMember } = await supabaseAdmin
       .from("workspace_members")
-      .select("id")
+      .select("id, role")
       .eq("workspace_id", invite.workspace_id)
       .eq("wallet_address", walletAddress)
       .single();
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       return NextResponse.json({
         success: true,
         workspaceId: invite.workspace_id,
-        slug: workspaceData.slug, // 🔥 AMAN! Slug dikirim ke frontend
+        slug: workspaceData.slug,
         message: "Anda sudah tergabung.",
       });
     }
@@ -74,7 +74,7 @@ export async function POST(request: Request) {
         {
           workspace_id: invite.workspace_id,
           wallet_address: walletAddress,
-          role: "member",
+          role: invite.role || "member", // 🔥 PERBAIKAN: Gunakan role dari token (fallback: member)
           joined_at: new Date().toISOString(),
         },
       ]);
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       workspaceId: invite.workspace_id,
-      slug: workspaceData.slug, // 🔥 AMAN! Slug dikirim ke frontend untuk keperluan redirect
+      slug: workspaceData.slug,
       message: "Berhasil bergabung ke workspace kolaboratif.",
     });
   } catch (error: any) {
