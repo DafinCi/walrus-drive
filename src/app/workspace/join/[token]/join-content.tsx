@@ -98,6 +98,7 @@ export default function JoinWorkspaceContent() {
     <JoinWorkspaceCard
       workspaceName={data.workspace?.name || "Unknown Workspace"}
       ownerAddress={data.workspace?.owner_address || ""}
+      role={data.invite?.role || "member"}
       isConnected={!!account}
       isJoining={joinMutation.isPending}
       onJoin={handleExecuteJoin}

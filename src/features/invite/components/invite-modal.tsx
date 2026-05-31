@@ -59,7 +59,7 @@ export function InviteModal({
   const [activeTab, setActiveTab] = useState<TabType>("invites");
 
   // State Management untuk form pembuatan
-  const [role, setRole] = useState("member"); // 🌟 PERBAIKAN: State role
+  const [role, setRole] = useState("member");
   const [expiresInHours, setExpiresInHours] = useState("24");
   const [inviteUrl, setInviteUrl] = useState("");
   const [copied, setCopied] = useState(false);
@@ -90,7 +90,7 @@ export function InviteModal({
         workspaceId,
         createdBy: account.address,
         expiresInHours: Number(expiresInHours),
-        role, // 🌟 PERBAIKAN: Kirim role ke API
+        role,
       },
       {
         onSuccess: (result) => {
@@ -336,6 +336,7 @@ export function InviteModal({
                         key={invite.token}
                         token={invite.token}
                         expiresAt={invite.expires_at}
+                        role={invite.role}
                         onRevoke={handleRevokeLink}
                         isRevoking={
                           revokeInviteMutation.isPending &&

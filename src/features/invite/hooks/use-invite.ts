@@ -1,5 +1,4 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 export interface WorkspaceInvite {
   token: string;
@@ -7,11 +6,10 @@ export interface WorkspaceInvite {
   created_by: string;
   expires_at: string;
   created_at: string;
+  role: string; // 🌟 TAMBAHAN: Biar tipe data invite di list juga tahu role-nya
 }
 
-// -------------------------------------------------------------------------
-// 1. HOOK: Mengambil Semua Tautan Undangan yang Aktif di Workspace
-// -------------------------------------------------------------------------
+// 1. HOOK: Fetch Daftar Invite Aktif
 export function useGetWorkspaceInvites(workspaceId: string) {
   return useQuery<WorkspaceInvite[]>({
     queryKey: ["workspace-invites", workspaceId],
@@ -29,18 +27,17 @@ export function useGetWorkspaceInvites(workspaceId: string) {
 
       return result.invites;
     },
-    enabled: !!workspaceId, // Jalankan query hanya jika workspaceId valid
-    staleTime: 1000 * 60 * 5, // Data dianggap segar selama 5 menit
+    enabled: !!workspaceId,
+    staleTime: 1000 * 60 * 2,
   });
 }
 
-// -------------------------------------------------------------------------
-// 2. HOOK: Mutasi untuk Membuat Tautan Undangan Baru
-// -------------------------------------------------------------------------
+// 2. HOOK: Mutasi Pembuatan Tautan
 interface CreateInviteInput {
   workspaceId: string;
   createdBy: string;
   expiresInHours: number;
+  role: string; // 🌟 FIX 1: Wajib masukkan role ke dalam interface input frontend!
 }
 
 export function useCreateInvite() {
@@ -51,7 +48,7 @@ export function useCreateInvite() {
       const response = await fetch("/api/workspace/invite/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload), // 🌟 FIX 2: Sekarang otomatis mengirimkan { workspaceId, createdBy, expiresInHours, role }
       });
 
       const result = await response.json();
@@ -60,10 +57,9 @@ export function useCreateInvite() {
         throw new Error(result.error || "Gagal memproses pembuatan undangan.");
       }
 
-      return result; // Mengembalikan { success: true, token, expiresAt }
+      return result;
     },
     onSuccess: (_, variables) => {
-      // Reaktif: Otomatis paksa query list untuk fetch ulang data terbaru dari database
       queryClient.invalidateQueries({
         queryKey: ["workspace-invites", variables.workspaceId],
       });
@@ -71,13 +67,11 @@ export function useCreateInvite() {
   });
 }
 
-// -------------------------------------------------------------------------
-// 3. HOOK: Mutasi untuk Mencabut (Revoke/Hapus) Tautan Undangan
-// -------------------------------------------------------------------------
+// 3. HOOK: Mutasi Pencabutan Tautan
 interface RevokeInviteInput {
   token: string;
   workspaceId: string;
-  walletAddress: string; // Dibutuhkan untuk security check di backend
+  walletAddress: string;
 }
 
 export function useRevokeInvite() {
@@ -86,7 +80,7 @@ export function useRevokeInvite() {
   return useMutation({
     mutationFn: async (payload: RevokeInviteInput) => {
       const response = await fetch("/api/workspace/invite/revoke", {
-        method: "POST",
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -100,17 +94,8 @@ export function useRevokeInvite() {
       return result;
     },
     onSuccess: (_, variables) => {
-      toast.success("Tautan Dicabut", {
-        description: "Akses cryptographic token tersebut berhasil dimatikan.",
-      });
-      // Reaktif: Segarkan cache data di layar client seketika
       queryClient.invalidateQueries({
         queryKey: ["workspace-invites", variables.workspaceId],
-      });
-    },
-    onError: (error: any) => {
-      toast.error("Gagal Mencabut Tautan", {
-        description: error.message || "Pastikan Anda memiliki hak akses admin.",
       });
     },
   });
