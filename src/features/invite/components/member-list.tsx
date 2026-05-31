@@ -68,6 +68,7 @@ export function MemberList({
             key={member.id}
             member={member}
             currentUserRole={currentUserRole}
+            workspaceId={workspaceId}
           />
         ))}
       </div>

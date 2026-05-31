@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import {
   Loader2,
@@ -38,6 +37,7 @@ import { Button } from "@/components/ui/button";
 interface MemberRowProps {
   member: WorkspaceMemberWithMeta;
   currentUserRole: WorkspaceRole;
+  workspaceId: string;
 }
 
 function getDeterministicGradient(address: string) {
@@ -54,10 +54,12 @@ function getDeterministicGradient(address: string) {
   return gradients[charCodeSum % gradients.length];
 }
 
-export function MemberRow({ member, currentUserRole }: MemberRowProps) {
-  const params = useParams();
+export function MemberRow({
+  member,
+  currentUserRole,
+  workspaceId,
+}: MemberRowProps) {
   const account = useCurrentAccount();
-  const workspaceId = params.workspaceId as string;
   const actorWallet = account?.address;
 
   const promoteMutation = usePromoteMember();

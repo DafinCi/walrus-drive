@@ -35,7 +35,7 @@ export function usePromoteMember() {
       targetWallet: string;
       actorWallet: string;
     }) => {
-      const response = await fetch("/api/workspace/member/promote", {
+      const response = await fetch("/api/workspace/members/promote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -65,7 +65,7 @@ export function useRemoveMember() {
       targetWallet: string;
       actorWallet: string;
     }) => {
-      const response = await fetch("/api/workspace/member/remove", {
+      const response = await fetch("/api/workspace/members/remove", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

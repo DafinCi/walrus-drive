@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/services/supabase/admin";
-import { canPromote } from "@/features/workspace/utils/permissions";
+// 🌟 FIX 1: Hapus import canPromote yang bikin crash
 
 export async function POST(request: Request) {
   try {
@@ -14,7 +14,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 1. Tarik status peran aktor & target sekaligus dari database
     const { data: members, error: fetchError } = await supabaseAdmin
       .from("workspace_members")
       .select("wallet_address, role")
@@ -26,28 +25,24 @@ export async function POST(request: Request) {
     const actor = members?.find((m) => m.wallet_address === actorWallet);
     const target = members?.find((m) => m.wallet_address === targetWallet);
 
-    // 2. Security Guard Checks
-    if (!actor) {
+    if (!actor)
       return NextResponse.json(
-        { success: false, error: "Aktor tidak terdaftar di workspace ini." },
+        { success: false, error: "Aktor tidak terdaftar." },
         { status: 403 },
       );
-    }
-    if (!target) {
+    if (!target)
       return NextResponse.json(
-        { success: false, error: "Target anggota tidak ditemukan." },
+        { success: false, error: "Target tidak ditemukan." },
         { status: 404 },
       );
-    }
-    if (target.role === "admin") {
+    if (target.role === "admin")
       return NextResponse.json({
         success: true,
-        message: "Anggota tersebut sudah berstatus sebagai Admin.",
+        message: "Sudah berstatus Admin.",
       });
-    }
 
-    // 3. Evaluasi Aturan Bisnis Terpusat
-    if (!canPromote(actor.role, target.role)) {
+    // 🌟 FIX 2: Validasi langsung. Hanya Owner yang bisa Promote
+    if (actor.role !== "owner") {
       return NextResponse.json(
         {
           success: false,
@@ -58,7 +53,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 4. Eksekusi Mutasi Perubahan Data
     const { error: updateError } = await supabaseAdmin
       .from("workspace_members")
       .update({ role: "admin" })
@@ -72,7 +66,6 @@ export async function POST(request: Request) {
       message: `Berhasil mengangkat ${targetWallet.slice(0, 6)}... menjadi Admin.`,
     });
   } catch (error: any) {
-    console.error("Promote Member API Error:", error);
     return NextResponse.json(
       { success: false, error: error.message || "Internal Server Error" },
       { status: 500 },
