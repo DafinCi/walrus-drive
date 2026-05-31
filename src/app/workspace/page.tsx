@@ -1,9 +1,8 @@
-// src/app/workspace/page.tsx
 "use client";
 
 import { useState, useMemo } from "react";
 import { useCurrentAccount } from "@mysten/dapp-kit";
-import { useRouter } from "next/navigation"; // 🌟 TAMBAHAN: Gunakan Next.js Router untuk migrasi halaman
+import { useRouter } from "next/navigation";
 import { Loader2, Wallet } from "lucide-react";
 
 // Hook & Store
@@ -19,21 +18,23 @@ import { WorkspaceHubToolbar } from "@/features/workspace/components/hub/workspa
 
 export default function WorkspaceHubPage() {
   const account = useCurrentAccount();
-  const router = useRouter(); // 🌟 INISIALISASI: Pemicu navigasi rute halaman
+  const router = useRouter();
 
+  // 1. CONSUME SORT PREFERENCE FROM ZUSTAND
+  const { workspaceSort, setWorkspaceSort, setJoinModalOpen } =
+    useWorkspaceStore();
+
+  // 2. INJEKSIKAN PREFERENSI SORT KE DALAM HOOK QUERY
   const {
     data: workspaces,
     isLoading,
     error,
-  } = useWorkspaces(account?.address);
-
-  // Zustand Modals State (Kita pertahankan JoinModal jika ke depan masih butuh modal untuk join via token)
-  const { isJoinModalOpen, setJoinModalOpen } = useWorkspaceStore();
+  } = useWorkspaces(account?.address, workspaceSort); // 🌟 DIUBAH: Mengirim parameter sort
 
   // Local Search State
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter & Kalkulasi Data Runtime
+  // Filter & Kalkulasi Data Runtime (Client-side Search)
   const filteredWorkspaces = useMemo(() => {
     if (!workspaces) return [];
     return workspaces.filter((ws) =>
@@ -48,7 +49,7 @@ export default function WorkspaceHubPage() {
     workspaces?.reduce((acc, ws) => acc + ws.totalMembers, 0) || 0;
 
   // =========================================================================
-  // STATE 1: WALLET DISCONNECTED STATE
+  // RENDERING MATRIX (DISCONNECTED & LOADING STATES TETAP SAMA)
   // =========================================================================
   if (!account) {
     return (
@@ -70,9 +71,6 @@ export default function WorkspaceHubPage() {
     );
   }
 
-  // =========================================================================
-  // LOGIKA LOADING
-  // =========================================================================
   if (isLoading) {
     return (
       <div className="flex flex-col min-h-screen">
@@ -88,22 +86,16 @@ export default function WorkspaceHubPage() {
 
   const hasNoWorkspace = !workspaces || workspaces.length === 0;
 
-  // =========================================================================
-  // STATE 2 & 3: MAIN HUB DASHBOARD
-  // =========================================================================
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-8 md:px-8 animate-in fade-in duration-300">
         {hasNoWorkspace ? (
-          // STATE 2: EMPTY ONBOARDING
           <div className="mt-10">
-            {/* 🌟 SEKARANG: Tombol di empty state akan langsung mengarahkan ke halaman /workspace/create */}
             <WorkspaceListEmpty
               onCreateClick={() => router.push("/workspace/create")}
             />
           </div>
         ) : (
-          // STATE 3: HUB GRID LIST
           <>
             <WorkspaceHubHero
               totalWorkspaces={workspaces.length}
@@ -111,9 +103,11 @@ export default function WorkspaceHubPage() {
               totalMembers={totalMembers}
             />
 
-            {/* 🌟 SEKARANG: Tombol create di toolbar dashboard ikut dialihkan ke halaman onboarding */}
+            {/* 🌟 PERUBAHAN: Pasangkan props state & handler sorting */}
             <WorkspaceHubToolbar
               searchQuery={searchQuery}
+              currentSort={workspaceSort}
+              onSortChange={setWorkspaceSort}
               onSearchChange={setSearchQuery}
               onCreateClick={() => router.push("/workspace/create")}
               onJoinClick={() => setJoinModalOpen(true)}
@@ -123,15 +117,6 @@ export default function WorkspaceHubPage() {
           </>
         )}
       </main>
-
-      {/* =========================================================================
-          GLOBAL MODAL PORTALS (Hanya memuat portal JoinWorkspaceModal jika diperlukan)
-         ========================================================================= */}
-      {/* <JoinWorkspaceModal 
-          open={isJoinModalOpen} 
-          onOpenChange={setJoinModalOpen} 
-        /> 
-      */}
     </div>
   );
 }

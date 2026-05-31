@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import {
   useParams,
   useRouter,
@@ -28,28 +28,41 @@ import { InviteModal } from "@/features/invite/components/invite-modal";
 // Import Dropzone Core Upload Service
 import { Dropzone } from "@/features/upload/components/dropzone";
 
-// Import Single Source of Truth Query Hook & UI Zustand Store
+// Import Single Source of Truth Query Hooks & UI Zustand Store
 import { useWorkspaceQuery } from "../hooks/use-workspace-query";
+import { useWorkspaceFiles } from "../hooks/use-workspace-files"; // 🌟 TAMBAHAN: Hook mandiri baru
 import { useWorkspaceStore } from "../store/workspace-store";
 
 function DashboardContent({ slug }: { slug: string }) {
-  // 🌟 PERBAIKAN: Menerima prop slug
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const account = useCurrentAccount();
 
-  // 1. CONSUME INTERACTION STATE FROM ZUSTAND STORE
+  // 1. CONSUME INTERACTION & SORT STATE FROM ZUSTAND STORE
   const {
     isUploadModalOpen,
     isInviteModalOpen,
+    fileSort, // 🌟 TAMBAHAN: Preferensi sortir dari localStorage
+    setFileSort, // 🌟 TAMBAHAN: Setter aksi sortir
     setUploadModalOpen,
     setInviteModalOpen,
   } = useWorkspaceStore();
 
-  // 2. CONSUME SERVER DATA STATE FROM TANSTACK QUERY
-  // 🌟 PERBAIKAN: Fetch data menggunakan slug
-  const { data, isLoading, error } = useWorkspaceQuery(slug);
+  // 2. CONSUME SERVER DATA STATES
+  // Mengambil Metadata Workspace & Anggota
+  const {
+    data: metaData,
+    isLoading: isMetaLoading,
+    error: metaError,
+  } = useWorkspaceQuery(slug);
+
+  // 🌟 TAMBAHAN: Jalur data file mandiri terikat langsung dengan state 'fileSort'
+  const {
+    data: rawFiles = [],
+    isLoading: isFilesLoading,
+    error: filesError,
+  } = useWorkspaceFiles(slug, fileSort);
 
   // 3. READ & DERIVE URL SELECTION STATE
   const view = (searchParams.get("view") === "table" ? "table" : "grid") as
@@ -57,18 +70,17 @@ function DashboardContent({ slug }: { slug: string }) {
     | "table";
   const searchQuery = searchParams.get("search") ?? "";
 
-  // 4. SAFE DERIVE SUB-DATA SESUAI TIPE WorkspaceFullPayload
-  const workspaceData = data?.workspace;
-  const rawFiles = data?.files ?? [];
-  const members = data?.members ?? [];
+  // 4. SAFE DERIVE SUB-DATA
+  const workspaceData = metaData?.workspace;
+  const members = metaData?.members ?? [];
 
-  // 3. FIX ERROR: Ekstrak role spesifik milik user yang sedang buka halaman ini
+  // Ekstrak role spesifik milik user
   const currentUserRole =
     members.find((m) => m.wallet_address === account?.address)?.role ??
     "member";
 
-  // 5. DATA MAPPING: Ubah snake_case (DB) ke camelCase (UI Component)
-  const uiFiles = rawFiles.map((f) => ({
+  // 5. DATA MAPPING: Snake_case (DB) -> camelCase (UI)
+  const uiFiles = rawFiles.map((f: any) => ({
     id: f.id,
     blobId: f.blob_id,
     name: f.file_name,
@@ -85,7 +97,8 @@ function DashboardContent({ slug }: { slug: string }) {
     router.push(`${pathname}?${currentParams.toString()}`);
   };
 
-  // 7. DATA RUNTIME FILTERING (Reaktif terhadap pencarian URL global)
+  // 7. CLIENT-SIDE RUNTIME SEARCH FILTERING
+  // Pencarian menyaring data hasil server-side sorting secara real-time
   const filteredFiles = uiFiles.filter((file) =>
     file.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
@@ -94,7 +107,10 @@ function DashboardContent({ slug }: { slug: string }) {
   // STATE RENDERING MATRIX
   // =========================================================================
 
-  if (isLoading) {
+  const isGlobalLoading = isMetaLoading || isFilesLoading;
+  const hasGlobalError = metaError || filesError || !metaData || !workspaceData;
+
+  if (isGlobalLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[75vh] gap-3">
         <Loader2 className="h-8 w-8 text-primary animate-spin" />
@@ -105,7 +121,7 @@ function DashboardContent({ slug }: { slug: string }) {
     );
   }
 
-  if (error || !data || !workspaceData) {
+  if (hasGlobalError) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[75vh] max-w-md mx-auto text-center p-6 border border-destructive/20 bg-destructive/5 rounded-sm shadow-xl">
         <AlertTriangle className="h-10 w-10 text-destructive mb-3" />
@@ -144,6 +160,8 @@ function DashboardContent({ slug }: { slug: string }) {
       <WorkspaceToolbar
         workspaceId={workspaceData.id}
         view={view}
+        currentSort={fileSort} // 🌟 TAMBAHAN
+        onSortChange={setFileSort} // 🌟 TAMBAHAN
         onViewChange={handleViewChange}
         onUploadClick={() => setUploadModalOpen(true)}
         onInviteClick={() => setInviteModalOpen(true)}
@@ -160,11 +178,7 @@ function DashboardContent({ slug }: { slug: string }) {
         )}
       </main>
 
-      {/* =========================================================================
-          GLOBAL MODAL PORTALS (ORCHESTRATED BY ZUSTAND)
-         ========================================================================= */}
-
-      {/* Modal Upload */}
+      {/* GLOBAL MODAL PORTALS */}
       <Dialog open={isUploadModalOpen} onOpenChange={setUploadModalOpen}>
         <DialogContent className="sm:max-w-xl bg-card border border-border">
           <DialogHeader>
@@ -173,14 +187,11 @@ function DashboardContent({ slug }: { slug: string }) {
             </DialogTitle>
           </DialogHeader>
           <div className="pt-2">
-            {/* 🌟 PENTING: Passing ID asli dari database, BUKAN slug, agar fungsi upload tidak error! */}
             <Dropzone workspaceId={workspaceData.id} />
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* Modal Invite */}
-      {/* 🌟 Sama seperti dropzone, pastikan modal ini menerima ID jika ia melakukan query database internal */}
       <InviteModal
         open={isInviteModalOpen}
         onOpenChange={setInviteModalOpen}
@@ -192,7 +203,6 @@ function DashboardContent({ slug }: { slug: string }) {
 
 // Composition Root Wrapper
 export function WorkspaceDashboard({ slug }: { slug: string }) {
-  // 🌟 PERBAIKAN: Menerima dan meneruskan prop slug dari page.tsx
   return (
     <Suspense
       fallback={

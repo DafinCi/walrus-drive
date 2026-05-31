@@ -42,7 +42,6 @@ export function useWorkspaceFiles(slug: string) {
     queryKey: ["workspace-detail", slug],
     queryFn: () => fetchWorkspaceFullData(slug),
     enabled: !!slug,
-    select: (data): WorkspaceFile[] => data.files, // 🔥 Mengambil array files saja
   });
 }
 

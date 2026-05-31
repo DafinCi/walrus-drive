@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { WorkspaceSortOption } from "../store/workspace-store"; // 🌟 TAMBAHAN: Import tipe data sort
 
 export interface WorkspaceHubItem {
   id: string;
@@ -14,12 +15,22 @@ export interface WorkspaceHubItem {
   totalFiles: number;
 }
 
-export function useWorkspaces(walletAddress: string | undefined) {
+// 🌟 PERUBAHAN: Menerima parameter sort
+export function useWorkspaces(
+  walletAddress: string | undefined,
+  sort: WorkspaceSortOption,
+) {
   return useQuery<WorkspaceHubItem[]>({
-    queryKey: ["user-workspaces", walletAddress],
+    // 🌟 PERUBAHAN: Masukkan sort ke queryKey agar TanStack Query tahu kapan harus fetch ulang
+    queryKey: ["user-workspaces", walletAddress, sort],
     queryFn: async () => {
       if (!walletAddress) return [];
-      const res = await fetch(`/api/workspace/list?wallet=${walletAddress}`);
+
+      // 🌟 PERUBAHAN: Suntikkan parameter &sort= ke dalam URL fetch
+      const res = await fetch(
+        `/api/workspace/list?wallet=${walletAddress}&sort=${sort}`,
+      );
+
       if (!res.ok) {
         throw new Error("Gagal memuat daftar ruang kerja.");
       }

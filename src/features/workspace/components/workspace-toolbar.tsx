@@ -4,6 +4,7 @@ import {
   Upload,
   UserPlus,
   ArrowUpDown,
+  Check, // 🌟 TAMBAHAN: Untuk indikator aktif
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,11 +13,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { RoleGuard } from "@/features/auth/components/role-guard"; // 🔥 Import RoleGuard
+import { RoleGuard } from "@/features/auth/components/role-guard";
+import { FILE_SORT_CONFIG } from "../constants/sort-config"; // 🌟 TAMBAHAN
+import { FileSortOption } from "../store/workspace-store"; // 🌟 TAMBAHAN
 
 export interface WorkspaceToolbarProps {
   view: "grid" | "table";
   workspaceId: string;
+  currentSort: FileSortOption; // 🌟 TAMBAHAN: State sorting saat ini
+  onSortChange: (sort: FileSortOption) => void; // 🌟 TAMBAHAN: Handler pengubah sorting
   onViewChange: (view: "grid" | "table") => void;
   onUploadClick: () => void;
   onInviteClick: () => void;
@@ -25,13 +30,18 @@ export interface WorkspaceToolbarProps {
 export function WorkspaceToolbar({
   workspaceId,
   view,
+  currentSort, // 🌟 Destructure
+  onSortChange, // 🌟 Destructure
+  view: currentView,
   onViewChange,
   onUploadClick,
   onInviteClick,
 }: WorkspaceToolbarProps) {
+  // Dapatkan label dinamis berdasarkan opsi yang sedang aktif
+  const activeSortLabel = FILE_SORT_CONFIG[currentSort]?.label || "Terbaru";
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-4">
-      {/* SISI KIRI: Filter & Sort Controls (SAMA SEPERTI SEBELUMNYA) */}
       <div className="flex items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -41,35 +51,47 @@ export function WorkspaceToolbar({
               className="h-9 gap-2 text-muted-foreground hover:text-foreground"
             >
               <ArrowUpDown className="h-3.5 w-3.5" />
-              <span className="text-xs font-medium">Urutkan: Terbaru</span>
+              {/* 🌟 UX DINAMIS: Mengikuti preferensi state */}
+              <span className="text-xs font-medium">
+                Urutkan: {activeSortLabel}
+              </span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-40">
-            <DropdownMenuItem className="cursor-pointer text-sm">
-              Terbaru
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-sm">
-              Terlama
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-sm">
-              Nama (A-Z)
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-sm">
-              Ukuran Terbesar
-            </DropdownMenuItem>
+
+          <DropdownMenuContent align="start" className="w-48">
+            {/* 🌟 LOOPING CONFIG: Bersih tanpa if-else */}
+            {Object.entries(FILE_SORT_CONFIG).map(([key, config]) => {
+              const isSelected = currentSort === key;
+              return (
+                <DropdownMenuItem
+                  key={key}
+                  onClick={() => onSortChange(key as FileSortOption)}
+                  className={`cursor-pointer text-sm flex items-center justify-between dynamic-sort-item ${
+                    isSelected
+                      ? "text-primary font-semibold bg-primary/5 focus:bg-primary/5"
+                      : ""
+                  }`}
+                >
+                  <span>{config.label}</span>
+                  {/* 🌟 ACTIVE INDICATOR: Tanda centang jika terpilih */}
+                  {isSelected && (
+                    <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                  )}
+                </DropdownMenuItem>
+              );
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
       {/* SISI KANAN: View Toggle & Action Buttons */}
       <div className="flex items-center justify-end gap-3 self-end sm:self-auto w-full sm:w-auto">
-        {/* Toggle Grid vs Table Layout (SAMA SEPERTI SEBELUMNYA) */}
         <div className="flex items-center border border-border rounded-sm p-0.5 bg-muted/20">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => onViewChange("grid")}
-            className={`h-8 w-8 rounded-sm transition-all ${view === "grid" ? "bg-muted text-foreground shadow-xs font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-transparent"}`}
+            className={`h-8 w-8 rounded-sm transition-all ${currentView === "grid" ? "bg-muted text-foreground shadow-xs font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-transparent"}`}
           >
             <LayoutGrid className="h-4 w-4" />
           </Button>
@@ -77,7 +99,7 @@ export function WorkspaceToolbar({
             variant="ghost"
             size="icon"
             onClick={() => onViewChange("table")}
-            className={`h-8 w-8 rounded-sm transition-all ${view === "table" ? "bg-muted text-foreground shadow-xs font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-transparent"}`}
+            className={`h-8 w-8 rounded-sm transition-all ${currentView === "table" ? "bg-muted text-foreground shadow-xs font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-transparent"}`}
           >
             <TableProperties className="h-4 w-4" />
           </Button>
@@ -85,7 +107,6 @@ export function WorkspaceToolbar({
 
         <div className="h-5 w-[1px] bg-border hidden sm:block" />
 
-        {/* 🔥 BUNGKUS TOMBOL INVITE DENGAN ROLE GUARD */}
         <RoleGuard workspaceId={workspaceId} permission="workspace:invite">
           <Button
             variant="outline"
@@ -98,7 +119,6 @@ export function WorkspaceToolbar({
           </Button>
         </RoleGuard>
 
-        {/* BUNGKUS TOMBOL UPLOAD (Opsional, tapi good practice) */}
         <RoleGuard workspaceId={workspaceId} permission="file:upload">
           <Button
             size="sm"

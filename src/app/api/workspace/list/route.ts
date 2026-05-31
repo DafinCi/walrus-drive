@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/services/supabase/admin";
+import { WorkspaceSortOption } from "@/features/workspace/store/workspace-store"; // 🌟 TAMBAHAN: Import type sort
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const wallet = searchParams.get("wallet");
+  // 🌟 TAMBAHAN: Tangkap parameter sort dari URL, fallback ke 'newest'
+  const sortParam =
+    (searchParams.get("sort") as WorkspaceSortOption) || "newest";
 
   if (!wallet) {
     return NextResponse.json(
@@ -67,6 +71,36 @@ export async function GET(request: NextRequest) {
       }),
     );
 
+    // 🌟 TAMBAHAN 3: SERVER-SIDE SORTING ENGINE
+    // Mengurutkan data di layer API sesuai dengan WORKSPACE_SORT_CONFIG
+    workspaceList.sort((a, b) => {
+      switch (sortParam) {
+        case "newest":
+          // Terbaru bergabung / dibuat (Berdasarkan tanggal terbaru ke terlama)
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+
+        case "oldest":
+          // Terlama bergabung / dibuat (Berdasarkan tanggal terlama ke terbaru)
+          return (
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
+
+        case "name_asc":
+          // Nama A-Z
+          return a.name.localeCompare(b.name);
+
+        case "name_desc":
+          // Nama Z-A
+          return b.name.localeCompare(a.name);
+
+        default:
+          return 0;
+      }
+    });
+
+    // Kirim hasil akhir yang sudah rapi dan tersortir murni ke React Frontend
     return NextResponse.json(workspaceList);
   } catch (error: any) {
     console.error("Error fetching workspace list:", error);
