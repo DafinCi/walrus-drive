@@ -3,7 +3,7 @@ import { supabaseAdmin } from "@/services/supabase/admin";
 
 export async function GET(
   request: Request,
-  { params }: { params: { token: string } }, // Perhatikan: di Next.js 15+ ini mungkin perlu di-await, tapi kita ikuti struktur lu yang sekarang
+  { params }: { params: { token: string } },
 ) {
   try {
     const { token } = await params;
@@ -27,7 +27,7 @@ export async function GET(
     if (inviteError || !invite) {
       return NextResponse.json({
         success: true,
-        invite: { valid: false, expired: false },
+        invite: { valid: false, expired: false, role: null }, // 🌟 FIX: Tambahkan role
         workspace: null,
         membership: { alreadyMember: false, role: null },
       });
@@ -39,14 +39,13 @@ export async function GET(
     if (isExpired) {
       return NextResponse.json({
         success: true,
-        invite: { valid: true, expired: true },
+        invite: { valid: true, expired: true, role: invite.role }, // 🌟 FIX: Tambahkan role
         workspace: null,
         membership: { alreadyMember: false, role: null },
       });
     }
 
     // 3. Ambil metadata singkat Workspace tujuan
-    // 🌟 FIX: Tambahkan kolom "slug" pada operasi select!
     const { data: workspace, error: workspaceError } = await supabaseAdmin
       .from("workspaces")
       .select("id, name, owner_address, slug")
@@ -80,12 +79,12 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      invite: { valid: true, expired: false },
+      invite: { valid: true, expired: false, role: invite.role }, // 🌟 FIX: Tambahkan role di sini
       workspace: {
         id: workspace.id,
         name: workspace.name,
         owner_address: workspace.owner_address,
-        slug: workspace.slug, // 🌟 FIX: Sertakan slug ke dalam payload JSON response!
+        slug: workspace.slug,
       },
       membership: {
         alreadyMember,

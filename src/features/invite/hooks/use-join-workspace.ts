@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 
 export interface ValidateInviteResponse {
   success: boolean;
-  invite: { valid: boolean; expired: boolean };
+  invite: { valid: boolean; expired: boolean; role: string | null };
   // 🌟 FIX: Tambahkan 'slug' di tipe data response
   workspace: {
     id: string;

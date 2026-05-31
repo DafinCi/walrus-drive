@@ -1,12 +1,20 @@
 "use client";
 
-import { Wallet, Loader2, Users, FolderKanban } from "lucide-react";
+import {
+  Wallet,
+  Loader2,
+  Users,
+  FolderKanban,
+  ShieldAlert,
+  ShieldCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConnectButton } from "@mysten/dapp-kit";
 
 interface JoinWorkspaceCardProps {
   workspaceName: string;
   ownerAddress: string;
+  role: string; // 🌟 TAMBAHAN: Menerima prop role dari parent
   isConnected: boolean;
   isJoining: boolean;
   onJoin: () => void;
@@ -15,6 +23,7 @@ interface JoinWorkspaceCardProps {
 export function JoinWorkspaceCard({
   workspaceName,
   ownerAddress,
+  role, // 🌟 Destructure role
   isConnected,
   isJoining,
   onJoin,
@@ -50,6 +59,24 @@ export function JoinWorkspaceCard({
               {workspaceName}
             </span>
           </div>
+
+          {/* 🌟 TAMBAHAN: Indikator Peran (Role) */}
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-muted-foreground font-medium flex items-center gap-1">
+              {role === "admin" ? (
+                <ShieldAlert className="h-3.5 w-3.5 shrink-0" />
+              ) : (
+                <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
+              )}
+              Peran Anda:
+            </span>
+            <span
+              className={`font-bold capitalize ${role === "admin" ? "text-amber-500" : "text-primary"}`}
+            >
+              {role === "admin" ? "Admin" : "Member"}
+            </span>
+          </div>
+
           <div className="flex justify-between items-center text-xs">
             <span className="text-muted-foreground font-medium flex items-center gap-1">
               <Users className="h-3.5 w-3.5 shrink-0" /> Owner Wallet:

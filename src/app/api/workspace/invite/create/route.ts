@@ -5,7 +5,13 @@ import crypto from "crypto";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { workspaceId, createdBy, expiresInHours = 24 } = body;
+    // 🌟 PERHATIKAN: Kita menangkap role dari frontend
+    const {
+      workspaceId,
+      createdBy,
+      expiresInHours = 24,
+      role = "member",
+    } = body;
 
     if (!workspaceId || !createdBy) {
       return NextResponse.json(
@@ -39,7 +45,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Generate Short Token (12 Karakter Hex - Fleksibel & Estetik)
+    // Generate Short Token
     const shortToken = crypto.randomBytes(6).toString("hex");
 
     // Hitung waktu expired
@@ -55,6 +61,7 @@ export async function POST(request: Request) {
           workspace_id: workspaceId,
           created_by: createdBy,
           expires_at: expiresAt.toISOString(),
+          role: role, // 🌟 PERHATIKAN: Role dimasukkan ke database
         },
       ]);
 
