@@ -26,7 +26,7 @@ export default function WorkspaceError({
       </p>
       <button
         onClick={() => reset()}
-        className="mt-4 px-6 py-2 border border-gray-700 bg-gray-900 hover:bg-gray-800 text-white rounded-sm transition"
+        className="mt-4 px-6 py-2 border border-gray-700 bg-gray-900 hover:bg-gray-800 text-white rounded-[6px] transition"
       >
         Coba Muat Ulang
       </button>

@@ -38,7 +38,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
   return (
     <Link
       href={`/workspace/${workspace.slug}`} // 🌟 PERBAIKAN: Gunakan slug untuk routing
-      className="group relative flex flex-col justify-between p-5 bg-card border border-border/70 rounded-sm shadow-xs transition-all duration-300 hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5 cursor-pointer overflow-hidden"
+      className="group relative flex flex-col justify-between p-5 bg-card border border-border/70 rounded-[6px] shadow-xs transition-all duration-300 hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5 cursor-pointer overflow-hidden"
     >
       {/* Efek Garis Dekoratif Glossy saat Hover */}
       <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl transition-opacity opacity-0 group-hover:opacity-100" />
@@ -67,7 +67,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
 
         {/* BARIS TENGAH: Grid Statistik (Files & Members) */}
         <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border/40">
-          <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-sm border border-border/30">
+          <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-[6px] border border-border/30">
             <FolderSync className="h-4 w-4 text-primary/80" />
             <div className="flex flex-col">
               <span className="font-mono text-xs font-bold text-foreground">
@@ -79,7 +79,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-sm border border-border/30">
+          <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-[6px] border border-border/30">
             <Users className="h-4 w-4 text-primary/80" />
             <div className="flex flex-col">
               <span className="font-mono text-xs font-bold text-foreground">
@@ -102,7 +102,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
           </span>
         </div>
 
-        <div className="flex items-center gap-0.5 bg-muted group-hover:bg-primary group-hover:text-primary-foreground p-1 rounded-sm transition-all duration-300">
+        <div className="flex items-center gap-0.5 bg-muted group-hover:bg-primary group-hover:text-primary-foreground p-1 rounded-[6px] transition-all duration-300">
           <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:rotate-45" />
         </div>
       </div>

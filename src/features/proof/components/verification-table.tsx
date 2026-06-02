@@ -124,7 +124,7 @@ export function VerificationTable({
   // EMPTY STATE INTERNAL TABLE
   if (files.length === 0) {
     return (
-      <div className="p-12 border border-dashed border-border/60 bg-card/20 rounded-sm text-center flex flex-col items-center justify-center space-y-3 animate-in fade-in duration-300">
+      <div className="p-12 border border-dashed border-border/60 bg-card/20 rounded-[6px] text-center flex flex-col items-center justify-center space-y-3 animate-in fade-in duration-300">
         <div className="p-3 bg-muted border border-border/40 rounded-full text-muted-foreground/60">
           <Inbox className="h-6 w-6 stroke-[1.5]" />
         </div>
@@ -152,7 +152,7 @@ export function VerificationTable({
             placeholder="Cari nama berkas atau uploader..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-card/40 border border-border/50 rounded-sm py-1.5 pl-9 pr-4 text-xs placeholder:text-muted-foreground text-foreground focus:outline-hidden focus:border-primary/60 transition-colors"
+            className="w-full bg-card/40 border border-border/50 rounded-[6px] py-1.5 pl-9 pr-4 text-xs placeholder:text-muted-foreground text-foreground focus:outline-hidden focus:border-primary/60 transition-colors"
           />
         </div>
 
@@ -165,7 +165,7 @@ export function VerificationTable({
               aria-label="Urutkan berkas"
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value as any)}
-              className="w-full bg-card/40 border border-border/50 rounded-sm py-1.5 px-3 text-xs text-foreground focus:outline-hidden focus:border-primary/60 cursor-pointer appearance-none"
+              className="w-full bg-card/40 border border-border/50 rounded-[6px] py-1.5 px-3 text-xs text-foreground focus:outline-hidden focus:border-primary/60 cursor-pointer appearance-none"
             >
               <option value="newest" className="bg-background">
                 Terbaru Mendaftar
@@ -189,7 +189,7 @@ export function VerificationTable({
       </div>
 
       {/* CORE AUDIT LOG TABLE */}
-      <div className="border border-border/40 rounded-sm bg-card/20 overflow-x-auto shadow-xs">
+      <div className="border border-border/40 rounded-[6px] bg-card/20 overflow-x-auto shadow-xs">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-border/40 bg-muted/30 text-[10px] font-bold uppercase tracking-wider text-muted-foreground select-none">
@@ -253,7 +253,7 @@ export function VerificationTable({
                   {/* KOLOM 6: SUI EPOCH/CHECKPOINT HASH */}
                   <td className="py-3 px-4 whitespace-nowrap">
                     {file.checkpoint ? (
-                      <span className="font-mono bg-muted border border-border/40 text-[10px] px-1.5 py-0.5 rounded-sm text-foreground font-bold">
+                      <span className="font-mono bg-muted border border-border/40 text-[10px] px-1.5 py-0.5 rounded-[6px] text-foreground font-bold">
                         #{file.checkpoint}
                       </span>
                     ) : file.status?.toLowerCase() === "failed" ? (
@@ -270,7 +270,7 @@ export function VerificationTable({
                   {/* KOLOM 7: ACTION DROPDOWN MENU */}
                   <td className="py-2 px-3 text-center">
                     <DropdownMenu>
-                      <DropdownMenuTrigger className="p-1 hover:bg-muted rounded-sm border border-transparent hover:border-border/50 text-muted-foreground hover:text-foreground transition-all">
+                      <DropdownMenuTrigger className="p-1 hover:bg-muted rounded-[6px] border border-transparent hover:border-border/50 text-muted-foreground hover:text-foreground transition-all">
                         <MoreVertical className="h-3.5 w-3.5" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent
@@ -326,20 +326,20 @@ export function VerificationTableSkeleton() {
   return (
     <div className="space-y-4 animate-pulse">
       <div className="flex justify-between items-center gap-4">
-        <div className="h-8 w-64 bg-muted rounded-sm" />
-        <div className="h-8 w-32 bg-muted rounded-sm" />
+        <div className="h-8 w-64 bg-muted rounded-[6px]" />
+        <div className="h-8 w-32 bg-muted rounded-[6px]" />
       </div>
-      <div className="border border-border/40 rounded-sm bg-muted/10 overflow-hidden">
+      <div className="border border-border/40 rounded-[6px] bg-muted/10 overflow-hidden">
         <div className="h-9 bg-muted/40 border-b border-border/40" />
         {[...Array(5)].map((_, i) => (
           <div
             key={i}
             className="h-12 border-b border-border/20 flex items-center px-4 justify-between"
           >
-            <div className="h-3 w-1/4 bg-muted/60 rounded-sm" />
+            <div className="h-3 w-1/4 bg-muted/60 rounded-[6px]" />
             <div className="h-5 w-16 bg-muted/60 rounded-full" />
-            <div className="h-3 w-20 bg-muted/40 rounded-sm" />
-            <div className="h-3 w-16 bg-muted/40 rounded-sm" />
+            <div className="h-3 w-20 bg-muted/40 rounded-[6px]" />
+            <div className="h-3 w-16 bg-muted/40 rounded-[6px]" />
           </div>
         ))}
       </div>

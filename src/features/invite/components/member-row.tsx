@@ -113,7 +113,7 @@ export function MemberRow({
   };
 
   return (
-    <div className="flex items-center justify-between p-2.5 rounded-sm border border-border/40 bg-background/50 hover:bg-muted/30 transition-all duration-150 group">
+    <div className="flex items-center justify-between p-2.5 rounded-[6px] border border-border/40 bg-background/50 hover:bg-muted/30 transition-all duration-150 group">
       <div className="flex items-center gap-3 min-w-0">
         <div
           className={`h-8 w-8 rounded-full bg-gradient-to-br ${gradientClass} flex items-center justify-center text-[10px] font-bold text-white shadow-sm shrink-0 select-none`}

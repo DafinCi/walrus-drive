@@ -21,7 +21,7 @@ export default async function SettingsPage({
         </div>
       </div>
 
-      <div className="bg-gray-900/40 border border-gray-800 p-6 rounded-sm space-y-6 max-w-xl">
+      <div className="bg-gray-900/40 border border-gray-800 p-6 rounded-[6px] space-y-6 max-w-xl">
         <div>
           <label className="block text-sm font-medium text-gray-400 mb-2">
             Nama Workspace
@@ -29,11 +29,11 @@ export default async function SettingsPage({
           <input
             type="text"
             defaultValue="Workspace Utama Hackathon"
-            className="w-full bg-gray-950 border border-gray-700 rounded-sm px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition"
+            className="w-full bg-gray-950 border border-gray-700 rounded-[6px] px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition"
           />
         </div>
 
-        <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-sm transition font-medium text-sm">
+        <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-[6px] transition font-medium text-sm">
           <Save className="w-4 h-4" />
           <span>Simpan Perubahan</span>
         </button>

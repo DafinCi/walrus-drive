@@ -52,7 +52,7 @@ export function LiveProofPlayground() {
     <div
       onDragOver={(e) => e.preventDefault()}
       onDrop={handleDrop}
-      className="w-full max-w-md bg-zinc-900/50 backdrop-blur-xs border border-zinc-800 rounded-sm p-5 shadow-2xl relative overflow-hidden group hover:border-zinc-700 transition-colors"
+      className="w-full max-w-md bg-zinc-900/50 backdrop-blur-xs border border-zinc-800 rounded-[6px] p-5 shadow-2xl relative overflow-hidden group hover:border-zinc-700 transition-colors"
     >
       {/* Efek pendaran latar belakang halus */}
       <div className="absolute -top-12 -left-12 w-32 h-32 bg-sky-500/10 rounded-full blur-3xl" />
@@ -77,7 +77,7 @@ export function LiveProofPlayground() {
       {status === "idle" && (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="border border-dashed border-zinc-800 hover:border-sky-500/50 rounded-sm p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all bg-zinc-950/40 group/drop"
+          className="border border-dashed border-zinc-800 hover:border-sky-500/50 rounded-[6px] p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all bg-zinc-950/40 group/drop"
         >
           <input
             type="file"
@@ -120,20 +120,20 @@ export function LiveProofPlayground() {
 
       {status === "ready" && (
         <div className="space-y-4 animate-in fade-in zoom-in-95 duration-200">
-          <div className="p-3 bg-zinc-950/80 border border-zinc-800 rounded-sm space-y-2">
+          <div className="p-3 bg-zinc-950/80 border border-zinc-800 rounded-[6px] space-y-2">
             <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400">
               <ShieldCheck className="h-4 w-4 shrink-0" />
               <span className="truncate max-w-[240px]">{fileName}</span>
             </div>
             <div className="flex items-start gap-1.5 pt-2 border-t border-zinc-900 font-mono text-[9px]">
               <Binary className="h-3 w-3 text-zinc-500 shrink-0 mt-0.5" />
-              <span className="text-zinc-400 break-all bg-zinc-900/50 p-1.5 rounded-sm border border-zinc-800/40 w-full">
+              <span className="text-zinc-400 break-all bg-zinc-900/50 p-1.5 rounded-[6px] border border-zinc-800/40 w-full">
                 {fileHash}
               </span>
             </div>
           </div>
 
-          <div className="bg-emerald-500/5 border border-emerald-500/10 rounded-sm p-3 text-center">
+          <div className="bg-emerald-500/5 border border-emerald-500/10 rounded-[6px] p-3 text-center">
             <p className="text-[11px] font-medium text-emerald-400/90">
               ✓ Berkas siap dipotong (*shard*) ke dalam Protokol Walrus
             </p>

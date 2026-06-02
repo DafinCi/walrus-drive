@@ -33,10 +33,10 @@ export function JoinWorkspaceCard({
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-[420px] border border-border bg-card p-6 rounded-sm shadow-2xl space-y-6">
+      <div className="w-full max-w-[420px] border border-border bg-card p-6 rounded-[6px] shadow-2xl space-y-6">
         {/* Header Visual */}
         <div className="text-center space-y-3">
-          <div className="mx-auto h-12 w-12 rounded-sm bg-primary/10 flex items-center justify-center text-primary shadow-inner">
+          <div className="mx-auto h-12 w-12 rounded-[6px] bg-primary/10 flex items-center justify-center text-primary shadow-inner">
             <FolderKanban className="h-6 w-6" />
           </div>
           <div className="space-y-1">
@@ -50,7 +50,7 @@ export function JoinWorkspaceCard({
         </div>
 
         {/* Informasi Detail Workspace */}
-        <div className="bg-muted/40 border border-border/60 rounded-sm p-3.5 space-y-2.5">
+        <div className="bg-muted/40 border border-border/60 rounded-[6px] p-3.5 space-y-2.5">
           <div className="flex justify-between items-center text-xs">
             <span className="text-muted-foreground font-medium flex items-center gap-1">
               <FolderKanban className="h-3.5 w-3.5 shrink-0" /> Nama:
@@ -91,7 +91,7 @@ export function JoinWorkspaceCard({
         <div className="pt-2">
           {!isConnected ? (
             <div className="space-y-3">
-              <div className="text-center text-[11px] text-amber-500 font-medium bg-amber-500/5 border border-amber-500/10 rounded-sm p-2">
+              <div className="text-center text-[11px] text-amber-500 font-medium bg-amber-500/5 border border-amber-500/10 rounded-[6px] p-2">
                 Hubungkan dompet Sui Anda terlebih dahulu untuk memverifikasi
                 hak akses tanda tangan digital Anda.
               </div>

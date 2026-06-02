@@ -98,7 +98,7 @@ export function FileRow({ file, onVerifyClick }: FileRowProps) {
       {/* KOLOM 1: Nama File & Ikon */}
       <td className="py-3 px-4 font-medium text-foreground max-w-xs md:max-w-md">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="p-1.5 bg-muted/60 border border-border/50 rounded-sm group-hover:bg-background transition-colors flex-shrink-0">
+          <div className="p-1.5 bg-muted/60 border border-border/50 rounded-[6px] group-hover:bg-background transition-colors flex-shrink-0">
             {getFileIcon(file.mime_type)}
           </div>
           <div className="flex flex-col min-w-0">

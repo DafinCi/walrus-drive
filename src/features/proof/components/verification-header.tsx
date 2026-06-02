@@ -18,7 +18,7 @@ export function VerificationHeader({
       {/* LEFT SIDE: KONTEN ORIENTASI & BADGE WORKSPACE */}
       <div className="space-y-2">
         <div className="flex flex-wrap items-center gap-2.5">
-          <div className="p-1.5 bg-primary/10 text-primary rounded-sm shrink-0">
+          <div className="p-1.5 bg-primary/10 text-primary rounded-[6px] shrink-0">
             <ShieldCheck className="h-5 w-5 stroke-[2]" />
           </div>
           <h1 className="text-xl font-bold tracking-tight text-foreground font-heading">
@@ -26,7 +26,7 @@ export function VerificationHeader({
           </h1>
 
           {/* Workspace Identification Badge */}
-          <span className="inline-flex items-center text-[11px] font-bold bg-muted/60 text-muted-foreground border border-border/60 px-2 py-0.5 rounded-sm select-none">
+          <span className="inline-flex items-center text-[11px] font-bold bg-muted/60 text-muted-foreground border border-border/60 px-2 py-0.5 rounded-[6px] select-none">
             Workspace: {workspaceName.toLowerCase().replace(/\s+/g, "-")}
           </span>
         </div>
@@ -44,7 +44,7 @@ export function VerificationHeader({
         <button
           onClick={onRefresh}
           disabled={isRefreshing}
-          className="inline-flex items-center justify-center gap-1.5 bg-secondary text-secondary-foreground border border-border/80 rounded-sm px-3 py-1.5 text-xs font-semibold hover:bg-accent hover:text-accent-foreground disabled:opacity-50 disabled:pointer-events-none transition-all cursor-pointer shadow-xs w-full sm:w-auto"
+          className="inline-flex items-center justify-center gap-1.5 bg-secondary text-secondary-foreground border border-border/80 rounded-[6px] px-3 py-1.5 text-xs font-semibold hover:bg-accent hover:text-accent-foreground disabled:opacity-50 disabled:pointer-events-none transition-all cursor-pointer shadow-xs w-full sm:w-auto"
         >
           <RotateCw
             className={`h-3.5 w-3.5 ${isRefreshing ? "animate-spin text-primary" : "text-muted-foreground"}`}
@@ -56,7 +56,7 @@ export function VerificationHeader({
         <button
           disabled
           title="Tersedia di versi Enterprise"
-          className="opacity-40 hidden sm:inline-flex items-center justify-center gap-1.5 bg-transparent text-muted-foreground border border-border border-dashed rounded-sm px-3 py-1.5 text-xs font-semibold select-none"
+          className="opacity-40 hidden sm:inline-flex items-center justify-center gap-1.5 bg-transparent text-muted-foreground border border-border border-dashed rounded-[6px] px-3 py-1.5 text-xs font-semibold select-none"
         >
           <Download className="h-3.5 w-3.5" />
           Export CSV
@@ -65,7 +65,7 @@ export function VerificationHeader({
         {/* FUTURE SLOT 2: MORE CONTEXT DROPDOWN MENU TRIGGER */}
         <button
           disabled
-          className="opacity-40 p-1.5 bg-secondary text-muted-foreground border border-border/80 rounded-sm hover:bg-accent transition-all cursor-not-allowed hidden sm:block"
+          className="opacity-40 p-1.5 bg-secondary text-muted-foreground border border-border/80 rounded-[6px] hover:bg-accent transition-all cursor-not-allowed hidden sm:block"
         >
           <MoreHorizontal className="h-3.5 w-3.5" />
         </button>
@@ -80,13 +80,13 @@ export function VerificationHeaderSkeleton() {
     <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-border/40 pb-5 animate-pulse">
       <div className="space-y-3 w-full max-w-xl">
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 bg-muted rounded-sm" />
-          <div className="h-6 w-44 bg-muted rounded-sm" />
-          <div className="h-5 w-32 bg-muted/60 rounded-sm" />
+          <div className="h-8 w-8 bg-muted rounded-[6px]" />
+          <div className="h-6 w-44 bg-muted rounded-[6px]" />
+          <div className="h-5 w-32 bg-muted/60 rounded-[6px]" />
         </div>
-        <div className="h-4 w-full bg-muted/40 rounded-sm" />
+        <div className="h-4 w-full bg-muted/40 rounded-[6px]" />
       </div>
-      <div className="h-8 w-24 bg-muted rounded-sm shrink-0 w-full sm:w-24" />
+      <div className="h-8 w-24 bg-muted rounded-[6px] shrink-0 w-full sm:w-24" />
     </div>
   );
 }

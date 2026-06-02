@@ -25,7 +25,7 @@ export default function CreateWorkspacePage() {
         </div>
 
         {/* Solid Form Container */}
-        <div className="bg-card border border-border p-6 sm:p-8 rounded-sm shadow-sm">
+        <div className="bg-card border border-border p-6 sm:p-8 rounded-[6px] shadow-sm">
           <CreateWorkspaceForm walletAddress={address || undefined} />
         </div>
 

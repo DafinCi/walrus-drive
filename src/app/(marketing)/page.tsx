@@ -25,9 +25,9 @@ export default function OfficialLandingPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Box 1: Walrus Sharding Teaser */}
-          <div className="md:col-span-7 bg-zinc-950/40 border border-zinc-900 rounded-sm p-6 flex flex-col justify-between gap-8 group hover:border-zinc-800 transition-colors">
+          <div className="md:col-span-7 bg-zinc-950/40 border border-zinc-900 rounded-[6px] p-6 flex flex-col justify-between gap-8 group hover:border-zinc-800 transition-colors">
             <div className="space-y-2">
-              <div className="p-2 bg-sky-500/10 border border-sky-500/20 rounded-sm w-fit text-sky-400">
+              <div className="p-2 bg-sky-500/10 border border-sky-500/20 rounded-[6px] w-fit text-sky-400">
                 <Database className="h-4 w-4" />
               </div>
               <h3 className="text-sm font-bold text-white mt-3">
@@ -43,9 +43,9 @@ export default function OfficialLandingPage() {
           </div>
 
           {/* Box 2: Cryptographic Proof */}
-          <div className="md:col-span-5 bg-zinc-950/40 border border-zinc-900 rounded-sm p-6 flex flex-col justify-between group hover:border-zinc-800 transition-colors">
+          <div className="md:col-span-5 bg-zinc-950/40 border border-zinc-900 rounded-[6px] p-6 flex flex-col justify-between group hover:border-zinc-800 transition-colors">
             <div className="space-y-2">
-              <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-sm w-fit text-emerald-400">
+              <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-[6px] w-fit text-emerald-400">
                 <Shield className="h-4 w-4" />
               </div>
               <h3 className="text-sm font-bold text-white mt-3">
@@ -58,7 +58,7 @@ export default function OfficialLandingPage() {
                 pemalsuan metadata.
               </p>
             </div>
-            <div className="border border-zinc-900 bg-zinc-950 p-4 rounded-sm font-mono text-[9px] text-zinc-500 space-y-1">
+            <div className="border border-zinc-900 bg-zinc-950 p-4 rounded-[6px] font-mono text-[9px] text-zinc-500 space-y-1">
               <div className="text-zinc-400 flex justify-between">
                 <span>[SUI_TX_DIGEST]</span>
                 <span className="text-emerald-500">VERIFIED</span>
@@ -73,8 +73,8 @@ export default function OfficialLandingPage() {
           </div>
 
           {/* Box 3: Role-Based Workspace */}
-          <div className="md:col-span-6 bg-zinc-950/40 border border-zinc-900 rounded-sm p-6 flex flex-col gap-4 group hover:border-zinc-800 transition-colors">
-            <div className="p-2 bg-indigo-500/10 border border-indigo-500/20 rounded-sm w-fit text-indigo-400">
+          <div className="md:col-span-6 bg-zinc-950/40 border border-zinc-900 rounded-[6px] p-6 flex flex-col gap-4 group hover:border-zinc-800 transition-colors">
+            <div className="p-2 bg-indigo-500/10 border border-indigo-500/20 rounded-[6px] w-fit text-indigo-400">
               <Users2 className="h-4 w-4" />
             </div>
             <div>
@@ -90,8 +90,8 @@ export default function OfficialLandingPage() {
           </div>
 
           {/* Box 4: Multi-Engine Validated */}
-          <div className="md:col-span-6 bg-zinc-950/40 border border-zinc-900 rounded-sm p-6 flex flex-col gap-4 group hover:border-zinc-800 transition-colors">
-            <div className="p-2 bg-purple-500/10 border border-purple-500/20 rounded-sm w-fit text-purple-400">
+          <div className="md:col-span-6 bg-zinc-950/40 border border-zinc-900 rounded-[6px] p-6 flex flex-col gap-4 group hover:border-zinc-800 transition-colors">
+            <div className="p-2 bg-purple-500/10 border border-purple-500/20 rounded-[6px] w-fit text-purple-400">
               <Cpu className="h-4 w-4" />
             </div>
             <div>

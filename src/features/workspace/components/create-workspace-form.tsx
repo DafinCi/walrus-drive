@@ -106,7 +106,7 @@ export function CreateWorkspaceForm({
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 text-left">
         {formState.errors.root && (
-          <div className="p-3 text-xs bg-destructive/5 border border-destructive/20 text-destructive rounded-sm font-medium flex items-center gap-2">
+          <div className="p-3 text-xs bg-destructive/5 border border-destructive/20 text-destructive rounded-[6px] font-medium flex items-center gap-2">
             <AlertTriangle className="h-3.5 w-3.5 flex-shrink-0" />
             <span>{formState.errors.root.message}</span>
           </div>
@@ -124,7 +124,7 @@ export function CreateWorkspaceForm({
               <FormControl>
                 <Input
                   placeholder="Acme Corp"
-                  className="h-9 bg-background rounded-sm border-input text-xs"
+                  className="h-9 bg-background rounded-[6px] border-input text-xs"
                   {...field}
                 />
               </FormControl>
@@ -155,7 +155,7 @@ export function CreateWorkspaceForm({
               </div>
 
               <FormControl>
-                <div className="flex rounded-sm shadow-none">
+                <div className="flex rounded-[6px] shadow-none">
                   {/* Prefix Box Ganti Posisi Absolute */}
                   <span className="inline-flex items-center px-3 rounded-l-sm border border-r-0 border-input bg-muted text-muted-foreground text-[11px] font-mono select-none">
                     WalSpace.io/
@@ -215,7 +215,7 @@ export function CreateWorkspaceForm({
               <FormControl>
                 <Input
                   placeholder="Repository for shared organization assets."
-                  className="h-9 bg-background rounded-sm text-xs"
+                  className="h-9 bg-background rounded-[6px] text-xs"
                   maxLength={160}
                   {...field}
                 />
@@ -253,7 +253,7 @@ export function CreateWorkspaceForm({
         {/* SUBMIT BUTTON */}
         <Button
           type="submit"
-          className="w-full h-9 font-semibold text-xs rounded-sm shadow-none mt-2 uppercase tracking-wider"
+          className="w-full h-9 font-semibold text-xs rounded-[6px] shadow-none mt-2 uppercase tracking-wider"
           disabled={
             mutation.isPending || isSlugAvailable === false || !walletAddress
           }

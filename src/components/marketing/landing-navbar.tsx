@@ -85,7 +85,7 @@ export function LandingNavbar() {
           <Button
             asChild
             size="sm"
-            className="font-semibold text-xs bg-white text-black hover:bg-zinc-200 rounded-sm px-4 cursor-pointer"
+            className="font-semibold text-xs bg-white text-black hover:bg-zinc-200 rounded-[6px] px-4 cursor-pointer"
           >
             <Link href="/workspace">Launch App</Link>
           </Button>

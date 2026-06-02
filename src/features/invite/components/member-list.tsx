@@ -46,7 +46,7 @@ export function MemberList({
 
   if (membersWithMeta.length === 0) {
     return (
-      <div className="text-center py-10 border border-dashed border-border rounded-sm bg-muted/10">
+      <div className="text-center py-10 border border-dashed border-border rounded-[6px] bg-muted/10">
         <Users2 className="mx-auto h-6 w-6 text-muted-foreground/60 mb-2" />
         <p className="text-xs text-muted-foreground">
           Tidak ada anggota yang terdaftar.

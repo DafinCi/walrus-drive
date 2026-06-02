@@ -34,7 +34,7 @@ export default function DocsIntroductionPage() {
           Pilar Teknologi Utama
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-          <div className="p-4 bg-zinc-950 border border-zinc-900 rounded-sm">
+          <div className="p-4 bg-zinc-950 border border-zinc-900 rounded-[6px]">
             <h4 className="text-xs font-bold text-white mb-1">
               1. Walrus Blob Storage
             </h4>
@@ -44,7 +44,7 @@ export default function DocsIntroductionPage() {
               desentralisasi.
             </p>
           </div>
-          <div className="p-4 bg-zinc-950 border border-zinc-900 rounded-sm">
+          <div className="p-4 bg-zinc-950 border border-zinc-900 rounded-[6px]">
             <h4 className="text-xs font-bold text-white mb-1">
               2. Otentikasi Kriptografi Sui
             </h4>

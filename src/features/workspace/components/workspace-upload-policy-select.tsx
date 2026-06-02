@@ -27,11 +27,11 @@ export function WorkspaceUploadPolicySelect({
       </FormLabel>
       <Select value={value} onValueChange={onValueChange}>
         <FormControl>
-          <SelectTrigger className="bg-background border-input h-9 text-xs rounded-sm shadow-none">
+          <SelectTrigger className="bg-background border-input h-9 text-xs rounded-[6px] shadow-none">
             <SelectValue placeholder="Select upload policy" />
           </SelectTrigger>
         </FormControl>
-        <SelectContent className="rounded-sm">
+        <SelectContent className="rounded-[6px]">
           <SelectItem
             value="members_only"
             className="text-xs py-1.5 rounded-none"

@@ -61,7 +61,7 @@ export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
 
         <div className="space-y-4 pt-2 z-50">
           {/* Section 1: Keterangan Berkas */}
-          <div className="p-3 bg-muted/40 border border-border/50 rounded-sm space-y-2">
+          <div className="p-3 bg-muted/40 border border-border/50 rounded-[6px] space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-muted-foreground">Nama Berkas:</span>
               <span
@@ -108,7 +108,7 @@ export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
                   <ShieldCheck className="h-3 w-3 text-emerald-500" /> Walrus
                   Blob ID
                 </label>
-                <div className="flex items-center gap-2 bg-background border border-border/60 p-2 rounded-sm">
+                <div className="flex items-center gap-2 bg-background border border-border/60 p-2 rounded-[6px]">
                   <code className="font-mono text-[10px] text-emerald-400 truncate flex-1">
                     {item.blobId}
                   </code>

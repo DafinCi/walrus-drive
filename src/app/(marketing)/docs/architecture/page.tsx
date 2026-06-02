@@ -43,7 +43,7 @@ export default function ArchitecturePage() {
           </h2>
         </div>
 
-        <div className="relative w-full bg-zinc-950/50 border border-zinc-900 rounded-sm p-8 overflow-hidden group">
+        <div className="relative w-full bg-zinc-950/50 border border-zinc-900 rounded-[6px] p-8 overflow-hidden group">
           {/* Background Grid Accent */}
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
 
@@ -53,7 +53,7 @@ export default function ArchitecturePage() {
             <div
               onMouseEnter={() => setActiveNode("supabase")}
               onMouseLeave={() => setActiveNode(null)}
-              className={`flex flex-col items-center gap-3 p-5 rounded-sm border transition-all duration-300 cursor-pointer w-40 ${
+              className={`flex flex-col items-center gap-3 p-5 rounded-[6px] border transition-all duration-300 cursor-pointer w-40 ${
                 activeNode === "supabase"
                   ? "bg-emerald-500/10 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
                   : "bg-zinc-900/50 border-zinc-800"
@@ -103,7 +103,7 @@ export default function ArchitecturePage() {
               <div
                 onMouseEnter={() => setActiveNode("walrus")}
                 onMouseLeave={() => setActiveNode(null)}
-                className={`flex flex-col items-center gap-3 p-5 rounded-sm border transition-all duration-300 cursor-pointer w-40 ${
+                className={`flex flex-col items-center gap-3 p-5 rounded-[6px] border transition-all duration-300 cursor-pointer w-40 ${
                   activeNode === "walrus"
                     ? "bg-indigo-500/10 border-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.1)]"
                     : "bg-zinc-900/50 border-zinc-800"
@@ -124,7 +124,7 @@ export default function ArchitecturePage() {
               <div
                 onMouseEnter={() => setActiveNode("sui")}
                 onMouseLeave={() => setActiveNode(null)}
-                className={`flex flex-col items-center gap-3 p-5 rounded-sm border transition-all duration-300 cursor-pointer w-40 ${
+                className={`flex flex-col items-center gap-3 p-5 rounded-[6px] border transition-all duration-300 cursor-pointer w-40 ${
                   activeNode === "sui"
                     ? "bg-sky-500/10 border-sky-500 shadow-[0_0_20px_rgba(56,189,248,0.1)]"
                     : "bg-zinc-900/50 border-zinc-800"
@@ -144,7 +144,7 @@ export default function ArchitecturePage() {
           </div>
 
           {/* Penjelasan Dinamis Berdasarkan Hover */}
-          <div className="mt-10 p-4 bg-zinc-900/80 border border-zinc-800 rounded-sm min-h-[80px] flex items-center justify-center text-center">
+          <div className="mt-10 p-4 bg-zinc-900/80 border border-zinc-800 rounded-[6px] min-h-[80px] flex items-center justify-center text-center">
             {!activeNode ? (
               <p className="text-xs text-zinc-500 italic">
                 Arahkan kursor ke komponen untuk melihat peran teknisnya.
@@ -174,7 +174,7 @@ export default function ArchitecturePage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-800 border border-zinc-800 rounded-sm overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-800 border border-zinc-800 rounded-[6px] overflow-hidden">
           {/* Kolom Kanan (Web2 Logic) */}
           <div className="bg-zinc-950 p-8 space-y-4">
             <div className="flex items-center gap-2 text-emerald-400">
@@ -226,7 +226,7 @@ export default function ArchitecturePage() {
       </section>
 
       {/* 3. TECHNICAL SUMMARY */}
-      <section className="bg-zinc-900/30 p-6 rounded-sm border border-zinc-800/50">
+      <section className="bg-zinc-900/30 p-6 rounded-[6px] border border-zinc-800/50">
         <h3 className="text-xs font-bold text-white mb-3">
           Ringkasan Teknis bagi Juri
         </h3>

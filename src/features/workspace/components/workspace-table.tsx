@@ -8,7 +8,7 @@ export interface WorkspaceTableProps {
 
 export function WorkspaceTable({ files, onVerifyClick }: WorkspaceTableProps) {
   return (
-    <div className="w-full overflow-x-auto border border-border/60 rounded-sm bg-card/10 backdrop-blur-xs shadow-md animate-in fade-in-50 duration-200">
+    <div className="w-full overflow-x-auto border border-border/60 rounded-[6px] bg-card/10 backdrop-blur-xs shadow-md animate-in fade-in-50 duration-200">
       <table className="w-full text-left border-collapse min-w-[600px]">
         {/* Kepala Tabel */}
         <thead>

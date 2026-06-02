@@ -9,7 +9,7 @@ export default async function WorkspacePage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen md:p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
+      <div className="mx-auto space-y-8">
         <WorkspaceDashboard slug={slug} />
       </div>
     </main>

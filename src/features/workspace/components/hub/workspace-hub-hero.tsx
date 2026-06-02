@@ -28,8 +28,8 @@ export function WorkspaceHubHero({
       {/* Bagian Quick Stats (Metrik) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Stat 1 */}
-        <div className="flex items-center gap-4 p-4 bg-card border border-border/60 rounded-sm shadow-sm">
-          <div className="p-3 bg-primary/10 rounded-sm">
+        <div className="flex items-center gap-4 p-4 bg-card border border-border/60 rounded-[6px] shadow-sm">
+          <div className="p-3 bg-primary/10 rounded-[6px]">
             <Layers className="h-5 w-5 text-primary" />
           </div>
           <div>
@@ -43,8 +43,8 @@ export function WorkspaceHubHero({
         </div>
 
         {/* Stat 2 */}
-        <div className="flex items-center gap-4 p-4 bg-card border border-border/60 rounded-sm shadow-sm">
-          <div className="p-3 bg-blue-500/10 rounded-sm">
+        <div className="flex items-center gap-4 p-4 bg-card border border-border/60 rounded-[6px] shadow-sm">
+          <div className="p-3 bg-blue-500/10 rounded-[6px]">
             <FileText className="h-5 w-5 text-blue-500" />
           </div>
           <div>
@@ -58,8 +58,8 @@ export function WorkspaceHubHero({
         </div>
 
         {/* Stat 3 (Sebagai ganti Storage karena belum ada API size, kita pakai Total Anggota Jaringan) */}
-        <div className="flex items-center gap-4 p-4 bg-card border border-border/60 rounded-sm shadow-sm">
-          <div className="p-3 bg-emerald-500/10 rounded-sm">
+        <div className="flex items-center gap-4 p-4 bg-card border border-border/60 rounded-[6px] shadow-sm">
+          <div className="p-3 bg-emerald-500/10 rounded-[6px]">
             <Users className="h-5 w-5 text-emerald-500" />
           </div>
           <div>

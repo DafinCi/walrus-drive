@@ -123,7 +123,7 @@ function WalletConnectInner() {
                 alt={wallet.name}
                 width={16}
                 height={16}
-                className="rounded-sm"
+                className="rounded-[6px]"
               />
             )}
             {wallet.name}

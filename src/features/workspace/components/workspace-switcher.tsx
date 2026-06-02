@@ -76,7 +76,7 @@ export function WorkspaceSwitcher() {
 
         <DropdownMenuContent
           align="start"
-          className="w-64 mt-1 border-border bg-popover text-popover-foreground rounded-sm"
+          className="w-64 mt-1 border-border bg-popover text-popover-foreground rounded-[6px]"
         >
           <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-muted-foreground">
             Daftar Workspace
@@ -88,7 +88,7 @@ export function WorkspaceSwitcher() {
               <DropdownMenuItem
                 key={ws.id}
                 onClick={() => router.push(`/workspace/${ws.slug}`)} // 🌟 Navigasi via SLUG
-                className="gap-2 cursor-pointer font-medium text-sm focus:bg-muted rounded-sm mb-0.5"
+                className="gap-2 cursor-pointer font-medium text-sm focus:bg-muted rounded-[6px] mb-0.5"
               >
                 <div className="flex h-5 w-5 items-center justify-center rounded bg-primary/10 text-primary text-[10px] font-bold">
                   {getInitials(ws.name)}
@@ -107,7 +107,7 @@ export function WorkspaceSwitcher() {
 
           <DropdownMenuItem
             onClick={() => setIsCreateModalOpen(true)}
-            className="gap-2 cursor-pointer text-muted-foreground hover:text-foreground text-sm focus:bg-muted font-medium rounded-sm"
+            className="gap-2 cursor-pointer text-muted-foreground hover:text-foreground text-sm focus:bg-muted font-medium rounded-[6px]"
           >
             <Plus className="h-3.5 w-3.5 text-primary" />
             Buat Workspace Baru

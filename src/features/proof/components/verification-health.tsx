@@ -72,7 +72,7 @@ export function VerificationHealth({
   }
 
   return (
-    <div className="flex flex-col border border-border/80 bg-card rounded-sm shadow-xs overflow-hidden animate-in fade-in-50 duration-300">
+    <div className="flex flex-col border border-border/80 bg-card rounded-[6px] shadow-xs overflow-hidden animate-in fade-in-50 duration-300">
       <div className="p-6 md:p-8 space-y-6">
         {/* HEADER: TITLE & BIG SCORE */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -152,16 +152,16 @@ export function VerificationHealthSkeleton() {
       <div className="p-6 md:p-8 space-y-6">
         <div className="flex justify-between items-end gap-4">
           <div className="space-y-3 w-full max-w-sm">
-            <div className="h-6 w-48 bg-muted rounded-sm" />
-            <div className="h-4 w-72 bg-muted/60 rounded-sm" />
+            <div className="h-6 w-48 bg-muted rounded-[6px]" />
+            <div className="h-4 w-72 bg-muted/60 rounded-[6px]" />
           </div>
           <div className="h-12 w-24 bg-muted rounded-md" />
         </div>
         <div className="h-2.5 w-full bg-muted rounded-full" />
         <div className="flex gap-6 pt-2">
-          <div className="h-4 w-24 bg-muted/60 rounded-sm" />
-          <div className="h-4 w-24 bg-muted/60 rounded-sm" />
-          <div className="h-4 w-24 bg-muted/60 rounded-sm" />
+          <div className="h-4 w-24 bg-muted/60 rounded-[6px]" />
+          <div className="h-4 w-24 bg-muted/60 rounded-[6px]" />
+          <div className="h-4 w-24 bg-muted/60 rounded-[6px]" />
         </div>
       </div>
     </div>

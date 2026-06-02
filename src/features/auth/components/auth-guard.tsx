@@ -32,7 +32,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   if (!isConnected) {
     return (
       <div className="flex h-[75vh] w-full flex-col items-center justify-center px-4">
-        <div className="max-w-md text-center space-y-6 p-8 border border-border/40 rounded-sm bg-card/50 shadow-sm backdrop-blur-sm">
+        <div className="max-w-md text-center space-y-6 p-8 border border-border/40 rounded-[6px] bg-card/50 shadow-sm backdrop-blur-sm">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 border border-primary/20">
             <ShieldAlert className="h-7 w-7 text-primary" />
           </div>

@@ -273,7 +273,7 @@ export function InviteModal({
                         Tautan Undangan Baru Anda
                       </label>
                       <div className="flex gap-2">
-                        <div className="flex-1 bg-muted/50 border border-border rounded-sm h-9.5 px-3 flex items-center min-w-0">
+                        <div className="flex-1 bg-muted/50 border border-border rounded-[6px] h-9.5 px-3 flex items-center min-w-0">
                           <span className="text-xs font-mono text-foreground/90 truncate select-all">
                             {inviteUrl}
                           </span>
@@ -293,7 +293,7 @@ export function InviteModal({
                     </div>
 
                     {expiresAtDate && (
-                      <div className="flex items-center gap-1.5 text-[11px] text-amber-500 font-medium bg-amber-500/5 border border-amber-500/10 rounded-sm p-2">
+                      <div className="flex items-center gap-1.5 text-[11px] text-amber-500 font-medium bg-amber-500/5 border border-amber-500/10 rounded-[6px] p-2">
                         <ShieldAlert className="h-3.5 w-3.5 shrink-0" />
                         <span className="truncate">
                           Kedaluwarsa otomatis:{" "}
@@ -325,7 +325,7 @@ export function InviteModal({
                       </span>
                     </div>
                   ) : invites.length === 0 ? (
-                    <div className="text-center py-8 border border-dashed border-border rounded-sm bg-muted/10">
+                    <div className="text-center py-8 border border-dashed border-border rounded-[6px] bg-muted/10">
                       <p className="text-xs text-muted-foreground">
                         Tidak ada tautan undangan aktif.
                       </p>

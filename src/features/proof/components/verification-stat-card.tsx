@@ -21,7 +21,7 @@ export function VerificationStatCard({
 }: VerificationStatCardProps) {
   return (
     <div
-      className={`p-4 bg-card/60 border ${borderColorClass} rounded-sm flex items-center justify-between shadow-xs transition-all duration-200 hover:shadow-md hover:bg-card`}
+      className={`p-4 bg-card/60 border ${borderColorClass} rounded-[6px] flex items-center justify-between shadow-xs transition-all duration-200 hover:shadow-md hover:bg-card`}
     >
       <div className="space-y-1 min-w-0">
         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider select-none">
@@ -36,7 +36,7 @@ export function VerificationStatCard({
       </div>
 
       <div
-        className={`p-2.5 bg-muted/40 border border-border/40 rounded-sm ${iconColorClass} shrink-0`}
+        className={`p-2.5 bg-muted/40 border border-border/40 rounded-[6px] ${iconColorClass} shrink-0`}
       >
         <Icon className="h-5 w-5" />
       </div>

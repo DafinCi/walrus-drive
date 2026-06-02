@@ -44,7 +44,7 @@ export function WorkspaceHeader({
 
           {/* Role Badge */}
           <span
-            className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm border ${getRoleBadgeColor(
+            className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-[6px] border ${getRoleBadgeColor(
               userRole,
             )}`}
           >

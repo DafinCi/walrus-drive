@@ -27,11 +27,11 @@ export function WorkspaceVisibilitySelect({
       </FormLabel>
       <Select value={value} onValueChange={onValueChange}>
         <FormControl>
-          <SelectTrigger className="bg-background border-input h-9 text-xs rounded-sm shadow-none">
+          <SelectTrigger className="bg-background border-input h-9 text-xs rounded-[6px] shadow-none">
             <SelectValue placeholder="Select visibility" />
           </SelectTrigger>
         </FormControl>
-        <SelectContent className="rounded-sm">
+        <SelectContent className="rounded-[6px]">
           <SelectItem value="private" className="rounded-none text-xs py-2">
             <span className="font-semibold block">Private</span>
             <span className="text-[10px] text-muted-foreground block mt-0.5">

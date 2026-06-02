@@ -64,7 +64,7 @@ export function VerificationSummarySkeleton() {
       {[...Array(4)].map((_, i) => (
         <div
           key={i}
-          className="h-24 bg-muted/50 border border-border/40 rounded-sm"
+          className="h-24 bg-muted/50 border border-border/40 rounded-[6px]"
         />
       ))}
     </div>

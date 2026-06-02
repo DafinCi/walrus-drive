@@ -24,7 +24,7 @@ export default function DocsNestedLayout({
             <Link
               key={menu.href}
               href={menu.href}
-              className="flex items-center gap-2.5 px-3 py-2 rounded-sm text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-900/50 transition-all"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-[6px] text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-900/50 transition-all"
             >
               <menu.icon className="h-4 w-4 text-zinc-500 shrink-0" />
               <span>{menu.name}</span>

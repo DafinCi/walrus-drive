@@ -86,12 +86,12 @@ export function WorkspaceToolbar({
 
       {/* SISI KANAN: View Toggle & Action Buttons */}
       <div className="flex items-center justify-end gap-3 self-end sm:self-auto w-full sm:w-auto">
-        <div className="flex items-center border border-border rounded-sm p-0.5 bg-muted/20">
+        <div className="flex items-center border border-border rounded-[6px] p-0.5 bg-muted/20">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => onViewChange("grid")}
-            className={`h-8 w-8 rounded-sm transition-all ${currentView === "grid" ? "bg-muted text-foreground shadow-xs font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-transparent"}`}
+            className={`h-8 w-8 rounded-[6px] transition-all ${currentView === "grid" ? "bg-muted text-foreground shadow-xs font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-transparent"}`}
           >
             <LayoutGrid className="h-4 w-4" />
           </Button>
@@ -99,7 +99,7 @@ export function WorkspaceToolbar({
             variant="ghost"
             size="icon"
             onClick={() => onViewChange("table")}
-            className={`h-8 w-8 rounded-sm transition-all ${currentView === "table" ? "bg-muted text-foreground shadow-xs font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-transparent"}`}
+            className={`h-8 w-8 rounded-[6px] transition-all ${currentView === "table" ? "bg-muted text-foreground shadow-xs font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-transparent"}`}
           >
             <TableProperties className="h-4 w-4" />
           </Button>

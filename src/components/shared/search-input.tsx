@@ -43,12 +43,12 @@ export function SearchInput() {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Cari file, blob ID, atau tx hash..."
-        className="w-full h-9 pl-9 pr-8 bg-muted/40 border border-border rounded-sm text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring transition-all"
+        className="w-full h-9 pl-9 pr-8 bg-muted/40 border border-border rounded-[6px] text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring transition-all"
       />
       {value && (
         <button
           onClick={() => setValue("")}
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-sm transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-[6px] transition-colors"
           title="Bersihkan pencarian"
           aria-label="Bersihkan pencarian"
         >

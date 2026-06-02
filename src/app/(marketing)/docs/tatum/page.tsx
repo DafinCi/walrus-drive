@@ -114,7 +114,7 @@ export default function TatumDocsPage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-zinc-950/40 border border-zinc-900 rounded-sm p-6 relative overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-zinc-950/40 border border-zinc-900 rounded-[6px] p-6 relative overflow-hidden">
           {/* KOLOM KIRI: REQUEST SELECTOR (40%) */}
           <div className="lg:col-span-5 space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
@@ -130,7 +130,7 @@ export default function TatumDocsPage() {
                       setActiveTab(key);
                       setShowResponse(false);
                     }}
-                    className={`w-full text-left p-3 rounded-sm border text-xs font-medium transition-all ${
+                    className={`w-full text-left p-3 rounded-[6px] border text-xs font-medium transition-all ${
                       activeTab === key
                         ? "bg-sky-500/10 border-sky-500/40 text-white"
                         : "bg-zinc-900/40 border-zinc-900 text-zinc-400 hover:border-zinc-800 hover:text-zinc-200"
@@ -162,13 +162,13 @@ export default function TatumDocsPage() {
 
             {/* URL Input Bar & Action Button */}
             <div className="space-y-2 pt-4 border-t border-zinc-900">
-              <div className="bg-zinc-950 border border-zinc-800 p-2 rounded-sm font-mono text-[10px] text-zinc-400 truncate select-all">
+              <div className="bg-zinc-950 border border-zinc-800 p-2 rounded-[6px] font-mono text-[10px] text-zinc-400 truncate select-all">
                 {endpoints[activeTab].url}
               </div>
               <button
                 onClick={triggerRequest}
                 disabled={isLoading}
-                className="w-full bg-white text-black hover:bg-zinc-200 disabled:bg-zinc-800 disabled:text-zinc-600 font-bold text-xs py-2.5 px-4 rounded-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                className="w-full bg-white text-black hover:bg-zinc-200 disabled:bg-zinc-800 disabled:text-zinc-600 font-bold text-xs py-2.5 px-4 rounded-[6px] flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 {isLoading ? (
                   <RefreshCw className="h-3.5 w-3.5 animate-spin" />
@@ -183,7 +183,7 @@ export default function TatumDocsPage() {
           </div>
 
           {/* KOLOM KANAN: RESPONSE WINDOW (60%) */}
-          <div className="lg:col-span-7 bg-[#050505] border border-zinc-800 rounded-sm overflow-hidden flex flex-col min-h-[300px]">
+          <div className="lg:col-span-7 bg-[#050505] border border-zinc-800 rounded-[6px] overflow-hidden flex flex-col min-h-[300px]">
             {/* Window Top Bar */}
             <div className="flex items-center justify-between px-4 py-2 bg-zinc-950 border-b border-zinc-900">
               <div className="flex items-center gap-2">
@@ -233,7 +233,7 @@ export default function TatumDocsPage() {
       </section>
 
       {/* BENEFIT EXPLANATION BOX */}
-      <section className="bg-zinc-900/20 border border-zinc-900 p-6 rounded-sm space-y-4">
+      <section className="bg-zinc-900/20 border border-zinc-900 p-6 rounded-[6px] space-y-4">
         <div className="flex items-center gap-2 text-zinc-300">
           <Cpu className="h-4 w-4 text-emerald-400" />
           <h3 className="text-xs font-bold uppercase tracking-widest">

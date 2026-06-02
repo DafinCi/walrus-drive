@@ -113,7 +113,7 @@ function DashboardContent({ slug }: { slug: string }) {
 
   if (hasGlobalError) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[75vh] max-w-md mx-auto text-center p-6 border border-destructive/20 bg-destructive/5 rounded-sm shadow-xl">
+      <div className="flex flex-col items-center justify-center min-h-[75vh] max-w-md mx-auto text-center p-6 border border-destructive/20 bg-destructive/5 rounded-[6px] shadow-xl">
         <AlertTriangle className="h-10 w-10 text-destructive mb-3" />
         <h3 className="text-lg font-bold text-foreground">
           Akses Komando Workspace Gagal

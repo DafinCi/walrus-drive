@@ -41,7 +41,7 @@ export function UploadProgress({ item }: UploadProgressProps) {
   return (
     <div
       onClick={() => setIsModalOpen(true)}
-      className="p-3 rounded-sm bg-muted/40 border border-border/50 space-y-2 text-xs"
+      className="p-3 rounded-[6px] bg-muted/40 border border-border/50 space-y-2 text-xs"
     >
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">

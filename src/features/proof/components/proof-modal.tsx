@@ -67,7 +67,7 @@ export function ProofModal({
         <div className="space-y-4 pt-2">
           {/* TAMPILAN STATUS STATUS BADGE BOX */}
           {status === "verified" ? (
-            <div className="p-4 border border-emerald-500/30 bg-emerald-500/10 rounded-sm flex items-start gap-3">
+            <div className="p-4 border border-emerald-500/30 bg-emerald-500/10 rounded-[6px] flex items-start gap-3">
               <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
               <div>
                 <h4 className="text-sm font-bold text-emerald-400">
@@ -80,7 +80,7 @@ export function ProofModal({
               </div>
             </div>
           ) : status === "failed" ? (
-            <div className="p-4 border border-destructive/30 bg-destructive/10 rounded-sm flex items-start gap-3">
+            <div className="p-4 border border-destructive/30 bg-destructive/10 rounded-[6px] flex items-start gap-3">
               <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
               <div>
                 <h4 className="text-sm font-bold text-destructive">
@@ -93,7 +93,7 @@ export function ProofModal({
               </div>
             </div>
           ) : (
-            <div className="p-4 border border-blue-500/30 bg-blue-500/10 rounded-sm flex items-start gap-3">
+            <div className="p-4 border border-blue-500/30 bg-blue-500/10 rounded-[6px] flex items-start gap-3">
               <Loader2
                 className={`h-5 w-5 text-blue-400 shrink-0 mt-0.5 ${isPending ? "animate-spin" : ""}`}
               />
@@ -111,7 +111,7 @@ export function ProofModal({
           )}
 
           {/* DETAIL KARTU AUDIT */}
-          <div className="p-4 bg-muted/40 border border-border rounded-sm space-y-3 font-sans text-sm">
+          <div className="p-4 bg-muted/40 border border-border rounded-[6px] space-y-3 font-sans text-sm">
             <div className="flex flex-col gap-0.5">
               <span className="text-xs text-muted-foreground">Nama Berkas</span>
               <span className="font-semibold text-foreground truncate">
@@ -123,7 +123,7 @@ export function ProofModal({
               <span className="text-xs text-muted-foreground">
                 Walrus Blob ID
               </span>
-              <span className="font-mono text-xs text-foreground/90 break-all bg-background p-1.5 border border-border/60 rounded-sm">
+              <span className="font-mono text-xs text-foreground/90 break-all bg-background p-1.5 border border-border/60 rounded-[6px]">
                 {blobId || "N/A"}
               </span>
             </div>
@@ -166,8 +166,8 @@ export function ProofModal({
                       Sender Wallet
                     </span>
                     <span className="font-mono font-medium text-xs">
-                      {currentFileState.sender
-                        ? `${currentFileState.sender.substring(0, 6)}...`
+                      {currentFileState.wallet_address
+                        ? `${currentFileState.wallet_address.substring(0, 6)}...`
                         : "N/A"}
                     </span>
                   </div>
