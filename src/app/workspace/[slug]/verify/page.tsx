@@ -1,40 +1,62 @@
 "use client";
 
-import { use } from "react"; // 🌟 TAMBAHAN: Import 'use' untuk unwrap Promise
+import { use } from "react";
 import { useWorkspaceVerifications } from "@/features/proof/hooks/use-workspace-verification";
 import {
   VerificationSummary,
   VerificationSummarySkeleton,
 } from "@/features/proof/components/verification-summary";
+import {
+  VerificationTable,
+  VerificationTableSkeleton,
+} from "@/features/proof/components/verification-table"; // 🌟 TAMBAHAN: Import komponen tabel
 import { ShieldCheck, AlertTriangle } from "lucide-react";
+import { WorkspaceFile } from "@/features/workspace/types/workspace.types";
 
 interface VerificationPageProps {
   params: Promise<{
     slug: string;
-  }>; // 🌟 DISESUAIKAN: params sekarang bertipe Promise
+  }>;
 }
 
 export default function VerificationCenterPage({
   params,
 }: VerificationPageProps) {
-  // 🌟 DISESUAIKAN: Unwrap params menggunakan React.use() sebelum mengakses propertinya
   const unwrappedParams = use(params);
   const slug = unwrappedParams.slug;
 
-  // 1. Konsumsi single-fetch API via TanStack Query
+  // 1. Konsumsi single-fetch API via TanStack Query (Mengambil summary & history sekaligus)
   const { data, isLoading, error } = useWorkspaceVerifications(slug);
 
-  // 2. LOADING STATE: Menampilkan Skeleton Loader Premium
+  // 🌟 HANDLER STUB: Aksi ketika user klik "Re-Verify" di dropdown tabel
+  const handleReVerify = (file: WorkspaceFile) => {
+    console.log("🔄 Memicu re-verifikasi untuk berkas ID:", file.id);
+    // Nanti di sini kita tinggal panggil mutasi dari useVerifyProof(slug)
+  };
+
+  // 🌟 HANDLER STUB: Aksi ketika user klik "View Proof" di dropdown tabel
+  const handleViewProof = (file: WorkspaceFile) => {
+    console.log(
+      "🔍 Membuka modal detail enkripsi/proof untuk berkas ID:",
+      file.id,
+    );
+    // Nanti di sini kita sambungkan ke state modal untuk memunculkan ProofModal
+  };
+
+  // 2. LOADING STATE: Menampilkan Skeleton Header, Summary, dan Tabel secara kompak
   if (isLoading) {
     return (
       <div className="space-y-6 p-6 max-w-7xl mx-auto">
         <PageHeaderSkeleton />
         <VerificationSummarySkeleton />
+        <div className="pt-4">
+          <VerificationTableSkeleton />
+        </div>
       </div>
     );
   }
 
-  // 3. ERROR STATE: Penanganan jika API jebol atau slug typo
+  // 3. ERROR STATE
   if (error || !data || !data.success) {
     return (
       <div className="p-6 max-w-md mx-auto mt-20 text-center border border-destructive/20 bg-destructive/5 rounded-sm">
@@ -50,14 +72,34 @@ export default function VerificationCenterPage({
     );
   }
 
-  // 4. MAIN RENDER
+  // 4. MAIN RENDER: Integrasi Penuh Berstruktur SaaS Premium
   return (
     <div className="space-y-6 p-6 max-w-7xl mx-auto animate-in fade-in-50 duration-300">
-      {/* Page Header Component */}
+      {/* Page Header */}
       <PageHeader workspaceName={data.meta.workspaceName} />
 
       {/* Summary KPI Cards & Progress Bar */}
       <VerificationSummary stats={data.summary} />
+
+      {/* Audit Trail Section */}
+      <div className="space-y-2 pt-4">
+        <div>
+          <h3 className="text-sm font-bold text-foreground">
+            Verification History
+          </h3>
+          <p className="text-xs text-muted-foreground">
+            Daftar lengkap berkas yang telah dikunci ke dalam jangkar
+            kriptografis on-chain.
+          </p>
+        </div>
+
+        {/* Core Audit Log Table */}
+        <VerificationTable
+          files={data.history}
+          onReVerify={handleReVerify}
+          onViewProof={handleViewProof}
+        />
+      </div>
     </div>
   );
 }
@@ -77,7 +119,8 @@ function PageHeader({ workspaceName }: { workspaceName: string }) {
       <p className="text-xs text-muted-foreground pl-9">
         Memantau kepatuhan data, validasi enkripsi on-chain, dan kesehatan
         kriptografis untuk ruang kerja{" "}
-        <span className="font-semibold text-foreground">{workspaceName}</span>.
+        <span className="font-semibold text-foreground">"{workspaceName}"</span>
+        .
       </p>
     </div>
   );
