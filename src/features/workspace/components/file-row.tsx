@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import {
   FileText,
@@ -22,18 +24,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { WorkspaceFile } from "./file-card";
+import { WorkspaceFile } from "@/features/workspace/types/workspace.types";
 
 interface FileRowProps {
   file: WorkspaceFile;
+  onVerifyClick: (file: WorkspaceFile) => void; // 🌟 TAMBAHAN: Menerima fungsi trigger dari parent table
 }
 
-export function FileRow({ file }: FileRowProps) {
+export function FileRow({ file, onVerifyClick }: FileRowProps) {
   const [copied, setCopied] = useState(false);
 
   // 1. Helper untuk memilih ikon berdasarkan MIME Type
-  const getFileIcon = (mimeType: string) => {
-    const type = mimeType.toLowerCase();
+  const getFileIcon = (mime_type: string) => {
+    const type = mime_type.toLowerCase();
     if (type.startsWith("image/"))
       return <ImageIcon className="h-4 w-4 text-blue-400" />;
     if (type.startsWith("video/"))
@@ -80,7 +83,7 @@ export function FileRow({ file }: FileRowProps) {
   const handleCopyBlobId = async (e: React.MouseEvent) => {
     e.stopPropagation();
     try {
-      await navigator.clipboard.writeText(file.blobId);
+      await navigator.clipboard.writeText(file.blob_id);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -88,7 +91,7 @@ export function FileRow({ file }: FileRowProps) {
     }
   };
 
-  const aggregatorUrl = `https://aggregator.walrus-testnet.walrus.space/v1/blobs/${file.blobId}`;
+  const aggregatorUrl = `https://aggregator.walrus-testnet.walrus.space/v1/blobs/${file.blob_id}`;
 
   return (
     <tr className="group border-b border-border/40 hover:bg-muted/30 transition-colors align-middle">
@@ -96,20 +99,20 @@ export function FileRow({ file }: FileRowProps) {
       <td className="py-3 px-4 font-medium text-foreground max-w-xs md:max-w-md">
         <div className="flex items-center gap-3 min-w-0">
           <div className="p-1.5 bg-muted/60 border border-border/50 rounded-sm group-hover:bg-background transition-colors flex-shrink-0">
-            {getFileIcon(file.mimeType)}
+            {getFileIcon(file.mime_type)}
           </div>
           <div className="flex flex-col min-w-0">
             <span
               className="text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors"
-              title={file.name}
+              title={file.file_name}
             >
-              {file.name}
+              {file.file_name}
             </span>
             <span
               className="text-[11px] text-muted-foreground font-mono truncate max-w-[180px] sm:max-w-xs"
-              title={file.blobId}
+              title={file.blob_id}
             >
-              Blob: {file.blobId}
+              Blob: {file.blob_id}
             </span>
           </div>
         </div>
@@ -117,20 +120,20 @@ export function FileRow({ file }: FileRowProps) {
 
       {/* KOLOM 2: Ukuran File */}
       <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-        {formatBytes(file.size)}
+        {formatBytes(file.file_size)}
       </td>
 
       {/* KOLOM 3: Uploader (Wallet Address) */}
       <td
         className="py-3 px-4 text-sm text-muted-foreground font-mono whitespace-nowrap"
-        title={file.uploader}
+        title={file.wallet_address}
       >
-        {formatAddress(file.uploader)}
+        {formatAddress(file.wallet_address)}
       </td>
 
       {/* KOLOM 4: Tanggal Upload */}
       <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-        {new Date(file.createdAt).toLocaleDateString("id-ID", {
+        {new Date(file.created_at).toLocaleDateString("id-ID", {
           day: "numeric",
           month: "short",
           year: "numeric",
@@ -162,29 +165,40 @@ export function FileRow({ file }: FileRowProps) {
               )}
               <span>{copied ? "Tersalin!" : "Salin Blob ID"}</span>
             </DropdownMenuItem>
+
             <DropdownMenuItem asChild className="gap-2 cursor-pointer text-sm">
               <a href={aggregatorUrl} target="_blank" rel="noreferrer">
                 <Eye className="h-3.5 w-3.5" />
                 <span>Buka di Explorer</span>
               </a>
             </DropdownMenuItem>
+
             <DropdownMenuItem asChild className="gap-2 cursor-pointer text-sm">
-              <a href={`${aggregatorUrl}?download=true`} download={file.name}>
+              <a
+                href={`${aggregatorUrl}?download=true`}
+                download={file.file_name}
+              >
                 <Download className="h-3.5 w-3.5" />
                 <span>Unduh File</span>
               </a>
             </DropdownMenuItem>
+
             <DropdownMenuSeparator />
+
+            {/* 🌟 AKTIVASI FITUR VERIFIKASI SEBENARNYA */}
             <DropdownMenuItem
-              onClick={() =>
-                alert(
-                  `Memverifikasi cryptographic proof untuk Blob: ${file.blobId.substring(0, 10)}...`,
-                )
-              }
+              onClick={(e) => {
+                e.preventDefault();
+                onVerifyClick(file); // Membuka modal audit pusat
+              }}
               className="gap-2 text-primary focus:text-primary cursor-pointer text-sm font-medium"
             >
               <ShieldCheck className="h-3.5 w-3.5" />
-              <span>Verifikasi Proof</span>
+              <span>
+                {file.status === "verified"
+                  ? "Lihat Hasil Proof"
+                  : "Verifikasi Proof"}
+              </span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -1,21 +1,25 @@
-// src/services/tatum/rpc-client.ts
-import { SuiJsonRpcClient } from "@mysten/sui/jsonRpc";
-import { SuiGrpcClient } from "@mysten/sui/grpc";
-import { env } from "@/lib/env";
+// 🌟 PERTAHANAN LAPIS 1: File ini wajib hanya berjalan di Server!
+import "server-only";
 
-// 1. JSON-RPC Client - Gunakan ini untuk Browser/Frontend karena aman dari CORS
-export const tatumSuiRpcClient = new SuiJsonRpcClient({
-  url: env.NEXT_PUBLIC_TATUM_RPC_URL, // https://sui-testnet.gateway.tatum.io
-  headers: {
-    "x-api-key": env.NEXT_PUBLIC_TATUM_API_KEY,
-  },
-});
+import { SuiJsonRpcClient, JsonRpcHTTPTransport } from "@mysten/sui/jsonRpc";
 
-// Base Client murni untuk interaksi on-chain Sui
-export const tatumSuiClient = new SuiGrpcClient({
+const TATUM_RPC_URL =
+  process.env.NEXT_TATUM_RPC_URL || "https://sui-testnet.gateway.tatum.io";
+const TATUM_API_KEY = process.env.NEXT_TATUM_API_KEY;
+
+if (!TATUM_API_KEY) {
+  console.warn("⚠️ TATUM_API_KEY belum dipasang di environment server!");
+}
+
+// 🌟 PERTAHANAN LAPIS 2: Menggunakan Custom Transport sesuai Docs Mysten terbaru
+export const tatumServerClient = new SuiJsonRpcClient({
   network: "testnet",
-  baseUrl: `${env.NEXT_PUBLIC_TATUM_GRPC_URL}:443`,
-  headers: {
-    "x-api-key": env.NEXT_PUBLIC_TATUM_API_KEY,
-  },
+  transport: new JsonRpcHTTPTransport({
+    url: TATUM_RPC_URL,
+    rpc: {
+      headers: {
+        "x-api-key": TATUM_API_KEY || "",
+      },
+    },
+  }),
 });

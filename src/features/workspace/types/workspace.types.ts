@@ -1,6 +1,6 @@
 export interface Workspace {
   id: string;
-  slug: string; // Tambahan Baru: Routing berbasis slug /workspace/tresto-labs
+  slug: string;
   name: string;
   description: string | null; // Tambahan Baru: Deskripsi opsional organisasi
   avatar_url: string | null; // Tambahan Baru: URL otomatis untuk identitas visual switcher
@@ -24,6 +24,11 @@ export interface WorkspaceFile {
   register_tx_digest: string | null;
   certify_tx_digest: string | null;
   created_at: string;
+
+  status?: "pending" | "verified" | "failed";
+  checkpoint?: string | null;
+  gas_used?: string | null;
+  verified_at?: string | null;
 }
 
 export interface WorkspaceMember {

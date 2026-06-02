@@ -1,12 +1,7 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
-import {
-  useParams,
-  useRouter,
-  usePathname,
-  useSearchParams,
-} from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Loader2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,14 +19,17 @@ import { WorkspaceEmpty } from "./workspace-empty";
 import { WorkspaceGrid } from "./workspace-grid";
 import { WorkspaceTable } from "./workspace-table";
 import { InviteModal } from "@/features/invite/components/invite-modal";
+import { ProofModal } from "@/features/proof/components/proof-modal";
 
 // Import Dropzone Core Upload Service
 import { Dropzone } from "@/features/upload/components/dropzone";
 
 // Import Single Source of Truth Query Hooks & UI Zustand Store
 import { useWorkspaceQuery } from "../hooks/use-workspace-query";
-import { useWorkspaceFiles } from "../hooks/use-workspace-files"; // 🌟 TAMBAHAN: Hook mandiri baru
+import { useWorkspaceFiles } from "../hooks/use-workspace-files";
 import { useWorkspaceStore } from "../store/workspace-store";
+// 🌟 TAMBAHAN: Import tipe data tunggal agar sinkron
+import { WorkspaceFile } from "@/features/workspace/types/workspace.types";
 
 function DashboardContent({ slug }: { slug: string }) {
   const router = useRouter();
@@ -39,25 +37,27 @@ function DashboardContent({ slug }: { slug: string }) {
   const searchParams = useSearchParams();
   const account = useCurrentAccount();
 
+  // 🌟 TAMBAHAN STATE UNTUK QUICK VERIFY MODAL
+  const [selectedVerifyFile, setSelectedVerifyFile] =
+    useState<WorkspaceFile | null>(null);
+
   // 1. CONSUME INTERACTION & SORT STATE FROM ZUSTAND STORE
   const {
     isUploadModalOpen,
     isInviteModalOpen,
-    fileSort, // 🌟 TAMBAHAN: Preferensi sortir dari localStorage
-    setFileSort, // 🌟 TAMBAHAN: Setter aksi sortir
+    fileSort,
+    setFileSort,
     setUploadModalOpen,
     setInviteModalOpen,
   } = useWorkspaceStore();
 
   // 2. CONSUME SERVER DATA STATES
-  // Mengambil Metadata Workspace & Anggota
   const {
     data: metaData,
     isLoading: isMetaLoading,
     error: metaError,
   } = useWorkspaceQuery(slug);
 
-  // 🌟 TAMBAHAN: Jalur data file mandiri terikat langsung dengan state 'fileSort'
   const {
     data: rawFiles = [],
     isLoading: isFilesLoading,
@@ -74,33 +74,23 @@ function DashboardContent({ slug }: { slug: string }) {
   const workspaceData = metaData?.workspace;
   const members = metaData?.members ?? [];
 
-  // Ekstrak role spesifik milik user
   const currentUserRole =
     members.find((m) => m.wallet_address === account?.address)?.role ??
     "member";
 
-  // 5. DATA MAPPING: Snake_case (DB) -> camelCase (UI)
-  const uiFiles = rawFiles.map((f: any) => ({
-    id: f.id,
-    blobId: f.blob_id,
-    name: f.file_name,
-    mimeType: f.mime_type,
-    size: f.file_size,
-    uploader: f.wallet_address,
-    createdAt: f.created_at,
-  }));
+  const typedFiles = rawFiles as WorkspaceFile[];
 
-  // 6. URL MUTATION HANDLER
+  // 5. URL MUTATION HANDLER
   const handleViewChange = (newView: "grid" | "table") => {
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.set("view", newView);
     router.push(`${pathname}?${currentParams.toString()}`);
   };
 
-  // 7. CLIENT-SIDE RUNTIME SEARCH FILTERING
-  // Pencarian menyaring data hasil server-side sorting secara real-time
-  const filteredFiles = uiFiles.filter((file) =>
-    file.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  // 6. CLIENT-SIDE RUNTIME SEARCH FILTERING
+  // 🌟 FIX 2: Sesuaikan filter pencarian menggunakan properti asli database 'file_name'
+  const filteredFiles = typedFiles.filter((file) =>
+    (file.file_name || "").toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // =========================================================================
@@ -143,38 +133,44 @@ function DashboardContent({ slug }: { slug: string }) {
     );
   }
 
-  const isEmpty = uiFiles.length === 0;
+  // 🌟 FIX 3: Cek kekosongan data langsung dari array utama
+  const isEmpty = typedFiles.length === 0;
 
   return (
     <div className="flex flex-col w-full max-w-[1400px] mx-auto px-4 py-6 md:px-8 animate-in fade-in duration-300">
-      {/* SECTION LAYER 1: Header Informasi */}
       <WorkspaceHeader
         workspaceName={workspaceData.name}
-        totalFiles={rawFiles.length}
+        totalFiles={typedFiles.length}
         totalMembers={members.length}
         userRole={currentUserRole}
         createdAt={workspaceData.created_at}
       />
 
-      {/* SECTION LAYER 2: Action Bar Toolbar */}
       <WorkspaceToolbar
         workspaceId={workspaceData.id}
         view={view}
-        currentSort={fileSort} // 🌟 TAMBAHAN
-        onSortChange={setFileSort} // 🌟 TAMBAHAN
+        currentSort={fileSort}
+        onSortChange={setFileSort}
         onViewChange={handleViewChange}
         onUploadClick={() => setUploadModalOpen(true)}
         onInviteClick={() => setInviteModalOpen(true)}
       />
 
-      {/* SECTION LAYER 3: Dynamic Render Viewport */}
       <main className="flex-1 mt-2">
         {isEmpty ? (
           <WorkspaceEmpty workspaceId={workspaceData.id} />
         ) : view === "grid" ? (
-          <WorkspaceGrid files={filteredFiles} />
+          // 🌟 OPER FUNGSI SETTER KE GRID
+          <WorkspaceGrid
+            files={filteredFiles}
+            onVerifyClick={setSelectedVerifyFile}
+          />
         ) : (
-          <WorkspaceTable files={filteredFiles} />
+          // 🌟 LAKUKAN HAL YANG SAMA UNTUK TABLE JIKA DIBUTUHKAN NANTI
+          <WorkspaceTable
+            files={filteredFiles}
+            onVerifyClick={setSelectedVerifyFile}
+          />
         )}
       </main>
 
@@ -187,7 +183,6 @@ function DashboardContent({ slug }: { slug: string }) {
             </DialogTitle>
           </DialogHeader>
           <div className="pt-2">
-            {/* 🌟 PERBAIKAN: Hapus properti key. Pembungkus '&&' ini sudah otomatis mereset komponen! */}
             {isUploadModalOpen && (
               <Dropzone workspaceId={workspaceData.id} autoOpen={true} />
             )}
@@ -199,6 +194,13 @@ function DashboardContent({ slug }: { slug: string }) {
         open={isInviteModalOpen}
         onOpenChange={setInviteModalOpen}
         workspaceId={workspaceData.id}
+      />
+
+      <ProofModal
+        file={selectedVerifyFile}
+        isOpen={!!selectedVerifyFile}
+        onOpenChange={(open) => !open && setSelectedVerifyFile(null)}
+        slug={slug}
       />
     </div>
   );
