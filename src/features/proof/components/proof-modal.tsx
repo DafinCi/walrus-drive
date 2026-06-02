@@ -123,7 +123,7 @@ export function ProofModal({
               <span className="text-xs text-muted-foreground">
                 Walrus Blob ID
               </span>
-              <span className="font-mono text-xs text-foreground/90 break-all bg-background p-1.5 border border-border/60 rounded-xs">
+              <span className="font-mono text-xs text-foreground/90 break-all bg-background p-1.5 border border-border/60 rounded-sm">
                 {blobId || "N/A"}
               </span>
             </div>

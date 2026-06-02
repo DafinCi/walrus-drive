@@ -3,14 +3,22 @@
 import { use } from "react";
 import { useWorkspaceVerifications } from "@/features/proof/hooks/use-workspace-verification";
 import {
+  VerificationHeader,
+  VerificationHeaderSkeleton,
+} from "@/features/proof/components/verification-header"; // 🌟 SEKARANG IMPORT COMPONENT ASLI
+import {
   VerificationSummary,
   VerificationSummarySkeleton,
 } from "@/features/proof/components/verification-summary";
 import {
+  VerificationHealth,
+  VerificationHealthSkeleton,
+} from "@/features/proof/components/verification-health";
+import {
   VerificationTable,
   VerificationTableSkeleton,
-} from "@/features/proof/components/verification-table"; // 🌟 TAMBAHAN: Import komponen tabel
-import { ShieldCheck, AlertTriangle } from "lucide-react";
+} from "@/features/proof/components/verification-table";
+import { AlertTriangle } from "lucide-react";
 import { WorkspaceFile } from "@/features/workspace/types/workspace.types";
 
 interface VerificationPageProps {
@@ -25,31 +33,32 @@ export default function VerificationCenterPage({
   const unwrappedParams = use(params);
   const slug = unwrappedParams.slug;
 
-  // 1. Konsumsi single-fetch API via TanStack Query (Mengambil summary & history sekaligus)
-  const { data, isLoading, error } = useWorkspaceVerifications(slug);
+  // 1. Ambil data dengan fungsionalitas destruktur penuh (termasuk trigger sinkronisasi ulang)
+  const {
+    data,
+    isLoading,
+    error,
+    refetch, // 🌟 FUNGSI BAWAAN RE-QUERY
+    isFetching, // 🌟 STATE DETEKSI BACKGROUND FETCHING
+  } = useWorkspaceVerifications(slug);
 
-  // 🌟 HANDLER STUB: Aksi ketika user klik "Re-Verify" di dropdown tabel
+  // Aksi interaktif Dropdown Table
   const handleReVerify = (file: WorkspaceFile) => {
     console.log("🔄 Memicu re-verifikasi untuk berkas ID:", file.id);
-    // Nanti di sini kita tinggal panggil mutasi dari useVerifyProof(slug)
   };
 
-  // 🌟 HANDLER STUB: Aksi ketika user klik "View Proof" di dropdown tabel
   const handleViewProof = (file: WorkspaceFile) => {
-    console.log(
-      "🔍 Membuka modal detail enkripsi/proof untuk berkas ID:",
-      file.id,
-    );
-    // Nanti di sini kita sambungkan ke state modal untuk memunculkan ProofModal
+    console.log("🔍 Membuka panel bukti enkripsi untuk berkas ID:", file.id);
   };
 
-  // 2. LOADING STATE: Menampilkan Skeleton Header, Summary, dan Tabel secara kompak
+  // 2. LOADING STATE: Sekuensial skeleton dari tingkat teratas hingga terdalam
   if (isLoading) {
     return (
       <div className="space-y-6 p-6 max-w-7xl mx-auto">
-        <PageHeaderSkeleton />
+        <VerificationHeaderSkeleton />
         <VerificationSummarySkeleton />
-        <div className="pt-4">
+        <VerificationHealthSkeleton />
+        <div className="pt-2">
           <VerificationTableSkeleton />
         </div>
       </div>
@@ -72,17 +81,28 @@ export default function VerificationCenterPage({
     );
   }
 
-  // 4. MAIN RENDER: Integrasi Penuh Berstruktur SaaS Premium
   return (
     <div className="space-y-6 p-6 max-w-7xl mx-auto animate-in fade-in-50 duration-300">
-      {/* Page Header */}
-      <PageHeader workspaceName={data.meta.workspaceName} />
+      {/* SECTION 1: HEADER HALAMAN (Orientation Layer wired up to TanStack Query) */}
+      <VerificationHeader
+        workspaceName={data.meta.workspaceName}
+        onRefresh={refetch}
+        isRefreshing={isFetching}
+      />
 
-      {/* Summary KPI Cards & Progress Bar */}
+      {/* SECTION 2: SUMMARY CARDS (Raw Statistics) */}
       <VerificationSummary stats={data.summary} />
 
-      {/* Audit Trail Section */}
-      <div className="space-y-2 pt-4">
+      {/* SECTION 3: INTEGRITY HEALTH CARD (Insight Analysis Dashboard) */}
+      <VerificationHealth
+        totalFiles={data.summary.totalFiles}
+        verifiedFiles={data.summary.verified}
+        pendingFiles={data.summary.pending}
+        failedFiles={data.summary.failed}
+      />
+
+      {/* SECTION 4: AUDIT LOG TIMELINE (Data Exploration & Table Trails) */}
+      <div className="space-y-3 pt-2">
         <div>
           <h3 className="text-sm font-bold text-foreground">
             Verification History
@@ -93,48 +113,12 @@ export default function VerificationCenterPage({
           </p>
         </div>
 
-        {/* Core Audit Log Table */}
         <VerificationTable
           files={data.history}
           onReVerify={handleReVerify}
           onViewProof={handleViewProof}
         />
       </div>
-    </div>
-  );
-}
-
-// ─── SUB COMPONENT: PAGE HEADER ──────────────────────────────────────────
-function PageHeader({ workspaceName }: { workspaceName: string }) {
-  return (
-    <div className="flex flex-col gap-1 border-b border-border/40 pb-5">
-      <div className="flex items-center gap-2">
-        <div className="p-1.5 bg-primary/10 text-primary rounded-xs">
-          <ShieldCheck className="h-5 w-5 stroke-[2]" />
-        </div>
-        <h1 className="text-xl font-bold tracking-tight text-foreground">
-          Workspace Integrity Center
-        </h1>
-      </div>
-      <p className="text-xs text-muted-foreground pl-9">
-        Memantau kepatuhan data, validasi enkripsi on-chain, dan kesehatan
-        kriptografis untuk ruang kerja{" "}
-        <span className="font-semibold text-foreground">"{workspaceName}"</span>
-        .
-      </p>
-    </div>
-  );
-}
-
-// ─── SUB COMPONENT: HEADER SKELETON ──────────────────────────────────────
-function PageHeaderSkeleton() {
-  return (
-    <div className="flex flex-col gap-2 border-b border-border/40 pb-5 animate-pulse">
-      <div className="flex items-center gap-2">
-        <div className="h-8 w-8 bg-muted rounded-xs" />
-        <div className="h-6 w-52 bg-muted rounded-sm" />
-      </div>
-      <div className="h-4 w-96 bg-muted/70 rounded-sm ml-10" />
     </div>
   );
 }

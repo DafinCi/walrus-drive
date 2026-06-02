@@ -270,7 +270,7 @@ export function VerificationTable({
                   {/* KOLOM 7: ACTION DROPDOWN MENU */}
                   <td className="py-2 px-3 text-center">
                     <DropdownMenu>
-                      <DropdownMenuTrigger className="p-1 hover:bg-muted rounded-xs border border-transparent hover:border-border/50 text-muted-foreground hover:text-foreground transition-all">
+                      <DropdownMenuTrigger className="p-1 hover:bg-muted rounded-sm border border-transparent hover:border-border/50 text-muted-foreground hover:text-foreground transition-all">
                         <MoreVertical className="h-3.5 w-3.5" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent
@@ -336,10 +336,10 @@ export function VerificationTableSkeleton() {
             key={i}
             className="h-12 border-b border-border/20 flex items-center px-4 justify-between"
           >
-            <div className="h-3 w-1/4 bg-muted/60 rounded-xs" />
+            <div className="h-3 w-1/4 bg-muted/60 rounded-sm" />
             <div className="h-5 w-16 bg-muted/60 rounded-full" />
-            <div className="h-3 w-20 bg-muted/40 rounded-xs" />
-            <div className="h-3 w-16 bg-muted/40 rounded-xs" />
+            <div className="h-3 w-20 bg-muted/40 rounded-sm" />
+            <div className="h-3 w-16 bg-muted/40 rounded-sm" />
           </div>
         ))}
       </div>
