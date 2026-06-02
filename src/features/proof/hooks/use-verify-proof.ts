@@ -51,6 +51,11 @@ export function useVerifyProof(slug: string) {
       queryClient.invalidateQueries({
         queryKey: ["workspace-files", slug],
       });
+
+      // 2. 🌟 TAMBAHAN BARU: Otomatis refresh metrics di Verification Center!
+      queryClient.invalidateQueries({
+        queryKey: ["workspace-integrity", slug],
+      });
     },
     onError: (error: any, variables, context) => {
       if (error.message === "PENDING_CHAIN") {
