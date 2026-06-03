@@ -1,3 +1,5 @@
+// src/features/upload/hooks/use-upload.ts
+
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useCurrentAccount,
@@ -57,11 +59,14 @@ export function useUpload() {
         progressMessage: "Upload berhasil!",
       });
 
-      // 🌟 PERBAIKAN: Invalidate secara "fuzzy" (cukup prefix-nya saja)
-      // Karena dashboard sekarang pakai 'slug', kalau kita tembak ID spesifik, cache nggak ker-reset.
-      // Dengan cara ini, semua cache list file & detail workspace akan di-refresh otomatis.
+      // 🌟 REFRESH CACHE LAYER SECARA LUAS
+      // Bersihkan cache file dan info ringkasan ruang kerja
       queryClient.invalidateQueries({ queryKey: ["workspace-files"] });
       queryClient.invalidateQueries({ queryKey: ["workspace-detail"] });
+
+      // Bersihkan list feed aktivitas utama dan angka statistik di bagian header panel
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity-stats"] });
 
       return result;
     } catch (error: any) {

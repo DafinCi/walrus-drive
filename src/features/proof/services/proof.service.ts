@@ -2,10 +2,7 @@ import { WorkspaceFile } from "@/features/workspace/types/workspace.types";
 
 export interface IntegrityDashboardPayload {
   success: boolean;
-  meta: {
-    workspaceName: string;
-    slug: string;
-  };
+  meta: { workspaceName: string; slug: string };
   summary: {
     totalFiles: number;
     verified: number;
@@ -32,15 +29,37 @@ export const proofService = {
   ): Promise<IntegrityDashboardPayload> => {
     const res = await fetch(`/api/workspace/${slug}/integrity`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
       throw new Error(
         errorData.error || "Gagal memuat dashboard integritas workspace",
+      );
+    }
+
+    return res.json();
+  },
+
+  /**
+   * 🌟 TAMBAHAN BARU: Memicu verifikasi file tunggal ke backend
+   */
+  verifyFileProof: async (
+    slug: string,
+    fileId: string,
+    txDigest: string,
+  ): Promise<{ success: boolean; message: string }> => {
+    const res = await fetch(`/api/workspace/${slug}/files/${fileId}/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ txDigest }),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(
+        errorData.error || "Gagal memproses verifikasi blockchain",
       );
     }
 

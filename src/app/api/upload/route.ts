@@ -1,6 +1,9 @@
 // src/app/api/upload/route.ts
+
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/services/supabase/admin";
+// 🌟 INJEKSI LOGGER: Hubungkan cross-feature system ke modul aktivitas
+import { activityLogger } from "@/features/activity/service/activity-logger";
 
 export async function POST(request: Request) {
   try {
@@ -27,8 +30,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. 🌟 UPGRADE KEAMANAN: Validasi Hak Akses (Membership Verification)
-    // Karena menggunakan supabaseAdmin, kita harus cek manual apakah wallet ini berhak mengupload di workspace ini
+    // 2. Validasi Hak Akses (Membership Verification)
     const { data: membership, error: membershipError } = await supabaseAdmin
       .from("workspace_members")
       .select("role")
@@ -50,11 +52,11 @@ export async function POST(request: Request) {
           error:
             "Akses ditolak. Wallet Anda tidak terdaftar di ruang kerja ini.",
         },
-        { status: 403 }, // Forbidden
+        { status: 403 },
       );
     }
 
-    // 3. Insert data metadata file ke Supabase (Aman & Terverifikasi)
+    // 3. Insert data metadata file ke Supabase
     const { data, error } = await supabaseAdmin
       .from("files")
       .insert([
@@ -78,6 +80,17 @@ export async function POST(request: Request) {
       console.error("Supabase Insert Error:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    // 🌟 ATOMIC AUDIT LOG TRIGGER
+    // File sukses masuk tabel? Langsung buat log aktivitasnya di server side!
+    await activityLogger.logFileUpload({
+      workspaceId,
+      walletAddress,
+      fileId: data.id, // ID file yang baru saja digenerate database
+      fileName,
+      fileSize,
+      mimeType,
+    });
 
     return NextResponse.json({ success: true, data });
   } catch (err: any) {

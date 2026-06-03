@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
+import { useActivityStore } from "@/features/activity/store/activity-store"; // 🌟 Import store
 import {
   LayoutDashboard,
   Settings,
@@ -26,14 +27,14 @@ export function WorkspaceSidebar({
   const pathname = usePathname();
   const params = useParams();
 
+  // 🌟 Ambil state dan action dari Activity Store
+  const { isActivityOpen, toggleActivity } = useActivityStore();
+
   const slug = params?.slug as string | undefined;
   const isHubMode = !slug;
 
   // Level 1 Navigation (Workspace Hub)
-  const hubLinks = [
-    { name: "Workspace Hub", href: "/workspace", icon: Home },
-    { name: "Recent Activity", href: "/workspace/recent", icon: Clock },
-  ];
+  const hubLinks = [{ name: "Workspace Hub", href: "/workspace", icon: Home }];
 
   // Level 2 Navigation (Workspace Specific)
   const workspaceLinks = slug
@@ -47,6 +48,14 @@ export function WorkspaceSidebar({
           name: "Proof Verification",
           href: `/workspace/${slug}/verify`,
           icon: ShieldCheck,
+        },
+        // 🌟 JALUR KHUSUS: Mengaktifkan panel samping kanan alih-alih navigasi penuh
+        {
+          name: "Workspace Activity",
+          icon: Clock,
+          isAction: true,
+          onClick: () => toggleActivity(),
+          isActive: isActivityOpen,
         },
         {
           name: "Space Settings",
@@ -65,7 +74,7 @@ export function WorkspaceSidebar({
         isCollapsed ? "w-[70px]" : "w-64",
       )}
     >
-      {/* ─── SIDEBAR HEADER WITH TOGGLE BUTTON ─── */}
+      {/* ─── SIDEBAR HEADER ─── */}
       <div
         className={cn(
           "h-14 border-b border-border/60 flex items-center px-4 shrink-0",
@@ -92,7 +101,6 @@ export function WorkspaceSidebar({
 
       {/* ─── MIDDLE NAVIGATION AREA ─── */}
       <div className="flex-1 overflow-y-auto p-3 space-y-4 custom-scrollbar">
-        {/* Contextual Section Label */}
         <div className={cn("px-2", isCollapsed ? "text-center" : "")}>
           {isCollapsed ? (
             <div className="h-[1px] w-full bg-border/60 my-2" />
@@ -103,25 +111,15 @@ export function WorkspaceSidebar({
           )}
         </div>
 
-        {/* Navigation Menus */}
         <nav className="flex flex-col space-y-1">
           {activeLinks.map((link) => {
-            const isActive = pathname === link.href;
+            // Evaluasi status aktif berdasarkan tipe item
+            const isActive =
+              "isAction" in link ? link.isActive : pathname === link.href;
             const Icon = link.icon;
 
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "flex items-center rounded-[6px] transition-all text-sm font-medium group",
-                  isCollapsed ? "justify-center p-2.5" : "px-3 py-2.5 gap-3",
-                  isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                )}
-                title={isCollapsed ? link.name : undefined}
-              >
+            const content = (
+              <>
                 <Icon
                   className={cn(
                     "w-4 h-4 shrink-0 transition-transform group-hover:scale-105",
@@ -133,13 +131,47 @@ export function WorkspaceSidebar({
                     {link.name}
                   </span>
                 )}
+              </>
+            );
+
+            const commonStyles = cn(
+              "w-full flex items-center rounded-[6px] transition-all text-sm font-medium group cursor-pointer text-left",
+              isCollapsed ? "justify-center p-2.5" : "px-3 py-2.5 gap-3",
+              isActive
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+            );
+
+            // Jika item berupa Action (Tombol Buka Panel)
+            if ("isAction" in link && link.isAction) {
+              return (
+                <button
+                  key={link.name}
+                  onClick={link.onClick}
+                  className={commonStyles}
+                  title={isCollapsed ? link.name : undefined}
+                >
+                  {content}
+                </button>
+              );
+            }
+
+            // Jika item berupa Link Halaman Biasa
+            return (
+              <Link
+                key={(link as any).href}
+                href={(link as any).href}
+                className={commonStyles}
+                title={isCollapsed ? link.name : undefined}
+              >
+                {content}
               </Link>
             );
           })}
         </nav>
       </div>
 
-      {/* ─── BOTTOM APP BADGE (WALRUS NETWORK STATUS) ─── */}
+      {/* ─── BOTTOM APP BADGE ─── */}
       <div className="p-3 border-t border-border/50">
         <div
           className={cn(
@@ -150,7 +182,6 @@ export function WorkspaceSidebar({
         >
           <div className="relative shrink-0">
             <FolderLock className="w-4 h-4 text-emerald-500" />
-            {/* Pulsing online status indicator anchor */}
             <span className="absolute -top-0.5 -right-0.5 flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />

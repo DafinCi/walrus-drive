@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react"; // 🌟 State controller diangkat ke parent
+import { useState } from "react";
 import { WorkspaceNavbar } from "./workspace-navbar";
 import { WorkspaceSidebar } from "./workspace-sidebar";
+import { ActivityPanel } from "@/features/activity/components/activity-panel"; // 🌟 Import Panel Baru
 import { UploadQueue } from "@/features/upload/components/upload-queue";
 
 interface WorkspaceShellProps {
@@ -10,7 +11,7 @@ interface WorkspaceShellProps {
 }
 
 export function WorkspaceShell({ children }: WorkspaceShellProps) {
-  // State global untuk mengontrol buka-tutup sidebar
+  // State global untuk mengontrol buka-tutup sidebar kiri
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const handleToggleSidebar = () => {
@@ -23,8 +24,8 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
       <WorkspaceNavbar />
 
       {/* 2. Core App Body Area */}
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-        {/* Responsive Desktop Sidebar (Managed via state) */}
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+        {/* Responsive Desktop Sidebar */}
         <div className="hidden md:block h-full shrink-0">
           <WorkspaceSidebar
             isCollapsed={isSidebarCollapsed}
@@ -36,9 +37,12 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
         <main className="flex-1 w-full relative bg-background overflow-y-auto custom-scrollbar transition-all duration-300">
           <div className="w-full h-fit">{children}</div>
         </main>
+
+        {/* 🌟 4. Right Side Enterprise Activity Panel */}
+        <ActivityPanel />
       </div>
 
-      {/* 4. Global Overlay Components */}
+      {/* 5. Global Overlay Components */}
       <UploadQueue />
     </div>
   );
