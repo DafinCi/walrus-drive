@@ -1,3 +1,4 @@
+import { activityLogger } from "@/features/activity/service/activity-logger";
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/services/supabase/admin";
 
@@ -80,6 +81,13 @@ export async function POST(request: Request) {
       ]);
 
     if (insertError) throw insertError;
+
+    // 🌟 INJEKSI LOGGER: Mencatat member baru yang bergabung
+    await activityLogger.logMemberJoined({
+      workspaceId: invite.workspace_id,
+      memberWalletAddress: walletAddress,
+      role: invite.role || "member",
+    });
 
     return NextResponse.json({
       success: true,

@@ -1,3 +1,5 @@
+// workspace/hooks/use-workspace-members.ts
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { WorkspaceMember } from "../types/member.types";
 import { toast } from "sonner";
@@ -51,6 +53,9 @@ export function usePromoteMember() {
       queryClient.invalidateQueries({
         queryKey: ["workspace-members", variables.workspaceId],
       });
+      // 🌟 INJEKSI CACHE: Segarkan Activity Feed!
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity-stats"] });
     },
   });
 }
@@ -80,6 +85,9 @@ export function useRemoveMember() {
       queryClient.invalidateQueries({
         queryKey: ["workspace-members", variables.workspaceId],
       });
+      // 🌟 INJEKSI CACHE: Segarkan Activity Feed!
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity-stats"] });
     },
   });
 }

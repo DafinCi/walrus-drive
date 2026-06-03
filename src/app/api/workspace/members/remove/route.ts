@@ -1,3 +1,4 @@
+import { activityLogger } from "@/features/activity/service/activity-logger";
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/services/supabase/admin";
 import { canManageRole } from "@/features/auth/services/auth.service"; // 🔥 Panggil dari service terpusat
@@ -73,6 +74,13 @@ export async function POST(request: Request) {
       .eq("wallet_address", targetWallet);
 
     if (deleteError) throw deleteError;
+
+    // 🌟 INJEKSI LOGGER: Mencatat pengeluaran member
+    await activityLogger.logMemberRemoved({
+      workspaceId,
+      actorWalletAddress: actorWallet,
+      targetWalletAddress: targetWallet,
+    });
 
     return NextResponse.json({
       success: true,

@@ -1,6 +1,6 @@
+import { activityLogger } from "@/features/activity/service/activity-logger";
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/services/supabase/admin";
-// 🌟 FIX 1: Hapus import canPromote yang bikin crash
 
 export async function POST(request: Request) {
   try {
@@ -60,6 +60,15 @@ export async function POST(request: Request) {
       .eq("wallet_address", targetWallet);
 
     if (updateError) throw updateError;
+
+    // 🌟 INJEKSI LOGGER: Mencatat promosi jabatan
+    await activityLogger.logMemberPromoted({
+      workspaceId,
+      actorWalletAddress: actorWallet,
+      targetWalletAddress: targetWallet,
+      oldRole: target.role,
+      newRole: "admin",
+    });
 
     return NextResponse.json({
       success: true,

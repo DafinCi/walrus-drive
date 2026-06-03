@@ -1,5 +1,6 @@
 // src/features/invite/hooks/use-join-workspace.ts
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { activityLogger } from "@/features/activity/service/activity-logger";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface ValidateInviteResponse {
   success: boolean;
@@ -43,6 +44,8 @@ interface JoinWorkspaceInput {
 }
 
 export function useJoinWorkspace() {
+  const queryClient = useQueryClient(); // 🌟 Ambil queryClient
+
   return useMutation({
     mutationFn: async (payload: JoinWorkspaceInput) => {
       const response = await fetch("/api/workspace/join", {
@@ -55,7 +58,13 @@ export function useJoinWorkspace() {
       if (!response.ok || !result.success) {
         throw new Error(result.error || "Gagal mendaftarkan diri Anda.");
       }
-      return result; // Ekspektasi pengembalian: { success: true, workspaceId, slug } 🌟
+      return result;
+    },
+    // 🌟 TAMBAHAN: Refresh data yang terdampak secara global
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["workspace-members"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity-stats"] });
     },
   });
 }

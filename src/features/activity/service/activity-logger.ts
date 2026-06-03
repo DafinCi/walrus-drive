@@ -87,6 +87,91 @@ class ActivityLogger {
       },
     });
   }
+
+  // Tambahan metode di dalam class ActivityLogger (src/features/activity/service/activity-logger.ts)
+
+  /**
+   * Logging ketika owner/admin membuat tautan undangan baru
+   */
+  async logInviteCreated(params: {
+    workspaceId: string;
+    actorWalletAddress: string;
+    invitedRole: string;
+  }) {
+    await this.insertLog({
+      workspaceId: params.workspaceId,
+      actorWalletAddress: params.actorWalletAddress,
+      action: "MEMBER_JOINED",
+      entityType: "invite",
+      metadata: {
+        invited_role: params.invitedRole,
+      },
+    });
+  }
+
+  /**
+   * Logging ketika seorang user berhasil masuk ke workspace menggunakan token
+   */
+  async logMemberJoined(params: {
+    workspaceId: string;
+    memberWalletAddress: string;
+    role: string;
+  }) {
+    await this.insertLog({
+      workspaceId: params.workspaceId,
+      actorWalletAddress: params.memberWalletAddress, // Aktornya adalah member yang baru bergabung itu sendiri
+      action: "MEMBER_JOINED",
+      entityType: "member",
+      entityId: params.memberWalletAddress,
+      metadata: {
+        role: params.role,
+      },
+    });
+  }
+
+  /**
+   * Logging ketika ada perubahan hak akses (role) anggota
+   */
+  async logMemberPromoted(params: {
+    workspaceId: string;
+    actorWalletAddress: string; // Siapa yang menaikkan jabatan (admin/owner)
+    targetWalletAddress: string; // Siapa yang dinaikkan jabatannya
+    oldRole: string;
+    newRole: string;
+  }) {
+    await this.insertLog({
+      workspaceId: params.workspaceId,
+      actorWalletAddress: params.actorWalletAddress,
+      action: "MEMBER_PROMOTED",
+      entityType: "member",
+      entityId: params.targetWalletAddress,
+      metadata: {
+        target_wallet: params.targetWalletAddress,
+        old_role: params.oldRole,
+        new_role: params.newRole,
+      },
+    });
+  }
+
+  /**
+   * Logging ketika anggota dikeluarkan dari ruang kerja
+   */
+  async logMemberRemoved(params: {
+    workspaceId: string;
+    actorWalletAddress: string; // Siapa yang menendang
+    targetWalletAddress: string; // Siapa yang ditendang
+  }) {
+    await this.insertLog({
+      workspaceId: params.workspaceId,
+      actorWalletAddress: params.actorWalletAddress,
+      action: "MEMBER_REMOVED",
+      entityType: "member",
+      entityId: params.targetWalletAddress,
+      metadata: {
+        target_wallet: params.targetWalletAddress,
+      },
+    });
+  }
 }
 
 export const activityLogger = new ActivityLogger();

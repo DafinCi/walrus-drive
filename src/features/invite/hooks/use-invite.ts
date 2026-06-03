@@ -1,3 +1,4 @@
+import { activityLogger } from "@/features/activity/service/activity-logger";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface WorkspaceInvite {
@@ -63,6 +64,10 @@ export function useCreateInvite() {
       queryClient.invalidateQueries({
         queryKey: ["workspace-invites", variables.workspaceId],
       });
+
+      // 🌟 TAMBAHAN: Refresh panel aktivitas & statistik
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity-stats"] });
     },
   });
 }
@@ -97,6 +102,10 @@ export function useRevokeInvite() {
       queryClient.invalidateQueries({
         queryKey: ["workspace-invites", variables.workspaceId],
       });
+
+      // 🌟 TAMBAHAN: Refresh panel aktivitas & statistik
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-activity-stats"] });
     },
   });
 }

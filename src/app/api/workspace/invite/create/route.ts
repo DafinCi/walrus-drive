@@ -1,3 +1,4 @@
+import { activityLogger } from "@/features/activity/service/activity-logger";
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/services/supabase/admin";
 import crypto from "crypto";
@@ -66,6 +67,12 @@ export async function POST(request: Request) {
       ]);
 
     if (inviteError) throw inviteError;
+
+    await activityLogger.logInviteCreated({
+      workspaceId,
+      actorWalletAddress: createdBy,
+      invitedRole: role,
+    });
 
     return NextResponse.json({
       success: true,
