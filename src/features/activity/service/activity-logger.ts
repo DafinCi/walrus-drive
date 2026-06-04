@@ -64,27 +64,96 @@ class ActivityLogger {
   /**
    * Logging khusus untuk modul Verifikasi Bukti Blockchain (Tatum Node)
    */
-  async logFileVerification(params: {
+  async fileVerified(params: {
     workspaceId: string;
-    walletAddress: string;
+    actorId: string;
     fileId: string;
     fileName: string;
     checkpoint: string;
     txDigest: string;
-    network: "sui-mainnet" | "sui-testnet";
   }) {
     await this.insertLog({
       workspaceId: params.workspaceId,
-      actorWalletAddress: params.walletAddress,
+      actorWalletAddress: params.actorId,
       action: "FILE_VERIFIED",
       entityType: "verification",
       entityId: params.fileId,
       metadata: {
         file_name: params.fileName,
         checkpoint: params.checkpoint,
-        txDigest: params.txDigest,
-        network: params.network,
+        tx_digest: params.txDigest,
       },
+    });
+  }
+
+  async fileVerificationFailed(params: {
+    workspaceId: string;
+    actorId: string;
+    fileId: string;
+    fileName: string;
+    reason: string;
+    txDigest?: string;
+  }) {
+    await this.insertLog({
+      workspaceId: params.workspaceId,
+      actorWalletAddress: params.actorId,
+      action: "FILE_VERIFICATION_FAILED",
+      entityType: "verification",
+      entityId: params.fileId,
+      metadata: {
+        file_name: params.fileName,
+        reason: params.reason,
+        tx_digest: params.txDigest,
+      },
+    });
+  }
+
+  async fileReverified(params: {
+    workspaceId: string;
+    actorId: string;
+    fileId: string;
+    fileName: string;
+    checkpoint: string;
+  }) {
+    await this.insertLog({
+      workspaceId: params.workspaceId,
+      actorWalletAddress: params.actorId,
+      action: "FILE_REVERIFIED",
+      entityType: "verification",
+      entityId: params.fileId,
+      metadata: { file_name: params.fileName, checkpoint: params.checkpoint },
+    });
+  }
+
+  async fileIntegrityPassed(params: {
+    workspaceId: string;
+    actorId: string;
+    fileId: string;
+    fileName: string;
+  }) {
+    await this.insertLog({
+      workspaceId: params.workspaceId,
+      actorWalletAddress: params.actorId,
+      action: "FILE_INTEGRITY_PASSED",
+      entityType: "file",
+      entityId: params.fileId,
+      metadata: { file_name: params.fileName },
+    });
+  }
+
+  async fileIntegrityFailed(params: {
+    workspaceId: string;
+    actorId: string;
+    fileId: string;
+    fileName: string;
+  }) {
+    await this.insertLog({
+      workspaceId: params.workspaceId,
+      actorWalletAddress: params.actorId,
+      action: "FILE_INTEGRITY_FAILED",
+      entityType: "file",
+      entityId: params.fileId,
+      metadata: { file_name: params.fileName, severity: "critical" },
     });
   }
 
@@ -101,7 +170,7 @@ class ActivityLogger {
     await this.insertLog({
       workspaceId: params.workspaceId,
       actorWalletAddress: params.actorWalletAddress,
-      action: "MEMBER_JOINED",
+      action: "MEMBER_INVITED",
       entityType: "invite",
       metadata: {
         invited_role: params.invitedRole,

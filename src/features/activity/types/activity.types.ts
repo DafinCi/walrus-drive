@@ -8,6 +8,10 @@ export type ActivityType =
   | "workspace_created"
   | "file_uploaded"
   | "file_verified"
+  | "file_verification_failed" // 🌟 TAMBAHAN
+  | "file_reverified" // 🌟 TAMBAHAN
+  | "file_integrity_passed" // 🌟 TAMBAHAN
+  | "file_integrity_failed" // 🌟 TAMBAHAN
   | "invite_created"
   | "member_joined"
   | "member_promoted"
@@ -97,6 +101,10 @@ export interface CreateActivityInput {
     | "FILE_UPLOADED"
     | "FILE_VERIFIED"
     | "FILE_VERIFICATION_FAILED"
+    | "FILE_REVERIFIED" // 🌟 TAMBAHAN
+    | "FILE_INTEGRITY_PASSED" // 🌟 TAMBAHAN
+    | "FILE_INTEGRITY_FAILED" // 🌟 TAMBAHAN
+    | "MEMBER_INVITED"
     | "MEMBER_JOINED"
     | "INVITE_CREATED"
     | "MEMBER_PROMOTED"
