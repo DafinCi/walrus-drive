@@ -52,7 +52,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
             </h3>
             <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
               <Calendar className="h-3 w-3" />
-              <span>Dibuat {formattedDate}</span>
+              <span>Created {formattedDate}</span>
             </div>
           </div>
 
@@ -74,7 +74,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
                 {workspace.totalFiles}
               </span>
               <span className="text-[10px] text-muted-foreground font-medium">
-                Berkas
+                File
               </span>
             </div>
           </div>
@@ -86,7 +86,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
                 {workspace.totalMembers}
               </span>
               <span className="text-[10px] text-muted-foreground font-medium">
-                Anggota
+                Member
               </span>
             </div>
           </div>

@@ -10,7 +10,7 @@ export async function POST(request: Request) {
 
     if (!workspaceId || !targetWallet || !actorWallet) {
       return NextResponse.json(
-        { success: false, error: "Payload tidak lengkap." },
+        { success: false, error: "The payload is incomplete." },
         { status: 400 },
       );
     }
@@ -34,7 +34,8 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Otoritas ditolak. Anda bukan anggota workspace.",
+          error:
+            "Authorization denied. You are not a member of this workspace.",
         },
         { status: 403 },
       );
@@ -43,7 +44,8 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Target anggota sudah tidak ada atau telah dikeluarkan.",
+          error:
+            "The target member no longer exists or has already been removed.",
         },
         { status: 404 },
       );
@@ -52,13 +54,13 @@ export async function POST(request: Request) {
     // 3. 🔥 Evaluasi Aturan Keamanan Berkas Kebijakan dengan canManageRole
     if (isSelf || !canManageRole(actor.role, target.role)) {
       let errorMessage =
-        "Anda tidak memiliki hak akses tingkat tinggi untuk mengeluarkan anggota ini.";
+        "Access denied. You do not have the required permissions to remove this member.";
       if (isSelf)
         errorMessage =
-          "Aksi mandiri diblokir. Fitur 'Tinggalkan Ruang Kerja' dalam pengembangan khusus.";
+          "Action not allowed. The 'Leave Workspace' feature is currently under development.";
       if (target.role === "owner")
         errorMessage =
-          "Fatal: Pemilik utama (Owner) ruang kerja tidak dapat dikeluarkan.";
+          "Fatal Error: The workspace Owner cannot be removed from the workspace.";
 
       return NextResponse.json(
         { success: false, error: errorMessage },
@@ -84,7 +86,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Anggota kolaborator berhasil dikeluarkan dari struktur akses.",
+      message: "Collaborator successfully removed from the workspace.",
     });
   } catch (error: any) {
     console.error("Remove Member API Error:", error);

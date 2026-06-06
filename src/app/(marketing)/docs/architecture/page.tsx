@@ -24,11 +24,12 @@ export default function ArchitecturePage() {
       {/* HEADER SECTION */}
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2 font-heading">
-          Arsitektur Hibrida WalSpace
+          Hybrid WalSpace Architecture
         </h1>
         <p className="text-zinc-400 text-sm leading-relaxed max-w-2xl">
-          Memadukan kecepatan manajemen data tradisional dengan keamanan
-          mutakhir penyimpanan terdesentralisasi Walrus & Sui.
+          Combining the speed of traditional data management with the
+          cutting-edge security of decentralized storage powered by Walrus &
+          Sui.
         </p>
       </div>
 
@@ -147,7 +148,7 @@ export default function ArchitecturePage() {
           <div className="mt-10 p-4 bg-zinc-900/80 border border-zinc-800 rounded-[6px] min-h-[80px] flex items-center justify-center text-center">
             {!activeNode ? (
               <p className="text-xs text-zinc-500 italic">
-                Arahkan kursor ke komponen untuk melihat peran teknisnya.
+                Hover over each component to explore its technical role.
               </p>
             ) : (
               <p className="text-xs text-zinc-300 leading-relaxed max-w-lg">
@@ -183,10 +184,10 @@ export default function ArchitecturePage() {
             </div>
             <ul className="space-y-3">
               {[
-                "Otentikasi pengguna berbasis wallet & email",
-                "Indeks pencarian file super cepat",
-                "Manajemen izin (Role-based Access Control)",
-                "Sinkronisasi aktivitas tim real-time",
+                "Wallet & email-based user authentication",
+                "Lightning-fast file search indexing",
+                "Role-Based Access Control (RBAC) permission management",
+                "Real-time team activity synchronization",
               ].map((item, i) => (
                 <li
                   key={i}
@@ -228,16 +229,17 @@ export default function ArchitecturePage() {
       {/* 3. TECHNICAL SUMMARY */}
       <section className="bg-zinc-900/30 p-6 rounded-[6px] border border-zinc-800/50">
         <h3 className="text-xs font-bold text-white mb-3">
-          Ringkasan Teknis bagi Juri
+          Technical Overview for Judges
         </h3>
         <p className="text-[11px] text-zinc-500 leading-relaxed">
-          WalSpace tidak membebani blockchain dengan data besar. Kami memisahkan{" "}
-          <strong className="text-zinc-300">ketersediaan data</strong> (Walrus)
-          dari <strong className="text-zinc-300">otoritas data</strong> (Sui).
-          Supabase digunakan sebagai cache metadata yang sinkron dengan on-chain
+          WalSpace does not burden the blockchain with large-scale data storage.
+          We separate{" "}
+          <strong className="text-zinc-300">data availability</strong> (Walrus)
+          from <strong className="text-zinc-300">data authority</strong> (Sui).
+          Supabase serves as a metadata cache synchronized with the on-chain
           state via <strong className="text-zinc-300">Tatum API</strong>,
-          menghasilkan pengalaman pengguna secepat Google Drive namun seaman
-          Bitcoin.
+          delivering a user experience as fast as Google Drive while maintaining
+          blockchain-grade security.
         </p>
       </section>
     </div>

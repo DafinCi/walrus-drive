@@ -16,7 +16,7 @@ export const workspaceService = {
 
     const result = await response.json();
     if (!response.ok || !result.success) {
-      throw new Error(result.error || "Gagal membuat workspace");
+      throw new Error(result.error || "Unable to create workspace");
     }
 
     return result as { success: boolean; workspaceId: string; slug: string };

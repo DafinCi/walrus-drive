@@ -32,8 +32,8 @@ import { Button } from "@/components/ui/button";
 const formSchema = z.object({
   name: z
     .string()
-    .min(3, { message: "Nama workspace minimal berdurasi 3 karakter." })
-    .max(32, { message: "Nama workspace maksimal 32 karakter." })
+    .min(3, { message: "Workspace name must be at least 3 characters." })
+    .max(32, { message: "Workspace name must not exceed 32 characters." })
     .trim(),
 });
 
@@ -64,8 +64,8 @@ export function CreateWorkspaceModal({
   const onSubmit = async (values: FormValues) => {
     // Proteksi Web3 guard di sisi client
     if (!account?.address) {
-      toast.error("Aksi Ditolak", {
-        description: "Hubungkan wallet Sui Anda terlebih dahulu di navbar.",
+      toast.error("Action Denied", {
+        description: "Connect your Sui wallet from the navbar first.",
       });
       return;
     }

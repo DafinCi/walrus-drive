@@ -105,7 +105,7 @@ function DashboardContent({ slug }: { slug: string }) {
       <div className="flex flex-col items-center justify-center min-h-[75vh] gap-3">
         <Loader2 className="h-8 w-8 text-primary animate-spin" />
         <p className="text-sm text-muted-foreground animate-pulse font-medium">
-          Sinkronisasi arsitektur runtime workspace...
+          Syncing workspace runtime architecture...
         </p>
       </div>
     );
@@ -116,18 +116,18 @@ function DashboardContent({ slug }: { slug: string }) {
       <div className="flex flex-col items-center justify-center min-h-[75vh] max-w-md mx-auto text-center p-6 border border-destructive/20 bg-destructive/5 rounded-[6px] shadow-xl">
         <AlertTriangle className="h-10 w-10 text-destructive mb-3" />
         <h3 className="text-lg font-bold text-foreground">
-          Akses Komando Workspace Gagal
+          Failed to access workspace command.
         </h3>
         <p className="text-sm text-muted-foreground mt-1 mb-5 leading-relaxed">
-          Gagal memuat data dari API. Pastikan parameter URL valid atau muat
-          ulang jika terjadi kendala jaringan.
+          Unable to load data from the API. Check your URL parameters or try
+          reloading if the network is unstable.
         </p>
         <Button
           size="sm"
           onClick={() => window.location.reload()}
           className="cursor-pointer font-medium"
         >
-          Coba Muat Ulang
+          Try Reload
         </Button>
       </div>
     );
@@ -179,7 +179,7 @@ function DashboardContent({ slug }: { slug: string }) {
         <DialogContent className="sm:max-w-xl bg-card border border-border">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold text-foreground">
-              Unggah Berkas Baru
+              Upload New File
             </DialogTitle>
           </DialogHeader>
           <div className="pt-2">

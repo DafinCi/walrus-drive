@@ -16,9 +16,7 @@ export function useWorkspaceMembers(workspaceId: string) {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        throw new Error(
-          result.error || "Gagal memuat daftar anggota kolaborator.",
-        );
+        throw new Error(result.error || "Unable to load collaborators.");
       }
       return result.members;
     },
@@ -44,7 +42,7 @@ export function usePromoteMember() {
       });
       const result = await response.json();
       if (!response.ok || !result.success) {
-        throw new Error(result.error || "Gagal mengubah hak akses anggota.");
+        throw new Error(result.error || "Failed to update member permissions.");
       }
       return result;
     },
@@ -77,7 +75,7 @@ export function useRemoveMember() {
       });
       const result = await response.json();
       if (!response.ok || !result.success) {
-        throw new Error(result.error || "Gagal mengeluarkan anggota.");
+        throw new Error(result.error || "Unable to remove member.");
       }
       return result;
     },

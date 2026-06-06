@@ -91,14 +91,14 @@ export function WorkspaceHubToolbar({
           className="w-full sm:w-auto gap-2 text-xs font-semibold h-10"
         >
           <LogIn className="h-4 w-4" />
-          Gabung
+          Join
         </Button>
         <Button
           onClick={onCreateClick}
           className="w-full sm:w-auto gap-2 text-xs font-semibold h-10"
         >
           <Plus className="h-4 w-4 stroke-[2.5]" />
-          Buat Baru
+          Create New
         </Button>
       </div>
     </div>

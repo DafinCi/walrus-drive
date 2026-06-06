@@ -50,7 +50,7 @@ export function InviteLinkCard({
 
       if (difference <= 0) {
         setIsExpired(true);
-        setTimeLeft("Kedaluwarsa");
+        setTimeLeft("Expired");
         return;
       }
 
@@ -60,11 +60,11 @@ export function InviteLinkCard({
 
       if (hours > 24) {
         const days = Math.floor(hours / 24);
-        setTimeLeft(`Sisa ${days} hari`);
+        setTimeLeft(`${days} days left`);
       } else if (hours > 0) {
-        setTimeLeft(`Sisa ${hours}j ${minutes}m`);
+        setTimeLeft(`${hours}h ${minutes}m left`);
       } else {
-        setTimeLeft(`Sisa ${minutes} menit`);
+        setTimeLeft(`${minutes} min left`);
       }
     };
 
@@ -78,8 +78,8 @@ export function InviteLinkCard({
     try {
       await navigator.clipboard.writeText(inviteUrl);
       setCopied(true);
-      toast.success("Tersalin!", {
-        description: "Tautan disalin ke clipboard.",
+      toast.success("Copied!", {
+        description: "Link copied to clipboard.",
       });
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {

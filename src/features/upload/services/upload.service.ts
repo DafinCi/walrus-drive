@@ -49,9 +49,7 @@ export async function executeWalrusUpload({
   };
 
   try {
-    logProgress(
-      "Mempersiapkan file dan menghitung Integrity Checksum SHA-256...",
-    );
+    logProgress("Preparing file and computing SHA-256 checksum...");
     const fileChecksum = await calculateFileChecksum(file); // 👈 HITUNG SEBELUM UPLOAD
 
     const fileBuffer = await file.arrayBuffer();
@@ -63,12 +61,12 @@ export async function executeWalrusUpload({
       },
     });
 
-    logProgress("Langkah 1/5: Menghitung pecahan data lokal (Encoding)...");
+    logProgress("Step 1/5: Encoding data into local shards...");
     const flow = walrusClient.walrus.writeFilesFlow({ files: [walrusFile] });
     await flow.encode();
 
     logProgress(
-      "Langkah 2/5: Mendaftarkan Blob... Tolong Approve transaksi di wallet Anda.",
+      "Step 2/5: Registering Blob. Please approve the transaction in your wallet.",
     );
     const registerTx = flow.register({
       epochs: 1,
@@ -79,30 +77,28 @@ export async function executeWalrusUpload({
       transaction: registerTx,
     });
 
-    logProgress("Menunggu konfirmasi pendaftaran di blockchain SUI...");
+    logProgress("Waiting for SUI blockchain confirmation...");
     await suiClient.waitForTransaction({ digest: registerResult.digest });
 
-    logProgress(
-      "Langkah 3/5: Mengirimkan fisik pecahan file ke Walrus Relay Node...",
-    );
+    logProgress("Step 3/5: Uploading file shards to Walrus Relay Node...");
     await flow.upload({ digest: registerResult.digest });
 
     logProgress(
-      "Langkah 4/5: Sertifikasi Blob... Tolong Approve transaksi TERAKHIR di wallet Anda.",
+      "Step 4/5: Certifying Blob. Please approve the final wallet transaction.",
     );
     const certifyTx = flow.certify();
     const certifyResult = await signAndExecuteTransaction({
       transaction: certifyTx,
     });
 
-    logProgress("Menunggu konfirmasi sertifikasi di blockchain SUI...");
+    logProgress("Waiting for SUI blockchain certification confirmation...");
     await suiClient.waitForTransaction({ digest: certifyResult.digest });
 
     logProgress("Finalisasi: Mengambil manifes Blob ID...");
     const filesInfo = await flow.listFiles();
     const finalBlobId = filesInfo[0].blobId;
 
-    logProgress("Langkah 5/5: Menyimpan metadata ke database terpusat...");
+    logProgress("Step 5/5: Storing metadata in centralized database...");
     const apiResponse = await fetch("/api/upload", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -123,11 +119,11 @@ export async function executeWalrusUpload({
     if (!apiResponse.ok) {
       const errData = await apiResponse.json().catch(() => ({}));
       throw new Error(
-        `[DB_ERROR] Gagal menyimpan metadata: ${errData.error || apiResponse.statusText}`,
+        `Database error: failed to save metadata: ${errData.error || apiResponse.statusText}`,
       );
     }
 
-    logProgress("Upload dan penyimpanan sukses 100%!");
+    logProgress("Upload and storage successful.");
 
     return {
       blobId: finalBlobId,
@@ -160,8 +156,8 @@ export function parseWalrusError(error: any): string {
   if (errorMessage.includes("[DB_ERROR]"))
     return errorMessage.replace("[DB_ERROR] ", "");
   if (error instanceof RetryableWalrusClientError)
-    return "Koneksi node terputus, silakan coba kembali.";
+    return "Connection lost. Please try again.";
   if (errorMessage.includes("Rejected by user"))
-    return "Transaksi dibatalkan oleh pengguna.";
-  return errorMessage || "Terjadi kesalahan internal.";
+    return "Transaction was cancelled.";
+  return errorMessage || "Internal error occurred.";
 }

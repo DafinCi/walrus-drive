@@ -71,11 +71,11 @@ export function ProofModal({
               <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
               <div>
                 <h4 className="text-sm font-bold text-emerald-400">
-                  Integritas Terverifikasi
+                  Integrity Verified
                 </h4>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Berkas ini telah terbukti secara kriptografis terdaftar di
-                  jaringan blockchain Sui dan tersimpan aman di Walrus Storage.
+                  This file is cryptographically verified on the Sui blockchain
+                  and securely stored in Walrus Storage.
                 </p>
               </div>
             </div>
@@ -84,11 +84,11 @@ export function ProofModal({
               <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
               <div>
                 <h4 className="text-sm font-bold text-destructive">
-                  Verifikasi Gagal
+                  Verification Failed
                 </h4>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Transaksi gagal diverifikasi atau tidak ditemukan di rantai
-                  blok resmi. Silakan hubungi pengunggah berkas.
+                  Transaction not verified or not found on the blockchain.
+                  Contact the uploader.
                 </p>
               </div>
             </div>
@@ -99,12 +99,11 @@ export function ProofModal({
               />
               <div>
                 <h4 className="text-sm font-bold text-blue-400">
-                  Menunggu Verifikasi
+                  Waiting for Verification
                 </h4>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Metadata lokal tersedia. Anda perlu memicu panggilan jaringan
-                  validator Sui untuk mencocokkan status jangkar bukti (*proof
-                  anchor*).
+                  Local metadata available. Trigger Sui validator call to verify
+                  proof anchor status.
                 </p>
               </div>
             </div>
@@ -205,7 +204,7 @@ export function ProofModal({
               onClick={() => onOpenChange(false)}
               className="cursor-pointer"
             >
-              Tutup
+              Close
             </Button>
             {status !== "verified" && (
               <Button
@@ -219,7 +218,7 @@ export function ProofModal({
                     <Loader2 className="h-4 w-4 animate-spin" /> Auditing...
                   </>
                 ) : (
-                  "Jalankan Kriptografis Audit"
+                  "Run Cryptographic Audit"
                 )}
               </Button>
             )}

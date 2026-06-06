@@ -28,8 +28,8 @@ export function InviteErrorState({ type }: InviteErrorStateProps) {
           </h2>
           <p className="text-xs text-muted-foreground leading-relaxed">
             {isExpired
-              ? "Masa aktif token cryptographic ini telah habis. Minta admin workspace untuk menerbitkan tautan baru."
-              : "Token tidak dikenali oleh sistem atau sudah dicabut aksesnya oleh pengelola."}
+              ? "This token has expired. Ask the workspace admin for a new link."
+              : "Token is invalid or has been revoked."}
           </p>
         </div>
 
@@ -41,7 +41,7 @@ export function InviteErrorState({ type }: InviteErrorStateProps) {
         >
           <Link href="/">
             <ArrowLeft className="h-3.5 w-3.5" />
-            Kembali ke Beranda
+            Back to Home
           </Link>
         </Button>
       </div>

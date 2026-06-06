@@ -27,8 +27,8 @@ export function UploadQueue() {
           />
           <span className="text-xs font-semibold text-foreground">
             {hasActiveUploads
-              ? `Mengunggah (${activeUploads.length} file...)`
-              : "Proses Unggahan Selesai"}
+              ? `Upload (${activeUploads.length} file...)`
+              : "Upload complete"}
           </span>
         </div>
 
@@ -42,7 +42,7 @@ export function UploadQueue() {
               size="icon"
               className="h-6 w-6 text-muted-foreground hover:text-destructive cursor-pointer"
               onClick={clearCompleted}
-              title="Bersihkan histori sukses"
+              title="Successfully cleared history"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </Button>

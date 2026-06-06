@@ -12,7 +12,7 @@ export async function GET(
 
     if (!token) {
       return NextResponse.json(
-        { success: false, error: "Token tidak ditemukan." },
+        { success: false, error: "The specified token could not be found." },
         { status: 400 },
       );
     }
@@ -54,7 +54,11 @@ export async function GET(
 
     if (workspaceError || !workspace) {
       return NextResponse.json(
-        { success: false, error: "Workspace target sudah tidak eksis lagi." },
+        {
+          success: false,
+          error:
+            "The target workspace could not be found because it no longer exists.",
+        },
         { status: 404 },
       );
     }

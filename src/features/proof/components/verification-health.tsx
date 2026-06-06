@@ -30,11 +30,11 @@ export function VerificationHealth({
           <ShieldAlert className="h-6 w-6 text-muted-foreground" />
         </div>
         <h3 className="text-base font-bold text-foreground">
-          Belum Ada Berkas yang Diunggah
+          No uploaded files yet
         </h3>
         <p className="text-sm text-muted-foreground max-w-md mt-1">
-          Unggah berkas pertama Anda ke workspace ini untuk mulai membangun dan
-          melacak jejak verifikasi kriptografis on-chain.
+          Upload your first file to start tracking its on-chain verification
+          history.
         </p>
       </div>
     );
@@ -132,11 +132,11 @@ export function VerificationHealth({
           <AlertOctagon className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
           <div>
             <h4 className="text-sm font-bold text-destructive">
-              {failedFiles} files failed verification
+              {failedFiles} Files failed verification.
             </h4>
             <p className="text-xs text-destructive/80 mt-0.5">
-              Berkas-berkas ini gagal diverifikasi di jaringan. Segera tinjau
-              ulang atau lakukan re-verifikasi melalui tabel di bawah.
+              These files failed verification. Review or re-verify them in the
+              table below.
             </p>
           </div>
         </div>

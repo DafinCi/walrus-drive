@@ -53,7 +53,7 @@ export function WorkspaceToolbar({
               <ArrowUpDown className="h-3.5 w-3.5" />
               {/* 🌟 UX DINAMIS: Mengikuti preferensi state */}
               <span className="text-xs font-medium">
-                Urutkan: {activeSortLabel}
+                Sort: {activeSortLabel}
               </span>
             </Button>
           </DropdownMenuTrigger>
@@ -115,7 +115,7 @@ export function WorkspaceToolbar({
             className="h-9 gap-2 text-sm font-medium border-border hover:bg-muted/50"
           >
             <UserPlus className="h-4 w-4 opacity-80" />
-            <span className="hidden xs:inline">Undang</span>
+            <span className="hidden xs:inline">Invite</span>
           </Button>
         </RoleGuard>
 

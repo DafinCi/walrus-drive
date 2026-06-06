@@ -120,7 +120,7 @@ export function FileCard({ file, onVerifyClick }: FileCardProps) {
               className="h-8 w-8 text-muted-foreground hover:text-foreground cursor-pointer"
             >
               <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">Menu berkas</span>
+              <span className="sr-only">File Menu</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
@@ -134,16 +134,20 @@ export function FileCard({ file, onVerifyClick }: FileCardProps) {
               ) : (
                 <Copy className="h-3.5 w-3.5" />
               )}
-              <span>{copied ? "Tersalin!" : "Salin Blob ID"}</span>
+              <span>{copied ? "Copied!" : "Copy Blob ID"}</span>
             </DropdownMenuItem>
             <DropdownMenuItem
               asChild
               disabled={!safeBlobId}
               className="gap-2 cursor-pointer text-sm"
             >
-              <a href={aggregatorUrl} target="_blank" rel="noreferrer">
+              <a
+                href={`https://walruscan.com/testnet/blob/${file.blob_id}`}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Eye className="h-3.5 w-3.5" />
-                <span>Buka di Explorer</span>
+                <span>Open in Explorer</span>
               </a>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -156,7 +160,7 @@ export function FileCard({ file, onVerifyClick }: FileCardProps) {
                 download={safeFileName}
               >
                 <Download className="h-3.5 w-3.5" />
-                <span>Unduh File</span>
+                <span>Download File</span>
               </a>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -170,9 +174,7 @@ export function FileCard({ file, onVerifyClick }: FileCardProps) {
             >
               <ShieldCheck className="h-3.5 w-3.5" />
               <span>
-                {file.status === "verified"
-                  ? "Lihat Hasil Proof"
-                  : "Verifikasi Proof"}
+                {file.status === "verified" ? "Detail" : "Verify Proof"}
               </span>
             </DropdownMenuItem>
           </DropdownMenuContent>

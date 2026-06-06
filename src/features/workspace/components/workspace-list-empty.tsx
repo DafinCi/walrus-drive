@@ -14,11 +14,11 @@ export function WorkspaceListEmpty({ onCreateClick }: WorkspaceListEmptyProps) {
         <Layers className="h-8 w-8 text-primary" />
       </div>
       <h3 className="text-base font-bold text-foreground">
-        Belum Ada Ruang Kerja
+        No workspaces available yet
       </h3>
       <p className="text-xs text-muted-foreground mt-1.5 mb-6 leading-relaxed">
-        Workspace adalah pusat kendali bersama tim Anda untuk mengunggah,
-        memverifikasi, dan mengamankan aset data kriptografi di jaringan Walrus.
+        A workspace is a shared team control hub for uploading, verifying, and
+        securing cryptographic data assets on the Walrus network.
       </p>
 
       <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
@@ -28,7 +28,7 @@ export function WorkspaceListEmpty({ onCreateClick }: WorkspaceListEmptyProps) {
           className="gap-2 font-semibold text-xs cursor-pointer"
         >
           <Plus className="h-4 w-4 stroke-[2.5]" />
-          Buat Workspace
+          Create Workspace
         </Button>
       </div>
     </div>

@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
     if (!name || !slug || !visibility || !upload_policy || !ownerAddress) {
       return NextResponse.json(
-        { success: false, error: "Data payload tidak lengkap." },
+        { success: false, error: "The payload data is incomplete." },
         { status: 400 },
       );
     }
@@ -30,7 +30,8 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Slug sudah digunakan. Silakan pilih yang lain.",
+          error:
+            "The selected slug is already taken. Please choose a different one.",
         },
         { status: 400 },
       );
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
     if (workspaceError || !newWorkspace) {
       console.error("Supabase Insert Workspace Error:", workspaceError);
       return NextResponse.json(
-        { success: false, error: "Gagal menyimpan data kluster workspace." },
+        { success: false, error: "Unable to persist workspace cluster data." },
         { status: 500 },
       );
     }
@@ -77,7 +78,7 @@ export async function POST(request: Request) {
         {
           success: false,
           error:
-            "Workspace terbuat, tetapi gagal mengonfigurasi hak akses owner.",
+            "The workspace was created successfully, but owner permissions could not be configured.",
         },
         { status: 500 },
       );

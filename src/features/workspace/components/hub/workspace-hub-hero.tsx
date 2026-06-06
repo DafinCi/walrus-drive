@@ -18,10 +18,10 @@ export function WorkspaceHubHero({
       {/* Bagian Sapaan */}
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-          Selamat Datang Kembali!
+          Welcome back
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Kelola ruang kerja terdesentralisasi Anda dengan aman di jaringan Sui.
+          Manage your decentralized workspace securely on the Sui network.
         </p>
       </div>
 
@@ -37,7 +37,7 @@ export function WorkspaceHubHero({
               {totalWorkspaces}
             </p>
             <p className="text-xs text-muted-foreground mt-1 font-medium">
-              Total Ruang Kerja
+              Total Workspaces
             </p>
           </div>
         </div>
@@ -52,7 +52,7 @@ export function WorkspaceHubHero({
               {totalFiles}
             </p>
             <p className="text-xs text-muted-foreground mt-1 font-medium">
-              Berkas Terenkripsi
+              File Encrypted
             </p>
           </div>
         </div>
@@ -67,7 +67,7 @@ export function WorkspaceHubHero({
               {totalMembers}
             </p>
             <p className="text-xs text-muted-foreground mt-1 font-medium">
-              Total Kolaborator
+              Total Collaborators
             </p>
           </div>
         </div>

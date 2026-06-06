@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
     if (!fileId) {
       return NextResponse.json(
-        { success: false, error: "Parameter fileId wajib diisi" },
+        { success: false, error: "Missing required parameter: fileId." },
         { status: 400 },
       );
     }
@@ -23,7 +23,10 @@ export async function POST(request: Request) {
 
     if (fetchError || !file) {
       return NextResponse.json(
-        { success: false, error: "File tidak ditemukan di database" },
+        {
+          success: false,
+          error: "The requested file was not found in the database.",
+        },
         { status: 404 },
       );
     }
@@ -33,7 +36,7 @@ export async function POST(request: Request) {
     if (file.status === "verified" || file.verified === true) {
       return NextResponse.json({
         success: true,
-        message: "Data diambil dari cache database (Hemat RPS)",
+        message: "Data served from the database cache (reducing RPS usage).",
         data: file,
       });
     }
@@ -43,7 +46,10 @@ export async function POST(request: Request) {
 
     if (!txDigest) {
       return NextResponse.json(
-        { success: false, error: "File ini belum memiliki Transaction Digest" },
+        {
+          success: false,
+          error: "No Transaction Digest has been recorded for this file yet.",
+        },
         { status: 400 },
       );
     }
@@ -59,7 +65,8 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message: "Transaksi masih diproses oleh jaringan Sui",
+          message:
+            "The transaction is still being processed by the Sui network.",
           data: verification,
         },
         { status: 202 }, // 202 Accepted: Diterima tapi belum selesai
@@ -74,7 +81,10 @@ export async function POST(request: Request) {
         .eq("id", fileId);
 
       return NextResponse.json(
-        { success: false, error: "Transaksi gagal dieksekusi di Blockchain" },
+        {
+          success: false,
+          error: "Transaction execution failed on the blockchain.",
+        },
         { status: 400 },
       );
     }
@@ -101,14 +111,18 @@ export async function POST(request: Request) {
 
       return NextResponse.json({
         success: true,
-        message: "File berhasil diverifikasi dan direkam secara kriptografis",
+        message:
+          "File successfully verified and immutably recorded on the blockchain.",
         data: updatedFile,
       });
     }
 
     // Fallback jika terjadi kondisi tidak terduga
     return NextResponse.json(
-      { success: false, error: "Verifikasi gagal tanpa alasan yang jelas" },
+      {
+        success: false,
+        error: "Verification failed due to an unexpected error.",
+      },
       { status: 500 },
     );
   } catch (error: any) {

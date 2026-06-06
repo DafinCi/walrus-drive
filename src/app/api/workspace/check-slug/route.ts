@@ -9,7 +9,7 @@ export async function GET(request: Request) {
 
     if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
       return NextResponse.json(
-        { available: false, error: "Format slug tidak valid" },
+        { available: false, error: "The provided slug format is invalid." },
         { status: 400 },
       );
     }
@@ -26,9 +26,9 @@ export async function GET(request: Request) {
     // Jika data tidak ditemukan, berarti slug tersedia (available = true)
     return NextResponse.json({ available: !data });
   } catch (error: any) {
-    console.error("⛔ Slug Check Error:", error);
+    console.error("Slug Check Error:", error);
     return NextResponse.json(
-      { available: false, error: "Gagal memvalidasi slug" },
+      { available: false, error: "Unable to validate the slug." },
       { status: 500 },
     );
   }

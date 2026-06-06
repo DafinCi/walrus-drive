@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
     if (!token || !walletAddress) {
       return NextResponse.json(
-        { success: false, error: "Payload pendaftaran tidak lengkap." },
+        { success: false, error: "The registration payload is incomplete." },
         { status: 400 },
       );
     }
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
     if (inviteError || !invite) {
       return NextResponse.json(
-        { success: false, error: "Tautan undangan tidak sah." },
+        { success: false, error: "Invalid invitation link." },
         { status: 400 },
       );
     }
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       new Date(invite.expires_at).getTime() < new Date().getTime();
     if (isExpired) {
       return NextResponse.json(
-        { success: false, error: "Tautan undangan sudah kedaluwarsa." },
+        { success: false, error: "This invitation link has expired." },
         { status: 400 },
       );
     }
@@ -46,7 +46,10 @@ export async function POST(request: Request) {
 
     if (workspaceError || !workspaceData) {
       return NextResponse.json(
-        { success: false, error: "Data kluster workspace tidak ditemukan." },
+        {
+          success: false,
+          error: "The workspace cluster data could not be found.",
+        },
         { status: 404 },
       );
     }
@@ -93,7 +96,7 @@ export async function POST(request: Request) {
       success: true,
       workspaceId: invite.workspace_id,
       slug: workspaceData.slug,
-      message: "Berhasil bergabung ke workspace kolaboratif.",
+      message: "You have successfully joined the workspace.",
     });
   } catch (error: any) {
     console.error("Join Workspace API Error:", error);

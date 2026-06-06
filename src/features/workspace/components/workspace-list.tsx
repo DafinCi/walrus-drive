@@ -12,10 +12,10 @@ export function WorkspaceList({ items }: WorkspaceListProps) {
     <div className="space-y-4">
       <div>
         <h2 className="text-sm font-bold text-foreground uppercase tracking-wider text-muted-foreground/80">
-          Ruang Kerja Anda ({items.length})
+          Your Workspace ({items.length})
         </h2>
         <p className="text-xs text-muted-foreground mt-0.5">
-          Pilih workspace untuk mulai mengelola berkas terdesentralisasi Anda.
+          Choose a workspace to manage your decentralized files.
         </p>
       </div>
 

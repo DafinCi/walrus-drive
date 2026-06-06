@@ -13,11 +13,11 @@ export function WorkspaceTable({ files, onVerifyClick }: WorkspaceTableProps) {
         {/* Kepala Tabel */}
         <thead>
           <tr className="border-b border-border bg-muted/40 text-xs font-bold uppercase tracking-wider text-muted-foreground select-none">
-            <th className="py-3 px-4 font-semibold">Nama File</th>
-            <th className="py-3 px-4 font-semibold w-28">Ukuran</th>
-            <th className="py-3 px-4 font-semibold w-32">Pengunggah</th>
-            <th className="py-3 px-4 font-semibold w-36">Tanggal</th>
-            <th className="py-3 px-4 font-semibold w-16 text-right">Aksi</th>
+            <th className="py-3 px-4 font-semibold">File Name</th>
+            <th className="py-3 px-4 font-semibold w-28">Size</th>
+            <th className="py-3 px-4 font-semibold w-32">Uploader</th>
+            <th className="py-3 px-4 font-semibold w-36">Date</th>
+            <th className="py-3 px-4 font-semibold w-16 text-right">Action</th>
           </tr>
         </thead>
 

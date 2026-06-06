@@ -15,11 +15,11 @@ export default function OfficialLandingPage() {
       >
         <div className="mb-12">
           <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white">
-            Sistem Operasi Kerja Masa Depan
+            The Operating System for the Future of Work
           </h2>
           <p className="text-xs text-zinc-400 mt-1">
-            Keamanan mutakhir Web3 yang dibungkus dengan kesederhanaan
-            pengalaman SaaS modern.
+            Advanced Web3 security wrapped in the simplicity of a modern SaaS
+            experience.
           </p>
         </div>
 
@@ -31,12 +31,13 @@ export default function OfficialLandingPage() {
                 <Database className="h-4 w-4" />
               </div>
               <h3 className="text-sm font-bold text-white mt-3">
-                Protokol Desentralisasi Walrus
+                Walrus Decentralized Storage Protocol
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed max-w-md">
-                Berkas Anda dipecah secara matematis menjadi serpihan kecil
-                (*sharding*) dan didistribusikan ke jaringan node Sui. Menjamin
-                ketersediaan data tinggi tanpa bergantung pada server tunggal.
+                Your files are mathematically fragmented into smaller pieces
+                (*sharding*) and distributed across the Sui node network,
+                ensuring high data availability without relying on a single
+                server.
               </p>
             </div>
             <ShardingPipeline />
@@ -49,13 +50,13 @@ export default function OfficialLandingPage() {
                 <Shield className="h-4 w-4" />
               </div>
               <h3 className="text-sm font-bold text-white mt-3">
-                Verifikasi Bukti Kriptografi
+                Cryptographic Proof Verification
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Setiap dokumen yang tersimpan memiliki sertifikat digital
-                berbasis hash transaksi Sui Network. Siapapun dapat
-                memverifikasi integritas berkas secara mutlak tanpa celah
-                pemalsuan metadata.
+                Every stored document is backed by a digital certificate derived
+                from a Sui Network transaction hash. Anyone can independently
+                verify the file's integrity with cryptographic certainty,
+                eliminating the risk of metadata tampering.
               </p>
             </div>
             <div className="border border-zinc-900 bg-zinc-950 p-4 rounded-[6px] font-mono text-[9px] text-zinc-500 space-y-1">
@@ -79,12 +80,13 @@ export default function OfficialLandingPage() {
             </div>
             <div>
               <h3 className="text-sm font-bold text-white">
-                Kolaborasi Tim Berbasis Enkripsi
+                End-to-End Encrypted Team Collaboration
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed mt-1">
-                Undang rekan kerja Anda dengan sistem manajemen akses
-                terdesentralisasi. Hak membaca dan menulis berkas diatur penuh
-                lewat kunci kriptografi unik per ruang kerja.
+                Collaborate securely with your team through a decentralized
+                access control system. Read and write permissions are enforced
+                using unique cryptographic keys for each workspace, ensuring
+                fine-grained ownership and access management.
               </p>
             </div>
           </div>
@@ -96,12 +98,13 @@ export default function OfficialLandingPage() {
             </div>
             <div>
               <h3 className="text-sm font-bold text-white">
-                Infrastruktur Hibrida Berkecepatan Tinggi
+                High-Speed Hybrid Infrastructure
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed mt-1">
-                Sinkronisasi dokumen secepat kilat berkat integrasi paralel
-                antara database metadata Supabase dengan ketangguhan jaringan
-                penyimpanan blob milik Walrus Protocol.
+                Achieve near-instant document synchronization through a hybrid
+                architecture that combines Supabase's high-speed metadata layer
+                with the durability and scalability of Walrus Protocol's
+                decentralized blob storage network.
               </p>
             </div>
           </div>

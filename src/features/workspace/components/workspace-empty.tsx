@@ -13,13 +13,13 @@ export function WorkspaceEmpty({ workspaceId }: WorkspaceEmptyProps) {
       </div>
 
       <h2 className="text-xl font-bold text-foreground tracking-tight mb-2">
-        Workspace Ini Belum Memiliki File
+        No files in this workspace yet
       </h2>
       <p className="text-sm text-muted-foreground max-w-md mb-8 leading-relaxed">
-        Amankan dokumen, aset digital, atau smart contract data Anda ke
-        decentralized storage milik{" "}
-        <span className="text-primary font-semibold">Walrus Protocol</span>.
-        File yang Anda unggah akan langsung terdistribusi secara aman.
+        Store your documents, digital assets, or smart contract data on
+        <span className="text-primary font-semibold">Walrus Protocol</span>'s
+        decentralized storage. Every uploaded file is instantly and securely
+        distributed.
       </p>
 
       {/* Core Dropzone Integration */}

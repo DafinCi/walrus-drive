@@ -21,7 +21,7 @@ export function useUpload() {
 
   const startUpload = async (file: File, workspaceId: string) => {
     if (!account) {
-      throw new Error("Wallet belum terhubung. Silakan hubungkan wallet Anda.");
+      throw new Error("Connect your wallet first.");
     }
 
     const uploadId = crypto.randomUUID();
@@ -45,9 +45,9 @@ export function useUpload() {
         onProgress: (msg) => {
           let status: any = "uploading";
           if (msg.includes("Encoding")) status = "encoding";
-          if (msg.includes("Mendaftarkan")) status = "registering";
-          if (msg.includes("Sertifikasi")) status = "certifying";
-          if (msg.includes("Menyimpan metadata")) status = "syncing_db";
+          if (msg.includes("Registering...")) status = "registering";
+          if (msg.includes("Certifications")) status = "certifying";
+          if (msg.includes("Saving metadata...")) status = "syncing_db";
 
           updateUpload(uploadId, { progressMessage: msg, status });
         },
@@ -56,7 +56,7 @@ export function useUpload() {
       updateUpload(uploadId, {
         status: "completed",
         blobId: result.blobId,
-        progressMessage: "Upload berhasil!",
+        progressMessage: "File uploaded successfully!",
       });
 
       // 🌟 REFRESH CACHE LAYER SECARA LUAS
@@ -72,7 +72,7 @@ export function useUpload() {
     } catch (error: any) {
       updateUpload(uploadId, {
         status: "failed",
-        error: error.message || "Gagal mengunggah file.",
+        error: error.message || "Unable to upload file.",
       });
       throw error;
     }

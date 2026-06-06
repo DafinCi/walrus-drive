@@ -63,14 +63,14 @@ export function WorkspaceHeader({
         {/* Total Members */}
         <div className="flex items-center gap-1.5">
           <Users className="h-4 w-4 opacity-70" />
-          <span>{totalMembers} Anggota</span>
+          <span>{totalMembers} Member</span>
         </div>
 
         {/* Created At (Optional) */}
         {formattedDate && (
           <div className="flex items-center gap-1.5">
             <Calendar className="h-4 w-4 opacity-70" />
-            <span>Dibuat {formattedDate}</span>
+            <span>Created {formattedDate}</span>
           </div>
         )}
 

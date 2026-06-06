@@ -56,11 +56,11 @@ export function VerificationTable({
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-    if (diffMins < 1) return "Baru saja";
-    if (diffMins < 60) return `${diffMins} menit lalu`;
-    if (diffHours < 24) return `${diffHours} jam lalu`;
-    if (diffDays === 1) return "Kemarin";
-    if (diffDays < 7) return `${diffDays} hari lalu`;
+    if (diffMins < 1) return "Just Now";
+    if (diffMins < 60) return `${diffMins} minute ago`;
+    if (diffHours < 24) return `${diffHours} hours ago`;
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays < 7) return `${diffDays} days ago`;
 
     return date.toLocaleDateString("id-ID", {
       day: "numeric",
@@ -130,11 +130,11 @@ export function VerificationTable({
         </div>
         <div className="space-y-1">
           <h4 className="text-sm font-bold text-foreground">
-            Riwayat Verifikasi Kosong
+            No verification history yet
           </h4>
           <p className="text-xs text-muted-foreground max-w-sm leading-relaxed">
-            Belum ada berkas terdaftar di ruang kerja ini. Unggah berkas pertama
-            Anda untuk mulai mengunci jejak kepatuhan on-chain.
+            No files in this workspace yet. Upload your first file to start
+            tracking compliance on-chain.
           </p>
         </div>
       </div>
@@ -149,7 +149,7 @@ export function VerificationTable({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Cari nama berkas atau uploader..."
+            placeholder="Search files or uploader..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-card/40 border border-border/50 rounded-[6px] py-1.5 pl-9 pr-4 text-xs placeholder:text-muted-foreground text-foreground focus:outline-hidden focus:border-primary/60 transition-colors"
@@ -158,20 +158,20 @@ export function VerificationTable({
 
         <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
           <span className="text-[11px] text-muted-foreground font-medium hidden sm:inline">
-            Urutkan:
+            Sort:
           </span>
           <div className="relative w-full sm:w-40">
             <select
-              aria-label="Urutkan berkas"
+              aria-label="Sort Files"
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value as any)}
               className="w-full bg-card/40 border border-border/50 rounded-[6px] py-1.5 px-3 text-xs text-foreground focus:outline-hidden focus:border-primary/60 cursor-pointer appearance-none"
             >
               <option value="newest" className="bg-background">
-                Terbaru Mendaftar
+                Newest registered
               </option>
               <option value="oldest" className="bg-background">
-                Terlama Mendaftar
+                Oldest registered
               </option>
               <option value="verified" className="bg-background">
                 Status: Verified First
@@ -193,13 +193,15 @@ export function VerificationTable({
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-border/40 bg-muted/30 text-[10px] font-bold uppercase tracking-wider text-muted-foreground select-none">
-              <th className="py-3 px-4 font-semibold">Nama Berkas</th>
+              <th className="py-3 px-4 font-semibold">File Name</th>
               <th className="py-3 px-4 font-semibold">Status</th>
               <th className="py-3 px-4 font-semibold">Uploaded By</th>
               <th className="py-3 px-4 font-semibold">Uploaded</th>
               <th className="py-3 px-4 font-semibold">Verified At</th>
               <th className="py-3 px-4 font-semibold">Checkpoint</th>
-              <th className="py-3 px-3 text-center font-semibold w-12">Aksi</th>
+              <th className="py-3 px-3 text-center font-semibold w-12">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border/30 text-xs font-normal">
@@ -209,7 +211,7 @@ export function VerificationTable({
                   colSpan={7}
                   className="py-8 text-center text-xs text-muted-foreground font-medium"
                 >
-                  Tidak ada berkas yang cocok dengan filter pencarian.
+                  No matching files found.
                 </td>
               </tr>
             ) : (

@@ -87,7 +87,7 @@ export function FileRow({ file, onVerifyClick }: FileRowProps) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Gagal menyalin Blob ID", err);
+      console.error("Failed to copy Blob ID.", err);
     }
   };
 
@@ -150,7 +150,7 @@ export function FileRow({ file, onVerifyClick }: FileRowProps) {
               className="h-8 w-8 text-muted-foreground hover:text-foreground cursor-pointer"
             >
               <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">Menu berkas</span>
+              <span className="sr-only">File menu</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
@@ -167,9 +167,13 @@ export function FileRow({ file, onVerifyClick }: FileRowProps) {
             </DropdownMenuItem>
 
             <DropdownMenuItem asChild className="gap-2 cursor-pointer text-sm">
-              <a href={aggregatorUrl} target="_blank" rel="noreferrer">
+              <a
+                href={`https://walruscan.com/testnet/blob/${file.blob_id}`}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Eye className="h-3.5 w-3.5" />
-                <span>Buka di Explorer</span>
+                <span>Open in Explorer</span>
               </a>
             </DropdownMenuItem>
 
@@ -195,9 +199,7 @@ export function FileRow({ file, onVerifyClick }: FileRowProps) {
             >
               <ShieldCheck className="h-3.5 w-3.5" />
               <span>
-                {file.status === "verified"
-                  ? "Lihat Hasil Proof"
-                  : "Verifikasi Proof"}
+                {file.status === "verified" ? "Detail" : "Verify Proof"}
               </span>
             </DropdownMenuItem>
           </DropdownMenuContent>

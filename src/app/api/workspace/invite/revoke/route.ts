@@ -8,7 +8,7 @@ export async function DELETE(request: Request) {
 
     if (!token || !workspaceId || !walletAddress) {
       return NextResponse.json(
-        { success: false, error: "Payload penghapusan tidak lengkap." },
+        { success: false, error: "The deletion payload is incomplete." },
         { status: 400 },
       );
     }
@@ -29,7 +29,8 @@ export async function DELETE(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Akses ditolak. Anda bukan pengelola workspace ini.",
+          error:
+            "Access denied. You do not have administrative permissions for this workspace.",
         },
         { status: 403 },
       );
@@ -46,7 +47,7 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Token berhasil dimusnahkan.",
+      message: "Token successfully revoked.",
     });
   } catch (error: any) {
     console.error("Revoke Invite API Error:", error);

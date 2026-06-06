@@ -14,7 +14,7 @@ async function fetchWorkspaceFullData(
   const result = await response.json();
 
   if (!response.ok || !result.success) {
-    throw new Error(result.error || "Gagal memuat data workspace");
+    throw new Error(result.error || "Unable to load workspace data.");
   }
 
   return result.data;

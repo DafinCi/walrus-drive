@@ -35,7 +35,7 @@ export const proofService = {
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
       throw new Error(
-        errorData.error || "Gagal memuat dashboard integritas workspace",
+        errorData.error || "Unable to load workspace integrity dashboard",
       );
     }
 
@@ -59,7 +59,7 @@ export const proofService = {
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
       throw new Error(
-        errorData.error || "Gagal memproses verifikasi blockchain",
+        errorData.error || "Failed to process blockchain verification",
       );
     }
 

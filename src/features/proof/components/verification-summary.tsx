@@ -24,14 +24,14 @@ export function VerificationSummary({ stats }: VerificationSummaryProps) {
         <VerificationStatCard
           title="Total Files"
           value={totalFiles}
-          description="Berkas tersimpan di workspace"
+          description="File saved to workspace"
           icon={Files}
           iconColorClass="text-blue-400"
         />
         <VerificationStatCard
           title="Verified"
           value={verified}
-          description="Proof tervalidasi on-chain"
+          description="On-chain proof validated"
           icon={ShieldCheck}
           iconColorClass="text-emerald-400"
           borderColorClass="hover:border-emerald-500/20"
@@ -39,7 +39,7 @@ export function VerificationSummary({ stats }: VerificationSummaryProps) {
         <VerificationStatCard
           title="Pending"
           value={pending}
-          description="Menunggu antrean validator"
+          description="Waiting in validator queue"
           icon={Clock3}
           iconColorClass="text-amber-400"
           borderColorClass="hover:border-amber-500/20"
@@ -47,7 +47,7 @@ export function VerificationSummary({ stats }: VerificationSummaryProps) {
         <VerificationStatCard
           title="Failed"
           value={failed}
-          description="Kegagalan verifikasi jangkar"
+          description="Failed to verify anchor"
           icon={AlertTriangle}
           iconColorClass="text-destructive"
           borderColorClass="hover:border-destructive/20"

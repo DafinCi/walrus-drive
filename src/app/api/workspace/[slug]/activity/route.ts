@@ -24,7 +24,7 @@ export async function GET(
 
     if (wsError || !workspace) {
       return NextResponse.json(
-        { error: "Workspace tidak ditemukan" },
+        { error: "The specified workspace could not be found." },
         { status: 404 },
       );
     }

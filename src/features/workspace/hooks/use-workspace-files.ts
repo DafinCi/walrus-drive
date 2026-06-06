@@ -15,7 +15,7 @@ export function useWorkspaceFiles(slug: string, sort: FileSortOption) {
       const response = await fetch(`/api/workspace/${slug}/files?sort=${sort}`);
 
       if (!response.ok) {
-        throw new Error("Gagal mengambil data file");
+        throw new Error("Unable to load file data.");
       }
 
       const data: FetchFilesResponse = await response.json();

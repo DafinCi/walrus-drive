@@ -86,7 +86,7 @@ export function UploadProgress({ item }: UploadProgressProps) {
             }`}
           >
             {isWalletActionRequired
-              ? "BUTUH APPROVE WALLET"
+              ? "Wallet approval needed"
               : item.progressMessage}
           </span>
         </div>
@@ -101,7 +101,7 @@ export function UploadProgress({ item }: UploadProgressProps) {
               <button
                 onClick={(e) => handleCopyBlobId(e, item.blobId!)}
                 className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                title="Salin Blob ID"
+                title="Copy Blob ID"
               >
                 {copied ? (
                   <Check className="h-3 w-3 text-emerald-500" />
@@ -114,7 +114,7 @@ export function UploadProgress({ item }: UploadProgressProps) {
                 target="_blank"
                 rel="noreferrer"
                 className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-primary transition-colors"
-                title="Buka di Walrus Aggregator"
+                title="Open in Walrus Aggregator"
               >
                 <ExternalLink className="h-3 w-3" />
               </a>

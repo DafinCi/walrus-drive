@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
 
   if (!wallet) {
     return NextResponse.json(
-      { error: "Parameter 'wallet' diperlukan." },
+      { error: "Missing required parameter: 'wallet'." },
       { status: 400 },
     );
   }

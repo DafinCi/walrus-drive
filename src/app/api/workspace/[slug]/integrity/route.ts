@@ -11,7 +11,7 @@ export async function GET(
 
     if (!slug) {
       return NextResponse.json(
-        { success: false, error: "Parameter slug workspace tidak ditemukan" },
+        { success: false, error: "Missing workspace slug parameter." },
         { status: 400 },
       );
     }
@@ -27,7 +27,8 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: "Workspace tidak ditemukan atau akses ditolak",
+          error:
+            "The workspace could not be found, or you do not have permission to access it.",
         },
         { status: 404 },
       );
@@ -45,7 +46,8 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: "Gagal memuat data enkripsi berkas dari database",
+          error:
+            "Unable to retrieve file encryption metadata from the database.",
         },
         { status: 500 },
       );
@@ -101,10 +103,7 @@ export async function GET(
       history: files,
     });
   } catch (error: any) {
-    console.error(
-      "🚨 Internal Server Error inside Integrity API Route:",
-      error,
-    );
+    console.error("Internal Server Error inside Integrity API Route:", error);
     return NextResponse.json(
       {
         success: false,

@@ -51,7 +51,7 @@ export default function VerificationCenterPage({
   // HANDLER: Klik Re-Verify di baris tabel
   const handleReVerify = (file: WorkspaceFile) => {
     if (isVerifying) {
-      toast.warning("Sistem sedang memproses verifikasi berkas. Mohon tunggu.");
+      toast.warning("Verifying file. Please wait.");
       return;
     }
     verifyFile({ fileId: file.id });
@@ -83,11 +83,11 @@ export default function VerificationCenterPage({
       <div className="p-6 max-w-md mx-auto mt-20 text-center border border-destructive/20 bg-destructive/5 rounded-[6px]">
         <AlertTriangle className="h-8 w-8 text-destructive mx-auto mb-2" />
         <h3 className="text-sm font-bold text-foreground">
-          Gagal Memuat Data Audit
+          Unable to load audit data.
         </h3>
         <p className="text-xs text-muted-foreground mt-1">
           {error?.message ||
-            "Terjadi kesalahan internal saat menarik metrik integritas."}
+            "Internal error while retrieving integrity metrics."}
         </p>
       </div>
     );
@@ -120,8 +120,7 @@ export default function VerificationCenterPage({
             Verification History
           </h3>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Daftar lengkap berkas yang telah dikunci ke dalam jangkar
-            kriptografis on-chain.
+            Full list of files anchored to the on-chain cryptographic system.
           </p>
         </div>
 

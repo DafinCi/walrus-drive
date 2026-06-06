@@ -10,7 +10,10 @@ export async function GET(
 
     if (!slug) {
       return NextResponse.json(
-        { success: false, error: "Workspace slug diperlukan" },
+        {
+          success: false,
+          error: "Missing required parameter: workspace slug.",
+        },
         { status: 400 },
       );
     }
@@ -25,7 +28,10 @@ export async function GET(
     if (wsError) throw wsError;
     if (!workspace) {
       return NextResponse.json(
-        { success: false, error: "Workspace tidak ditemukan" },
+        {
+          success: false,
+          error: "The specified workspace could not be found.",
+        },
         { status: 404 },
       );
     }

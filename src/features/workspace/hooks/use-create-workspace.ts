@@ -11,7 +11,7 @@ export function useCreateWorkspace(walletAddress: string | undefined) {
   return useMutation({
     mutationFn: (formData: CreateWorkspaceInput) => {
       if (!walletAddress) {
-        throw new Error("Wallet lu harus terkoneksi terlebih dahulu.");
+        throw new Error("Please connect your wallet first.");
       }
       return workspaceService.createWorkspace({
         ...formData,

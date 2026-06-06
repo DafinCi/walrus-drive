@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Workspace ID dan Wallet Pembuat wajib diisi.",
+          error: "Missing required fields: Workspace ID and Creator Wallet.",
         },
         { status: 400 },
       );
@@ -40,7 +40,8 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Anda tidak memiliki izin untuk membuat tautan undangan.",
+          error:
+            "You do not have sufficient permissions to create invitation links.",
         },
         { status: 403 },
       );

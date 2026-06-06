@@ -79,7 +79,7 @@ export function WorkspaceSwitcher() {
           className="w-64 mt-1 border-border bg-popover text-popover-foreground rounded-[6px]"
         >
           <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-muted-foreground">
-            Daftar Workspace
+            Workspace List
           </DropdownMenuLabel>
 
           {/* 🌟 PERBAIKAN: Render list dari allWorkspaces */}
@@ -110,7 +110,7 @@ export function WorkspaceSwitcher() {
             className="gap-2 cursor-pointer text-muted-foreground hover:text-foreground text-sm focus:bg-muted font-medium rounded-[6px]"
           >
             <Plus className="h-3.5 w-3.5 text-primary" />
-            Buat Workspace Baru
+            Create New Workspace
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

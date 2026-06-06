@@ -32,9 +32,8 @@ export function VerificationHeader({
         </div>
 
         <p className="text-xs text-muted-foreground max-w-2xl leading-relaxed pl-0 md:pl-9">
-          Monitor file integrity, proof status, and verification history across
-          your workspace. Seluruh data terikat langsung ke dalam jangkar
-          kriptografis publik secara transparan.
+          Monitor file integrity, proof status, and verification history in your
+          workspace. All data is transparently anchored on-chain.
         </p>
       </div>
 

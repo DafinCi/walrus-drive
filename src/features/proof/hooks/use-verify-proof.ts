@@ -26,7 +26,7 @@ export function useVerifyProof(slug: string) {
       }
 
       if (!res.ok) {
-        throw new Error(data.error || "Gagal memverifikasi file");
+        throw new Error(data.error || "File verification failed");
       }
 
       return data;
@@ -35,13 +35,13 @@ export function useVerifyProof(slug: string) {
       // Menampilkan loading toast yang interaktif
       return {
         toastId: toast.loading(
-          "Memverifikasi cryptographic proof di Sui Network...",
+          "Verifying cryptographic proof on Sui Network...",
         ),
       };
     },
     onSuccess: (data, variables, context) => {
       // 1. Update notifikasi menjadi sukses
-      toast.success("Integritas kriptografis terverifikasi!", {
+      toast.success("Integrity verified", {
         id: context?.toastId,
         description: `Checkpoint: ${data.data.checkpoint}`,
       });
@@ -59,13 +59,12 @@ export function useVerifyProof(slug: string) {
     },
     onError: (error: any, variables, context) => {
       if (error.message === "PENDING_CHAIN") {
-        toast.info("Transaksi masih diproses oleh validator Sui.", {
+        toast.info("Transaction is still being processed by Sui validators.", {
           id: context?.toastId,
-          description:
-            "Silakan coba klik verifikasi lagi beberapa saat kemudian.",
+          description: "Try verifying again in a few moments.",
         });
       } else {
-        toast.error("Verifikasi Gagal", {
+        toast.error("Verification Failed", {
           id: context?.toastId,
           description: error.message,
         });

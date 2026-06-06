@@ -8,7 +8,7 @@ export async function GET(request: Request) {
 
     if (!workspaceId) {
       return NextResponse.json(
-        { success: false, error: "Workspace ID wajib disertakan." },
+        { success: false, error: "Missing required parameter: Workspace ID." },
         { status: 400 },
       );
     }

@@ -3,35 +3,33 @@ export default function DocsIntroductionPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">
-          Pengantar WalSpace
+          Introduction to WalSpace
         </h1>
         <p className="text-zinc-400 text-sm">
-          Platform kolaborasi dan penyimpanan terdesentralisasi berbasis
-          enkripsi mutakhir.
+          A decentralized collaboration and storage platform powered by advanced
+          encryption technology.
         </p>
       </div>
 
       <div className="h-[1px] bg-zinc-900 w-full" />
 
       <section className="space-y-3">
-        <h2 className="text-base font-bold text-white">
-          Latar Belakang Proyek
-        </h2>
+        <h2 className="text-base font-bold text-white">Project Background</h2>
         <p className="text-zinc-400 text-xs leading-relaxed">
-          SaaS kolaboratif tradisional (seperti Google Drive) memegang kendali
-          penuh atas file Anda pada server terpusat.
+          Traditional collaborative SaaS platforms (such as Google Drive)
+          maintain full control over your files through centralized servers.
           <span className="text-zinc-200">
             {" "}
-            WalSpace hadir sebagai solusi hibrida
+            WalSpace introduces a hybrid solution
           </span>{" "}
-          yang menggabungkan kenyamanan manajemen tim ala SaaS modern dengan
-          keamanan mutakhir infrastruktur Web3.
+          that combines the convenience of modern SaaS-style team management
+          with the advanced security of Web3 infrastructure.
         </p>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-base font-bold text-white">
-          Pilar Teknologi Utama
+          Core Technology Pillars
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
           <div className="p-4 bg-zinc-950 border border-zinc-900 rounded-[6px]">
@@ -39,18 +37,19 @@ export default function DocsIntroductionPage() {
               1. Walrus Blob Storage
             </h4>
             <p className="text-[11px] text-zinc-500 leading-relaxed">
-              Berkas ditiadakan dari server tunggal, melainkan dipecah
-              (sharding) secara matematis dan diamankan ke simpul
-              desentralisasi.
+              Files are no longer stored on a single server. Instead, they are
+              mathematically fragmented through sharding and secured across
+              decentralized nodes.
             </p>
           </div>
           <div className="p-4 bg-zinc-950 border border-zinc-900 rounded-[6px]">
             <h4 className="text-xs font-bold text-white mb-1">
-              2. Otentikasi Kriptografi Sui
+              2. Sui Cryptographic Authentication
             </h4>
             <p className="text-[11px] text-zinc-500 leading-relaxed">
-              Identitas pengguna diikat dengan tanda tangan dompet digital,
-              memetakan kepemilikan data tanpa memerlukan password tradisional.
+              User identities are secured through digital wallet signatures,
+              establishing verifiable data ownership without relying on
+              traditional passwords.
             </p>
           </div>
         </div>

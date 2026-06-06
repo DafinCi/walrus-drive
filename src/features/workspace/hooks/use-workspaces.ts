@@ -32,7 +32,7 @@ export function useWorkspaces(
       );
 
       if (!res.ok) {
-        throw new Error("Gagal memuat daftar ruang kerja.");
+        throw new Error("Unable to load workspace data.");
       }
       return res.json();
     },

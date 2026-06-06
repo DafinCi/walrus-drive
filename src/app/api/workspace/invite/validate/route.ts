@@ -21,7 +21,9 @@ export function useGetWorkspaceInvites(workspaceId: string) {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        throw new Error(result.error || "Gagal mengambil daftar undangan.");
+        throw new Error(
+          result.error || "Unable to load the list of invitations.",
+        );
       }
 
       return result.invites;
@@ -52,7 +54,7 @@ export function useCreateInvite() {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        throw new Error(result.error || "Gagal memproses pembuatan undangan.");
+        throw new Error(result.error || "Unable to create the invitation.");
       }
 
       return result; // { success: true, token, expiresAt }
@@ -87,7 +89,9 @@ export function useRevokeInvite() {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        throw new Error(result.error || "Gagal mencabut izin tautan.");
+        throw new Error(
+          result.error || "Unable to revoke access for this invitation link.",
+        );
       }
 
       return result;

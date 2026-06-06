@@ -2,7 +2,6 @@
 
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/services/supabase/admin";
-// 🌟 INJEKSI LOGGER: Hubungkan cross-feature system ke modul aktivitas
 import { activityLogger } from "@/features/activity/service/activity-logger";
 
 export async function POST(request: Request) {
@@ -22,7 +21,6 @@ export async function POST(request: Request) {
       storageEpoch,
     } = body;
 
-    // 1. Validasi input minimal
     if (!blobId || !walletAddress || !workspaceId) {
       return NextResponse.json(
         { error: "Missing required metadata fields" },
@@ -30,7 +28,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Validasi Hak Akses (Membership Verification)
     const { data: membership, error: membershipError } = await supabaseAdmin
       .from("workspace_members")
       .select("role")
@@ -41,7 +38,7 @@ export async function POST(request: Request) {
     if (membershipError) {
       console.error("Membership Check Error:", membershipError);
       return NextResponse.json(
-        { error: "Gagal memverifikasi hak akses ruang kerja." },
+        { error: "Unable to verify workspace access permissions." },
         { status: 500 },
       );
     }
@@ -50,7 +47,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            "Akses ditolak. Wallet Anda tidak terdaftar di ruang kerja ini.",
+            "Access denied. This wallet does not have permission to access this workspace.",
         },
         { status: 403 },
       );

@@ -42,7 +42,7 @@ export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
   const handleCopy = (text: string, key: string) => {
     navigator.clipboard.writeText(text);
     setCopiedKey(key);
-    toast.success("Berhasil disalin ke clipboard");
+    toast.success("Copied to clipboard");
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
@@ -52,10 +52,11 @@ export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-sm font-bold text-foreground">
             <FileText className="h-4 w-4 text-primary" />
-            Meta Inspector Berkas
+            File Meta Inspector
           </DialogTitle>
           <DialogDescription className="text-[11px] text-muted-foreground">
-            Audit data integritas kriptografi dan manifes on-chain Sui & Walrus.
+            Audit cryptographic integrity and on-chain manifests for Sui &
+            Walrus.
           </DialogDescription>
         </DialogHeader>
 
@@ -83,7 +84,7 @@ export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
                 <Wallet className="w-3 h-3 text-muted-foreground" />
                 {account?.address
                   ? formatTruncateWallet(account.address)
-                  : "Tidak diketahui"}
+                  : "Unknown"}
               </span>
             </div>
 
@@ -98,7 +99,7 @@ export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
           {/* Section 2: Data Kriptografi On-Chain */}
           <div className="space-y-2.5">
             <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-              Manifes Kriptografi & Blockchain
+              Cryptographic & Blockchain Manifest
             </p>
 
             {/* Blob ID */}
@@ -138,7 +139,7 @@ export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
             <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground pt-1">
               <Clock className="h-3 w-3" />
               <span>
-                Didaftarkan pada:{" "}
+                Registered at:{" "}
                 {new Date(item.createdAt).toLocaleString("id-ID")}
               </span>
             </div>
@@ -152,7 +153,7 @@ export function UploadModal({ item, isOpen, onClose }: UploadModalProps) {
             onClick={onClose}
             className="h-8 cursor-pointer text-xs"
           >
-            Tutup Panel
+            Close Panel
           </Button>
         </div>
       </DialogContent>

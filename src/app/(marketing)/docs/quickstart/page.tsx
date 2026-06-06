@@ -64,11 +64,11 @@ export default function QuickstartPage() {
       {/* Header Halaman */}
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">
-          Panduan Memulai Cepat
+          Quick Start Guide
         </h1>
         <p className="text-zinc-400 text-sm">
-          Siapkan lingkungan lokal Anda dan mulai berinteraksi dengan Walrus
-          Protocol dalam hitungan menit.
+          Get your local environment up and running and begin building with the
+          Walrus Protocol in minutes.
         </p>
       </div>
 

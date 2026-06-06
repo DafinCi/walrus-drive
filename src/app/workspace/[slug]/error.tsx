@@ -19,7 +19,7 @@ export default function WorkspaceError({
     <div className="flex flex-col items-center justify-center min-h-[80vh] space-y-4 p-8 text-center">
       <AlertCircle className="w-12 h-12 text-red-500" />
       <h2 className="text-xl font-bold text-gray-200">
-        Waduh, terjadi kesalahan!
+        Oops, an error occurred!
       </h2>
       <p className="text-sm text-gray-400 max-w-md">
         {error.message || "Gagal memuat halaman workspace."}
@@ -28,7 +28,7 @@ export default function WorkspaceError({
         onClick={() => reset()}
         className="mt-4 px-6 py-2 border border-gray-700 bg-gray-900 hover:bg-gray-800 text-white rounded-[6px] transition"
       >
-        Coba Muat Ulang
+        Try Reload
       </button>
     </div>
   );

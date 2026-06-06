@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
     if (!workspaceId || !targetWallet || !actorWallet) {
       return NextResponse.json(
-        { success: false, error: "Payload tidak lengkap." },
+        { success: false, error: "The payload is incomplete." },
         { status: 400 },
       );
     }
@@ -27,18 +27,18 @@ export async function POST(request: Request) {
 
     if (!actor)
       return NextResponse.json(
-        { success: false, error: "Aktor tidak terdaftar." },
+        { success: false, error: "The requesting user is not registered." },
         { status: 403 },
       );
     if (!target)
       return NextResponse.json(
-        { success: false, error: "Target tidak ditemukan." },
+        { success: false, error: "The specified target could not be found." },
         { status: 404 },
       );
     if (target.role === "admin")
       return NextResponse.json({
         success: true,
-        message: "Sudah berstatus Admin.",
+        message: "This member is already an Admin.",
       });
 
     // 🌟 FIX 2: Validasi langsung. Hanya Owner yang bisa Promote
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
         {
           success: false,
           error:
-            "Ditolak. Hanya pemilik penuh (Owner) yang berhak mengangkat Admin baru.",
+            "Access denied. Only the workspace Owner can appoint new Admins.",
         },
         { status: 403 },
       );
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: `Berhasil mengangkat ${targetWallet.slice(0, 6)}... menjadi Admin.`,
+      message: `${targetWallet.slice(0, 6)}... has been successfully promoted to Admin.`,
     });
   } catch (error: any) {
     return NextResponse.json(

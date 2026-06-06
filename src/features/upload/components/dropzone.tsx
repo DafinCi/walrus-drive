@@ -29,8 +29,8 @@ export function Dropzone({ workspaceId, autoOpen = false }: DropzoneProps) {
 
   const processFile = async (file: File) => {
     if (!account) {
-      toast.error("Koneksi Diperlukan", {
-        description: "Silakan hubungkan wallet Sui Anda terlebih dahulu.",
+      toast.error("Connection needed", {
+        description: "Connect your Sui wallet first.",
       });
       return;
     }
@@ -87,7 +87,7 @@ export function Dropzone({ workspaceId, autoOpen = false }: DropzoneProps) {
           onChange={onFileInput}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
           disabled={!account}
-          title="Pilih file untuk diupload"
+          title="Choose a file to upload"
         />
 
         <div className="flex flex-col items-center space-y-3 pointer-events-none text-center select-none">
@@ -96,10 +96,10 @@ export function Dropzone({ workspaceId, autoOpen = false }: DropzoneProps) {
           />
           <div>
             <p className="font-medium text-sm text-foreground">
-              Drag & drop file Anda ke sini
+              Drop your file here
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Atau klik untuk menelusuri berkas komputer
+              Or click to browse your files
             </p>
           </div>
         </div>
