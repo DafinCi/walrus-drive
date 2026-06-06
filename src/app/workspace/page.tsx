@@ -77,7 +77,7 @@ export default function WorkspaceHubPage() {
         <div className="flex-1 flex flex-col items-center justify-center gap-3">
           <Loader2 className="h-7 w-7 text-primary animate-spin" />
           <p className="text-xs text-muted-foreground font-medium animate-pulse">
-            Memuat manifes otorisasi ruang kerja...
+            Load Workspace...
           </p>
         </div>
       </div>
