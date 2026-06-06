@@ -163,7 +163,7 @@ export function FileRow({ file, onVerifyClick }: FileRowProps) {
               ) : (
                 <Copy className="h-3.5 w-3.5" />
               )}
-              <span>{copied ? "Tersalin!" : "Salin Blob ID"}</span>
+              <span>{copied ? "Tersalin!" : "Copy Blob ID"}</span>
             </DropdownMenuItem>
 
             <DropdownMenuItem asChild className="gap-2 cursor-pointer text-sm">
@@ -183,7 +183,7 @@ export function FileRow({ file, onVerifyClick }: FileRowProps) {
                 download={file.file_name}
               >
                 <Download className="h-3.5 w-3.5" />
-                <span>Unduh File</span>
+                <span>Download File</span>
               </a>
             </DropdownMenuItem>
 

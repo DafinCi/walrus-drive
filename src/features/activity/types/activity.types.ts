@@ -8,10 +8,10 @@ export type ActivityType =
   | "workspace_created"
   | "file_uploaded"
   | "file_verified"
-  | "file_verification_failed" // 🌟 TAMBAHAN
-  | "file_reverified" // 🌟 TAMBAHAN
-  | "file_integrity_passed" // 🌟 TAMBAHAN
-  | "file_integrity_failed" // 🌟 TAMBAHAN
+  | "file_verification_failed"
+  | "file_reverified"
+  | "file_integrity_passed"
+  | "file_integrity_failed"
   | "invite_created"
   | "member_joined"
   | "member_promoted"
@@ -38,26 +38,46 @@ export interface ActivityActor {
 export interface ActivityTarget {
   id: string;
   name: string;
-  type: "file" | "member" | "workspace" | "invite";
+  type: "file" | "member" | "workspace" | "invite" | "verification";
 }
 
 /**
  * 🌟 Strict Metadata Typing Per Event (DX & Type Safety Boost)
- * Keeps code clean without creating dozens of separate entity interfaces.
+ * Updated to match the snake_case data injected by ActivityLogger.
  */
 export type ActivityMetadata =
   | { type: "workspace_created"; size?: never; checkpoint?: never }
-  | { type: "file_uploaded"; size: number; mimeType?: string }
+  | {
+      type: "file_uploaded";
+      file_name: string;
+      size: number;
+      mimeType?: string;
+    }
   | {
       type: "file_verified";
+      file_name: string;
       checkpoint: string;
-      txDigest: string;
-      network: "sui-mainnet" | "sui-testnet";
+      tx_digest: string;
+      network?: "sui-mainnet" | "sui-testnet";
     }
-  | { type: "invite_created"; expiresIn: string; role: string }
-  | { type: "member_joined"; joinedVia: "link" | "direct" }
-  | { type: "member_promoted"; fromRole: string; toRole: string }
-  | { type: "member_removed"; reason?: string };
+  | {
+      type: "file_verification_failed";
+      file_name: string;
+      reason: string;
+      tx_digest?: string;
+    }
+  | { type: "file_reverified"; file_name: string; checkpoint: string }
+  | { type: "file_integrity_passed"; file_name: string }
+  | { type: "file_integrity_failed"; file_name: string; severity?: string }
+  | { type: "invite_created"; invited_role: string; expiresIn?: string }
+  | { type: "member_joined"; role: string; joinedVia?: "link" | "direct" }
+  | {
+      type: "member_promoted";
+      old_role: string;
+      new_role: string;
+      target_wallet?: string;
+    }
+  | { type: "member_removed"; target_wallet?: string; reason?: string };
 
 /**
  * 🌟 Main Activity Log Entity Structure
@@ -101,9 +121,9 @@ export interface CreateActivityInput {
     | "FILE_UPLOADED"
     | "FILE_VERIFIED"
     | "FILE_VERIFICATION_FAILED"
-    | "FILE_REVERIFIED" // 🌟 TAMBAHAN
-    | "FILE_INTEGRITY_PASSED" // 🌟 TAMBAHAN
-    | "FILE_INTEGRITY_FAILED" // 🌟 TAMBAHAN
+    | "FILE_REVERIFIED"
+    | "FILE_INTEGRITY_PASSED"
+    | "FILE_INTEGRITY_FAILED"
     | "MEMBER_INVITED"
     | "MEMBER_JOINED"
     | "INVITE_CREATED"

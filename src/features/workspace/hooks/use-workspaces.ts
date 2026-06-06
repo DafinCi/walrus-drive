@@ -18,7 +18,7 @@ export interface WorkspaceHubItem {
 // 🌟 PERUBAHAN: Menerima parameter sort
 export function useWorkspaces(
   walletAddress: string | undefined,
-  sort: WorkspaceSortOption,
+  sort: WorkspaceSortOption = "recent" as WorkspaceSortOption,
 ) {
   return useQuery<WorkspaceHubItem[]>({
     // 🌟 PERUBAHAN: Masukkan sort ke queryKey agar TanStack Query tahu kapan harus fetch ulang
