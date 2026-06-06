@@ -78,7 +78,7 @@ export function InviteModal({
   const handleGenerateLink = () => {
     if (!account?.address) {
       toast.error("Aksi Ditolak", {
-        description: "Hubungkan wallet Sui Anda terlebih dahulu.",
+        description: "Please connect your Sui wallet first.",
       });
       return;
     }
@@ -98,21 +98,19 @@ export function InviteModal({
           setInviteUrl(`${origin}/workspace/join/${result.token}`);
           setExpiresAtDate(result.expiresAt);
 
-          toast.success("Tautan Undangan Aktif!", {
-            description: "Berhasil didaftarkan ke kluster database.",
+          toast.success("Invitation Link Active!", {
+            description: "Successfully registered to database cluster.",
           });
         },
         onError: (error) => {
-          toast.error("Gagal Membuat Undangan", {
-            description:
-              error.message || "Pastikan Anda adalah Owner atau Admin.",
+          toast.error("Failed to create invitation", {
+            description: error.message || "You must be an Owner or Admin.",
           });
         },
       },
     );
   };
 
-  // 3. HANDLER: Mencabut / Revoke Tautan (HTTP DELETE)
   const handleRevokeLink = (token: string) => {
     if (!account?.address) return;
 
@@ -124,9 +122,8 @@ export function InviteModal({
       },
       {
         onSuccess: () => {
-          toast.success("Tautan Dicabut", {
-            description:
-              "Akses cryptographic token tersebut berhasil dimatikan.",
+          toast.success("Link Revoked", {
+            description: "Cryptographic token access disabled successfully.",
           });
           if (inviteUrl.endsWith(token)) {
             setInviteUrl("");
@@ -134,26 +131,25 @@ export function InviteModal({
           }
         },
         onError: (error) => {
-          toast.error("Gagal Mencabut Tautan", {
-            description: error.message || "Terjadi kendala otoritas hak akses.",
+          toast.error("Failed to revoke link", {
+            description: error.message || "Permission error occurred.",
           });
         },
       },
     );
   };
 
-  // 4. HANDLER: Salin ke Clipboard
   const handleCopy = async () => {
     if (!inviteUrl) return;
     try {
       await navigator.clipboard.writeText(inviteUrl);
       setCopied(true);
-      toast.success("Tersalin!", {
-        description: "Tautan undangan disalin ke clipboard.",
+      toast.success("Copied!", {
+        description: "Invitation link copied to clipboard.",
       });
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Gagal menyalin", err);
+      console.error("Failed to copy", err);
     }
   };
 
@@ -177,11 +173,10 @@ export function InviteModal({
         <DialogHeader className="shrink-0 space-y-1">
           <DialogTitle className="text-lg font-bold tracking-tight text-foreground flex items-center gap-2 select-none">
             <Link2 className="h-4 w-4 text-primary" />
-            Pengaturan Akses Workspace
+            Access Settings
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-xs leading-relaxed">
-            Kelola otorisasi tautan kriptografi eksternal dan hak tata kelola
-            struktural anggota tim kolaborasi Anda.
+            Manage cryptographic link access and team governance permissions.
           </DialogDescription>
         </DialogHeader>
 
@@ -196,7 +191,7 @@ export function InviteModal({
             }`}
           >
             <Link2 className="h-3.5 w-3.5" />
-            Tautan Akses
+            Access Link
           </button>
           <button
             onClick={() => setActiveTab("members")}
@@ -207,7 +202,7 @@ export function InviteModal({
             }`}
           >
             <Users className="h-3.5 w-3.5" />
-            Anggota Tim
+            Members
           </button>
         </div>
 
@@ -223,7 +218,7 @@ export function InviteModal({
                     <div className="space-y-2">
                       <label className="text-xs font-semibold text-foreground/80 flex items-center gap-1.5">
                         <Users className="h-3.5 w-3.5 text-muted-foreground" />
-                        Peran Anggota (Role)
+                        Member Role
                       </label>
                       <Select
                         value={role}
@@ -234,10 +229,10 @@ export function InviteModal({
                           <SelectValue placeholder="Pilih Peran" />
                         </SelectTrigger>
                         <SelectContent className="text-xs">
-                          <SelectItem value="member">Member (Biasa)</SelectItem>
-                          <SelectItem value="admin">
-                            Admin (Pengelola)
+                          <SelectItem value="member">
+                            Member (Standard)
                           </SelectItem>
+                          <SelectItem value="admin">Admin (Manager)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -245,7 +240,7 @@ export function InviteModal({
                     <div className="space-y-2">
                       <label className="text-xs font-semibold text-foreground/80 flex items-center gap-1.5">
                         <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                        Masa Berlaku Tautan
+                        Link validity period
                       </label>
                       <Select
                         value={expiresInHours}
@@ -256,10 +251,10 @@ export function InviteModal({
                           <SelectValue placeholder="Pilih masa kedaluwarsa" />
                         </SelectTrigger>
                         <SelectContent className="text-xs">
-                          <SelectItem value="1">1 Jam</SelectItem>
-                          <SelectItem value="12">12 Jam</SelectItem>
-                          <SelectItem value="24">1 Hari (24 Jam)</SelectItem>
-                          <SelectItem value="168">7 Hari (1 Minggu)</SelectItem>
+                          <SelectItem value="1">1 Hour</SelectItem>
+                          <SelectItem value="12">12 Hours</SelectItem>
+                          <SelectItem value="24">1 Day (24 Hours)</SelectItem>
+                          <SelectItem value="168">7 Days (1 Week)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -270,7 +265,7 @@ export function InviteModal({
                   <div className="space-y-3 animate-in fade-in-50 slide-in-from-bottom-1 duration-200">
                     <div className="space-y-1.5">
                       <label className="text-xs font-semibold text-foreground/80">
-                        Tautan Undangan Baru Anda
+                        Your New Invitation Link
                       </label>
                       <div className="flex gap-2">
                         <div className="flex-1 bg-muted/50 border border-border rounded-[6px] h-9.5 px-3 flex items-center min-w-0">
@@ -296,7 +291,7 @@ export function InviteModal({
                       <div className="flex items-center gap-1.5 text-[11px] text-amber-500 font-medium bg-amber-500/5 border border-amber-500/10 rounded-[6px] p-2">
                         <ShieldAlert className="h-3.5 w-3.5 shrink-0" />
                         <span className="truncate">
-                          Kedaluwarsa otomatis:{" "}
+                          Automatically expires:{" "}
                           {new Date(expiresAtDate).toLocaleString("id-ID", {
                             dateStyle: "short",
                             timeStyle: "short",
@@ -313,7 +308,7 @@ export function InviteModal({
               {/* SEKSI DAFTAR TAUTAN AKTIF */}
               <div className="space-y-2.5">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider select-none">
-                  Tautan Aktif Saat Ini ({invites.length})
+                  Current Active Link ({invites.length})
                 </h4>
 
                 <div className="space-y-2 max-h-[200px] overflow-y-auto pr-0.5">
@@ -321,13 +316,13 @@ export function InviteModal({
                     <div className="flex flex-col items-center justify-center py-6 gap-2">
                       <Loader2 className="h-5 w-5 text-primary animate-spin" />
                       <span className="text-xs text-muted-foreground">
-                        Memuat manifest token...
+                        Loading token manifest...
                       </span>
                     </div>
                   ) : invites.length === 0 ? (
                     <div className="text-center py-8 border border-dashed border-border rounded-[6px] bg-muted/10">
                       <p className="text-xs text-muted-foreground">
-                        Tidak ada tautan undangan aktif.
+                        No active invitation links found.
                       </p>
                     </div>
                   ) : (
@@ -368,7 +363,7 @@ export function InviteModal({
             onClick={() => handleClose(false)}
             className="text-xs h-9 cursor-pointer"
           >
-            {inviteUrl || activeTab === "members" ? "Selesai" : "Batal"}
+            {inviteUrl || activeTab === "members" ? "Done" : "Cancel"}
           </Button>
 
           {!inviteUrl && activeTab === "invites" && (
@@ -381,10 +376,10 @@ export function InviteModal({
               {isGenerating ? (
                 <>
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  Membuat...
+                  Creating...
                 </>
               ) : (
-                "Buat Tautan"
+                "Create Link"
               )}
             </Button>
           )}

@@ -152,7 +152,7 @@ export function WalletConnectButton() {
         className="gap-2 min-w-[120px]"
       >
         <Loader2 className="h-3.5 w-3.5 animate-spin opacity-50" />
-        <span>Memuat...</span>
+        <span>Loading...</span>
       </Button>
     );
   }

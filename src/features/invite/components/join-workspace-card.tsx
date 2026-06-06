@@ -41,10 +41,10 @@ export function JoinWorkspaceCard({
           </div>
           <div className="space-y-1">
             <h2 className="text-xl font-extrabold tracking-tight text-foreground">
-              Bergabung ke Workspace
+              Join Workspace
             </h2>
             <p className="text-xs text-muted-foreground">
-              Anda diundang untuk berkolaborasi di dalam kluster terenkripsi.
+              You’re invited to collaborate in an encrypted cluster.
             </p>
           </div>
         </div>
@@ -53,7 +53,7 @@ export function JoinWorkspaceCard({
         <div className="bg-muted/40 border border-border/60 rounded-[6px] p-3.5 space-y-2.5">
           <div className="flex justify-between items-center text-xs">
             <span className="text-muted-foreground font-medium flex items-center gap-1">
-              <FolderKanban className="h-3.5 w-3.5 shrink-0" /> Nama:
+              <FolderKanban className="h-3.5 w-3.5 shrink-0" /> Name:
             </span>
             <span className="font-bold text-foreground truncate max-w-[200px]">
               {workspaceName}
@@ -68,7 +68,7 @@ export function JoinWorkspaceCard({
               ) : (
                 <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
               )}
-              Peran Anda:
+              Your Role:
             </span>
             <span
               className={`font-bold capitalize ${role === "admin" ? "text-amber-500" : "text-primary"}`}
@@ -79,7 +79,7 @@ export function JoinWorkspaceCard({
 
           <div className="flex justify-between items-center text-xs">
             <span className="text-muted-foreground font-medium flex items-center gap-1">
-              <Users className="h-3.5 w-3.5 shrink-0" /> Owner Wallet:
+              <Users className="h-3.5 w-3.5 shrink-0" /> Wallet Owner:
             </span>
             <span className="font-mono text-foreground/80 bg-background px-1.5 py-0.5 rounded border border-border/40 select-all">
               {truncatedOwner}
@@ -92,13 +92,12 @@ export function JoinWorkspaceCard({
           {!isConnected ? (
             <div className="space-y-3">
               <div className="text-center text-[11px] text-amber-500 font-medium bg-amber-500/5 border border-amber-500/10 rounded-[6px] p-2">
-                Hubungkan dompet Sui Anda terlebih dahulu untuk memverifikasi
-                hak akses tanda tangan digital Anda.
+                Connect your Sui wallet to verify your digital signature access.
               </div>
               <div className="flex justify-center [&_button]:w-full [&_button]:h-10 [&_button]:text-xs [&_button]:font-semibold [&_button]:cursor-pointer">
                 <ConnectButton
                   style={{ width: "100%" }}
-                  connectText="Hubungkan Wallet Sui"
+                  connectText="Connect Sui Wallet"
                 />
               </div>
             </div>
@@ -111,12 +110,12 @@ export function JoinWorkspaceCard({
               {isJoining ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Mendaftarkan Otoritas Akses...
+                  Registering Access Authority...
                 </>
               ) : (
                 <>
                   <Wallet className="h-4 w-4" />
-                  Terima Undangan & Gabung
+                  Accept Invitation & Join
                 </>
               )}
             </Button>

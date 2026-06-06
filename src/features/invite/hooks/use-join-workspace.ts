@@ -28,7 +28,9 @@ export function useValidateInvite(token: string, walletAddress?: string) {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        throw new Error(result.error || "Gagal memproses otentikasi tautan.");
+        throw new Error(
+          result.error || "Failed to process link authentication.",
+        );
       }
       return result;
     },
@@ -56,7 +58,7 @@ export function useJoinWorkspace() {
 
       const result = await response.json();
       if (!response.ok || !result.success) {
-        throw new Error(result.error || "Gagal mendaftarkan diri Anda.");
+        throw new Error(result.error || "Failed to register yourself.");
       }
       return result;
     },

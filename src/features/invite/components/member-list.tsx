@@ -38,7 +38,7 @@ export function MemberList({
       <div className="flex flex-col items-center justify-center py-12 gap-2">
         <Loader2 className="h-5 w-5 text-primary animate-spin" />
         <span className="text-xs text-muted-foreground">
-          Menghubungkan kluster repositori tim...
+          Connecting team cluster...
         </span>
       </div>
     );
@@ -48,9 +48,7 @@ export function MemberList({
     return (
       <div className="text-center py-10 border border-dashed border-border rounded-[6px] bg-muted/10">
         <Users2 className="mx-auto h-6 w-6 text-muted-foreground/60 mb-2" />
-        <p className="text-xs text-muted-foreground">
-          Tidak ada anggota yang terdaftar.
-        </p>
+        <p className="text-xs text-muted-foreground">No members registered.</p>
       </div>
     );
   }
@@ -59,7 +57,7 @@ export function MemberList({
     <div className="space-y-2 max-h-[340px] overflow-y-auto pr-0.5 scrollbar-thin">
       <div className="flex justify-between items-center select-none pb-1">
         <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-          Daftar Kolaborator Aktif ({membersWithMeta.length})
+          Active collaborators ({membersWithMeta.length})
         </h4>
       </div>
       <div className="space-y-1.5">

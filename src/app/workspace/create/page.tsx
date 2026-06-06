@@ -32,7 +32,7 @@ export default function CreateWorkspacePage() {
         {/* Footer Monokromatik */}
         <div className="text-left">
           <p className="text-[10px] text-muted-foreground/50 font-mono">
-            WalSpace Protocol v1.0.0 • Production Environment
+            WalSpace • Production Environment
           </p>
         </div>
       </div>

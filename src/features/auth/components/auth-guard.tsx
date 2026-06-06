@@ -21,7 +21,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       <div className="flex h-[60vh] w-full flex-col items-center justify-center gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground/60" />
         <p className="text-sm text-muted-foreground animate-pulse font-medium">
-          Memverifikasi identitas kriptografi...
+          Verifying cryptographic identity...
         </p>
       </div>
     );
@@ -39,12 +39,11 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
           <div className="space-y-2">
             <h2 className="text-2xl font-bold tracking-tight text-foreground">
-              Akses Terkunci
+              Access blocked
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Ruang kerja ini dilindungi oleh autentikasi Web3. Silakan
-              hubungkan dompet Anda untuk memverifikasi identitas dan
-              melanjutkan sesi.
+              This workspace requires Web3 authentication. Connect your wallet
+              to continue.
             </p>
           </div>
 

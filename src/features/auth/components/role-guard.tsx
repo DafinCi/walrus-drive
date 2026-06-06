@@ -36,7 +36,7 @@ export function RoleGuard({
 
   // Jika activeWorkspaceId kosong/invalid, jangan render untuk mencegah error 500
   if (!activeWorkspaceId) {
-    console.warn("RoleGuard butuh valid workspaceId (UUID), bukan slug.");
+    console.warn("Invalid workspace ID. UUID required instead of slug.");
     return null;
   }
 

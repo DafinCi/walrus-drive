@@ -83,7 +83,7 @@ export function InviteLinkCard({
       });
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Gagal menyalin", err);
+      console.error("Copy failed", err);
     }
   };
 
@@ -98,7 +98,7 @@ export function InviteLinkCard({
           <span
             className={`text-xs font-mono truncate select-all ${isExpired ? "text-muted-foreground" : "text-foreground"}`}
           >
-            {inviteUrl || "Memuat tautan..."}
+            {inviteUrl || "Loading link..."}
           </span>
         </div>
 
@@ -109,7 +109,7 @@ export function InviteLinkCard({
             onClick={handleCopy}
             disabled={isExpired}
             className="h-8 w-8 cursor-pointer"
-            title="Salin Tautan"
+            title="Copy Link"
           >
             {copied ? (
               <Check className="h-3.5 w-3.5 text-primary" />
@@ -145,7 +145,7 @@ export function InviteLinkCard({
             {timeLeft}
             {!isExpired && (
               <span className="text-muted-foreground font-normal ml-1">
-                • Kedaluwarsa{" "}
+                • Expired{" "}
                 {new Date(expiresAt).toLocaleDateString("id-ID", {
                   day: "numeric",
                   month: "short",

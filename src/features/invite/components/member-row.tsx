@@ -82,29 +82,28 @@ export function MemberRow({
       { workspaceId, targetWallet: member.wallet_address, actorWallet },
       {
         onSuccess: (res) =>
-          toast.success("Otoritas Diperbarui", { description: res.message }),
+          toast.success("Permissions updated", { description: res.message }),
         onError: (err) =>
-          toast.error("Gagal Mempromosikan", { description: err.message }),
+          toast.error("Failed to promote", { description: err.message }),
       },
     );
   };
 
   const handleRemove = () => {
     if (!actorWallet || isMutating) return;
-    toast.loading("Memutuskan akses kriptografi...", {
+    toast.loading("Revoking cryptographic access...", {
       id: `remove-${member.id}`,
     });
     removeMutation.mutate(
       { workspaceId, targetWallet: member.wallet_address, actorWallet },
       {
         onSuccess: () =>
-          toast.success("Akses Dicabut", {
+          toast.success("Access Revoked", {
             id: `remove-${member.id}`,
-            description:
-              "Kolaborator berhasil dikeluarkan dari struktur organisasi.",
+            description: "Collaborator removed from organization.",
           }),
         onError: (err) =>
-          toast.error("Aksi Gagal", {
+          toast.error("Action Failed", {
             id: `remove-${member.id}`,
             description: err.message,
           }),
@@ -127,7 +126,7 @@ export function MemberRow({
             </span>
             {member.isCurrentUser && (
               <span className="text-[10px] bg-primary/10 text-primary px-1 rounded font-sans font-medium select-none">
-                Anda
+                You
               </span>
             )}
           </div>
@@ -185,7 +184,7 @@ export function MemberRow({
                 onClick={handleRemove}
                 className="gap-2 cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10 py-1.5"
               >
-                <Trash2 className="h-3.5 w-3.5" /> Keluarkan Member
+                <Trash2 className="h-3.5 w-3.5" /> Kick Member
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

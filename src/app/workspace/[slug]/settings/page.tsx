@@ -1,42 +1,43 @@
-import { Settings, Save } from "lucide-react";
+import { Settings, Sparkles, Wrench } from "lucide-react";
 
 export default async function SettingsPage({
   params,
 }: {
-  params: Promise<{ workspaceId: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { workspaceId } = await params;
+  const { slug } = await params;
 
   return (
-    <div className="p-8 max-w-5xl mx-auto space-y-8">
-      <div className="flex items-center space-x-3 border-b border-gray-800 pb-5">
-        <Settings className="w-8 h-8 text-gray-400" />
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            Workspace Settings
-          </h1>
-          <p className="text-xs text-gray-400 font-mono ">
-            Konfigurasi • ID: {workspaceId}
-          </p>
+    <div className="flex flex-col items-center justify-center min-h-[75vh] p-8 max-w-3xl mx-auto">
+      {/* Visual Centerpiece */}
+      <div className="relative mb-8 group">
+        <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full transition-all duration-700 group-hover:bg-blue-500/30" />
+        <div className="relative bg-gray-900/50 border border-gray-800 p-6 rounded-[6px] flex items-center justify-center backdrop-blur-sm">
+          <Settings className="w-14 h-14 text-blue-400" />
         </div>
       </div>
 
-      <div className="bg-gray-900/40 border border-gray-800 p-6 rounded-[6px] space-y-6 max-w-xl">
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-2">
-            Nama Workspace
-          </label>
-          <input
-            type="text"
-            defaultValue="Workspace Utama Hackathon"
-            className="w-full bg-gray-950 border border-gray-700 rounded-[6px] px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition"
-          />
-        </div>
+      {/* Copywriting */}
+      <h1 className="text-3xl font-bold tracking-tight text-white mb-4 flex items-center gap-3">
+        Workspace Settings
+      </h1>
 
-        <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-[6px] transition font-medium text-sm">
-          <Save className="w-4 h-4" />
-          <span>Simpan Perubahan</span>
-        </button>
+      <p className="text-gray-400 text-center leading-relaxed mb-8 max-w-lg text-lg">
+        We are actively crafting advanced configuration modules, including
+        custom role definitions, environment variables, and deeper blockchain
+        integrations.
+        <br className="mb-4" />
+        <span className="text-gray-300 font-medium">
+          This module will be unlocked in the upcoming release.
+        </span>
+      </p>
+
+      {/* Technical Indicator */}
+      <div className="flex items-center gap-3 text-sm font-mono text-gray-500 bg-gray-900/40 px-5 py-2.5 border border-gray-800 rounded-[6px] shadow-inner">
+        <Wrench className="w-4 h-4 text-gray-400" />
+        <span>Target: {slug}</span>
+        <span className="w-1.5 h-1.5 rounded-full bg-yellow-500/80 animate-pulse" />
+        <span>Work in Progress</span>
       </div>
     </div>
   );
