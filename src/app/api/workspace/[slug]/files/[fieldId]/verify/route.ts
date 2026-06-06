@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyBlobTransaction } from "@/services/tatum/verification";
 import { createClient } from "@supabase/supabase-js";
-// 🌟 INJEKSI LOGGER
 import { activityLogger } from "@/features/activity/service/activity-logger";
 
 const supabaseAdmin = createClient(
@@ -11,10 +10,15 @@ const supabaseAdmin = createClient(
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { slug: string; fileId: string } },
+  { params }: { params: Promise<{ slug: string; fieldId: string }> },
 ) {
   try {
-    const { slug, fileId } = params;
+    // 🌟 PERBAIKAN 3: Kita harus await params terlebih dahulu
+    const resolvedParams = await params;
+
+    // Kita buat alias dari fieldId menjadi fileId supaya kode lu ke bawah tidak perlu diubah
+    const { slug, fieldId: fileId } = resolvedParams;
+
     const { txDigest } = await req.json();
 
     if (!txDigest) {

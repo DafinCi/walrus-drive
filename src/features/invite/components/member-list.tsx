@@ -2,10 +2,8 @@
 
 import { Loader2, Users2 } from "lucide-react";
 import { useWorkspaceMembers } from "@/features/workspace/hooks/use-workspace-members";
-import {
-  WorkspaceMemberWithMeta,
-  WorkspaceRole,
-} from "@/features/workspace/types/member.types";
+import { WorkspaceMemberWithMeta } from "@/features/workspace/types/member.types";
+import { WorkspaceRole } from "@/features/auth/types/auth.types";
 import { MemberRow } from "./member-row";
 
 interface MemberListProps {

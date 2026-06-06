@@ -3,10 +3,13 @@ import { supabaseAdmin } from "@/services/supabase/admin";
 
 export async function GET(
   request: Request,
-  { params }: { params: { token: string } },
+  // 🌟 PERBAIKAN: Ubah typing params menjadi Promise
+  { params }: { params: Promise<{ token: string }> },
 ) {
   try {
+    // 🌟 Ekstrak dari Promise
     const { token } = await params;
+
     const { searchParams } = new URL(request.url);
     const walletAddress = searchParams.get("walletAddress");
 
@@ -36,6 +39,7 @@ export async function GET(
     // 2. Cek apakah token sudah kedaluwarsa
     const isExpired =
       new Date(invite.expires_at).getTime() < new Date().getTime();
+
     if (isExpired) {
       return NextResponse.json({
         success: true,

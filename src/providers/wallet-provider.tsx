@@ -10,7 +10,10 @@ import type { ReactNode } from "react";
 // createNetworkConfig returns a typed network map — keeps network switching
 // easy later (mainnet, devnet) without restructuring the provider tree.
 const { networkConfig } = createNetworkConfig({
-  testnet: { url: "https://fullnode.testnet.sui.io:443" },
+  testnet: {
+    url: "https://fullnode.testnet.sui.io:443",
+    network: "testnet",
+  },
 });
 
 interface AppWalletProviderProps {

@@ -12,10 +12,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import {
-  WorkspaceMemberWithMeta,
-  WorkspaceRole,
-} from "@/features/workspace/types/member.types";
+import { WorkspaceMemberWithMeta } from "@/features/workspace/types/member.types";
+import { WorkspaceRole } from "@/features/auth/types/auth.types";
 import {
   usePromoteMember,
   useRemoveMember,

@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Search, X } from "lucide-react";
 
-export function SearchInput() {
+// 🌟 PERBAIKAN 1: Ekstrak logika utama menjadi komponen "Content"
+function SearchInputContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -56,5 +57,19 @@ export function SearchInput() {
         </button>
       )}
     </div>
+  );
+}
+
+// 🌟 PERBAIKAN 2: Export komponen utama yang membungkus Content dengan Suspense
+export function SearchInput() {
+  return (
+    // Fallback diset sebagai skeleton kotak input supaya UI nggak "lompat" saat loading
+    <Suspense
+      fallback={
+        <div className="relative w-full max-w-xs md:max-w-md h-9 bg-muted/40 border border-border rounded-[6px] animate-pulse" />
+      }
+    >
+      <SearchInputContent />
+    </Suspense>
   );
 }
