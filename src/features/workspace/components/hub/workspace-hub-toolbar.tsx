@@ -39,7 +39,7 @@ export function WorkspaceHubToolbar({
         <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Cari ruang kerja..."
+            placeholder="Search Workspace"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-9 bg-card border-border/70 focus-visible:ring-primary/50"
@@ -55,7 +55,7 @@ export function WorkspaceHubToolbar({
             >
               <ArrowUpDown className="h-3.5 w-3.5" />
               <span className="text-xs font-medium whitespace-nowrap">
-                Urutkan: {activeSortLabel}
+                Sort: {activeSortLabel}
               </span>
             </Button>
           </DropdownMenuTrigger>
