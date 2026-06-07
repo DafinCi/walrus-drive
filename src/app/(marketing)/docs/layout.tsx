@@ -7,17 +7,17 @@ export default function DocsNestedLayout({
   children: React.ReactNode;
 }) {
   const docMenus = [
-    { name: "Pengantar & Solusi", href: "/docs", icon: BookOpen },
-    { name: "Panduan Memulai", href: "/docs/quickstart", icon: Terminal },
-    { name: "Arsitektur & Walrus", href: "/docs/architecture", icon: Layers },
-    { name: "Integrasi Tatum API", href: "/docs/tatum", icon: Code2 },
+    { name: "Introduction & Solution", href: "/docs", icon: BookOpen },
+    { name: "Getting Started", href: "/docs/quickstart", icon: Terminal },
+    { name: "Architecture & Walrus", href: "/docs/architecture", icon: Layers },
+    { name: "Tatum API Integration", href: "/docs/tatum", icon: Code2 },
   ];
 
   return (
     <div className="max-w-6xl mx-auto pt-16 flex flex-col md:flex-row">
       <aside className="w-full md:w-60 shrink-0 border-b md:border-b-0 md:border-r border-zinc-900 p-6 space-y-4 md:sticky md:top-16 md:h-[calc(100vh-4rem)] overflow-y-auto">
         <div className="text-xs font-bold uppercase tracking-widest text-zinc-500 px-2">
-          Dokumentasi
+          Documentation
         </div>
         <nav className="flex flex-col space-y-1">
           {docMenus.map((menu) => (

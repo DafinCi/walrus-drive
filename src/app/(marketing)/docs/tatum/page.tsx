@@ -22,10 +22,10 @@ export default function TatumDocsPage() {
       method: "GET",
       url: "https://api.tatum.io/v3/sui/account/0x7a31...f9b2",
       description:
-        "Mengambil saldo asset dan metadata akun Sui Network pengguna secara real-time.",
+        "Fetches real-time Sui account balances and metadata using Tatum's high-performance RPC gateway.",
       response: {
         status: "success",
-        network: "sui-testnet",
+        network: "sui-mainnet",
         address: "0x7a31ef909a4b8c71d2eef234b92c81a2b3c4d5e6f",
         balance: {
           SUI: "142.50392",
@@ -39,7 +39,7 @@ export default function TatumDocsPage() {
       method: "GET",
       url: "https://api.tatum.io/v3/sui/tx/0x8a12...3c4d",
       description:
-        "Memverifikasi integritas manifes kriptografi dan stempel waktu file di blockchain Sui.",
+        "Verifies cryptographic manifest integrity and transaction block status directly from the Sui ledger.",
       response: {
         digest: "0x8a12f309a4b8c71d2eef234b92c81a2b3c4d5e6f",
         sender: "0x7a31ef909a4b8c71d2eef234b92c81a2b3c4d5e6f",
@@ -60,7 +60,7 @@ export default function TatumDocsPage() {
       method: "POST",
       url: "https://api.tatum.io/v3/walrus/storage/verify-shards",
       description:
-        "Memeriksa ketersediaan kesehatan serpihan data (shards) di jaringan node desentralisasi Walrus.",
+        "Performs a health check on blob storage shards across the decentralized Walrus network.",
       response: {
         blobId: "walrus-blob-abc-98765-xyz",
         registeredOnSui: true,
@@ -80,7 +80,6 @@ export default function TatumDocsPage() {
     setIsLoading(true);
     setShowResponse(false);
 
-    // Simulasi loading jaringan agar terkesan nyata
     setTimeout(() => {
       setIsLoading(false);
       setShowResponse(true);
@@ -95,11 +94,11 @@ export default function TatumDocsPage() {
           Core Gateway Integration
         </div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">
-          Infrastruktur Tatum API
+          Tatum API Infrastructure
         </h1>
         <p className="text-zinc-400 text-sm leading-relaxed">
-          Bagaimana WalSpace mengoptimalkan API terpadu Tatum untuk melakukan
-          agregasi data blockchain secepat kilat.
+          WalSpace leverages Tatum's enterprise-grade RPC infrastructure for
+          lightning-fast blockchain data aggregation and verification.
         </p>
       </div>
 
@@ -115,11 +114,10 @@ export default function TatumDocsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-zinc-950/40 border border-zinc-900 rounded-[6px] p-6 relative overflow-hidden">
-          {/* KOLOM KIRI: REQUEST SELECTOR (40%) */}
           <div className="lg:col-span-5 space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
               <p className="text-[11px] font-medium text-zinc-500">
-                PILIH ENDPOINT DATUM:
+                SELECT DATA ENDPOINT:
               </p>
 
               <div className="flex flex-col gap-2">
@@ -160,7 +158,6 @@ export default function TatumDocsPage() {
               </div>
             </div>
 
-            {/* URL Input Bar & Action Button */}
             <div className="space-y-2 pt-4 border-t border-zinc-900">
               <div className="bg-zinc-950 border border-zinc-800 p-2 rounded-[6px] font-mono text-[10px] text-zinc-400 truncate select-all">
                 {endpoints[activeTab].url}
@@ -175,16 +172,14 @@ export default function TatumDocsPage() {
                 ) : (
                   <>
                     <Send className="h-3.5 w-3.5" />
-                    <span>Kirim Request</span>
+                    <span>Execute Request</span>
                   </>
                 )}
               </button>
             </div>
           </div>
 
-          {/* KOLOM KANAN: RESPONSE WINDOW (60%) */}
           <div className="lg:col-span-7 bg-[#050505] border border-zinc-800 rounded-[6px] overflow-hidden flex flex-col min-h-[300px]">
-            {/* Window Top Bar */}
             <div className="flex items-center justify-between px-4 py-2 bg-zinc-950 border-b border-zinc-900">
               <div className="flex items-center gap-2">
                 <Terminal className="h-3.5 w-3.5 text-zinc-500" />
@@ -200,13 +195,12 @@ export default function TatumDocsPage() {
               )}
             </div>
 
-            {/* Window Content */}
             <div className="p-4 flex-1 font-mono text-[11px] leading-relaxed overflow-auto max-h-[350px]">
               {isLoading && (
                 <div className="h-full flex flex-col items-center justify-center text-zinc-600 gap-2 py-20">
                   <RefreshCw className="h-5 w-5 animate-spin text-sky-500" />
                   <p className="text-[10px] animate-pulse">
-                    Awaiting Tatum Edge Nodes...
+                    Communicating with Tatum Edge Nodes...
                   </p>
                 </div>
               )}
@@ -214,8 +208,8 @@ export default function TatumDocsPage() {
               {!isLoading && !showResponse && (
                 <div className="h-full flex items-center justify-center text-zinc-600 text-center py-20 px-4">
                   <p className="text-[11px] italic">
-                    Klik tombol "Kirim Request" untuk mengeksekusi panggilan API
-                    via infrastruktur Tatum.
+                    Click "Execute Request" to trigger the API call via Tatum
+                    infrastructure.
                   </p>
                 </div>
               )}
@@ -237,25 +231,22 @@ export default function TatumDocsPage() {
         <div className="flex items-center gap-2 text-zinc-300">
           <Cpu className="h-4 w-4 text-emerald-400" />
           <h3 className="text-xs font-bold uppercase tracking-widest">
-            Kenapa Harus Menggunakan Tatum API?
+            Why Tatum API?
           </h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px] text-zinc-400 leading-relaxed">
           <p>
-            <strong className="text-zinc-200">
-              1. Abstraksi Kompleksitas Node RPC:
-            </strong>{" "}
-            Tanpa Tatum, tim kami harus mengelola koneksi RPC mentah Sui dan
-            mem-parsing data heksadesimal yang rumit. Tatum menyatukan ini ke
-            dalam format REST JSON yang bersih.
+            <strong className="text-zinc-200">1. RPC Node Abstraction:</strong>{" "}
+            Tatum streamlines complex Sui JSON-RPC methods into clean, RESTful
+            endpoints, removing the burden of manual hex-parsing and node
+            management.
           </p>
           <p>
             <strong className="text-zinc-200">
-              2. Infrastruktur Skala Multi-Region:
+              2. Multi-Region Scalability:
             </strong>{" "}
-            Kueri riwayat transaksi dilayani lewat jaringan cache terdistribusi
-            Tatum global, mengurangi latensi respon UI aplikasi dari 1200ms
-            menjadi di bawah 90ms.
+            Transactions and blockchain data are served via Tatum's global
+            distributed cache, dropping UI latency from ~1200ms to under 90ms.
           </p>
         </div>
       </section>

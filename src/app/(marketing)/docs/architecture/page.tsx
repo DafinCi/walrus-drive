@@ -14,7 +14,7 @@ import {
 export default function ArchitecturePage() {
   const [activeNode, setActiveNode] = useState<string | null>(null);
 
-  // Helper untuk menentukan apakah jalur/garis harus menyala
+  // Helper to determine if the connection path should glow
   const isPathActive = (nodes: string[]) => {
     return activeNode && nodes.includes(activeNode);
   };
@@ -66,14 +66,14 @@ export default function ArchitecturePage() {
               <div className="text-center">
                 <p className="text-xs font-bold text-white">Supabase</p>
                 <p className="text-[9px] text-zinc-500 uppercase mt-0.5 tracking-tighter">
-                  Metadata & Auth
+                  Collaboration Layer
                 </p>
               </div>
             </div>
 
             {/* THE BRIDGE: Tatum API */}
             <div className="relative flex items-center justify-center">
-              {/* Garis Koneksi Kiri */}
+              {/* Left Connection Line */}
               <div
                 className={`hidden md:block absolute -left-12 w-12 h-[2px] transition-colors duration-500 ${isPathActive(["supabase", "tatum"]) ? "bg-sky-400 shadow-[0_0_10px_#38bdf8]" : "bg-zinc-800"}`}
               />
@@ -92,7 +92,7 @@ export default function ArchitecturePage() {
                 />
               </div>
 
-              {/* Garis Koneksi Kanan */}
+              {/* Right Connection Line */}
               <div
                 className={`hidden md:block absolute -right-12 w-12 h-[2px] transition-colors duration-500 ${isPathActive(["tatum", "walrus", "sui"]) ? "bg-sky-400 shadow-[0_0_10px_#38bdf8]" : "bg-zinc-800"}`}
               />
@@ -116,7 +116,7 @@ export default function ArchitecturePage() {
                 <div className="text-center">
                   <p className="text-xs font-bold text-white">Walrus</p>
                   <p className="text-[9px] text-zinc-500 uppercase mt-0.5 tracking-tighter">
-                    Blob Storage
+                    Storage Layer
                   </p>
                 </div>
               </div>
@@ -137,14 +137,14 @@ export default function ArchitecturePage() {
                 <div className="text-center">
                   <p className="text-xs font-bold text-white">Sui Network</p>
                   <p className="text-[9px] text-zinc-500 uppercase mt-0.5 tracking-tighter">
-                    Ownership Proof
+                    Verification Layer
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Penjelasan Dinamis Berdasarkan Hover */}
+          {/* Dynamic Explanation Based on Hover */}
           <div className="mt-10 p-4 bg-zinc-900/80 border border-zinc-800 rounded-[6px] min-h-[80px] flex items-center justify-center text-center">
             {!activeNode ? (
               <p className="text-xs text-zinc-500 italic">
@@ -153,13 +153,13 @@ export default function ArchitecturePage() {
             ) : (
               <p className="text-xs text-zinc-300 leading-relaxed max-w-lg">
                 {activeNode === "supabase" &&
-                  "Supabase mengelola metadata file (nama, tipe, ukuran) dan struktur organisasi workspace secara instan agar UI tetap responsif."}
+                  "Supabase acts as the Collaboration Layer. It manages workspace logic, members, and file references (like blob IDs) to keep the UI instantly responsive, without storing physical files or blockchain data."}
                 {activeNode === "tatum" &&
-                  "Tatum API bertindak sebagai jembatan cerdas yang memantau transaksi Sui dan memverifikasi status shard data Walrus secara real-time."}
+                  "Tatum serves as the Infrastructure Layer. It provides stable RPC endpoints to quickly query Sui transactions and fetch cryptographic checkpoints for real-time proof verification."}
                 {activeNode === "walrus" &&
-                  "Walrus Protocol menyimpan berkas fisik Anda. Berkas dipecah menjadi shards dan disebar ke node tanpa bergantung pada server pusat."}
+                  "Walrus functions as the Storage Layer. It securely stores your physical files across a decentralized network, returning a unique blob ID without relying on centralized servers."}
                 {activeNode === "sui" &&
-                  "Sui Network mencatat 'sidik jari' (hash) dan bukti kepemilikan berkas ke dalam ledger yang tidak dapat diubah (immutable)."}
+                  "Sui operates as the Verification Layer. It immutably records the cryptographic hash and ownership proofs, binding the Walrus blob ID directly to your workspace."}
               </p>
             )}
           </div>
@@ -176,7 +176,7 @@ export default function ArchitecturePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-800 border border-zinc-800 rounded-[6px] overflow-hidden">
-          {/* Kolom Kanan (Web2 Logic) */}
+          {/* Right Column (Web2 Logic) */}
           <div className="bg-zinc-950 p-8 space-y-4">
             <div className="flex items-center gap-2 text-emerald-400">
               <Cpu className="h-5 w-5" />
@@ -200,7 +200,7 @@ export default function ArchitecturePage() {
             </ul>
           </div>
 
-          {/* Kolom Kiri (Web3 Logic) */}
+          {/* Left Column (Web3 Logic) */}
           <div className="bg-zinc-950 p-8 space-y-4">
             <div className="flex items-center gap-2 text-sky-400">
               <ShieldCheck className="h-5 w-5" />
@@ -208,10 +208,10 @@ export default function ArchitecturePage() {
             </div>
             <ul className="space-y-3">
               {[
-                "Penyimpanan blob terdesentralisasi (Walrus)",
-                "Bukti integritas data on-chain (Sui)",
+                "Decentralized blob storage (Walrus)",
+                "On-chain data integrity proofs (Sui)",
                 "Censorship-resistant data hosting",
-                "Verifikasi publik tanpa pihak ketiga",
+                "Public verification without third parties",
               ].map((item, i) => (
                 <li
                   key={i}
@@ -233,13 +233,13 @@ export default function ArchitecturePage() {
         </h3>
         <p className="text-[11px] text-zinc-500 leading-relaxed">
           WalSpace does not burden the blockchain with large-scale data storage.
-          We separate{" "}
+          We separate <strong className="text-zinc-300">collaboration</strong>{" "}
+          (Supabase) and{" "}
           <strong className="text-zinc-300">data availability</strong> (Walrus)
           from <strong className="text-zinc-300">data authority</strong> (Sui).
-          Supabase serves as a metadata cache synchronized with the on-chain
-          state via <strong className="text-zinc-300">Tatum API</strong>,
-          delivering a user experience as fast as Google Drive while maintaining
-          blockchain-grade security.
+          The <strong className="text-zinc-300">Tatum API</strong> serves as the
+          infrastructure bridge, delivering a user experience as fast as Google
+          Drive while maintaining Web3-grade security.
         </p>
       </section>
     </div>

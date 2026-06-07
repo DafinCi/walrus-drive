@@ -13,11 +13,11 @@ export default function QuickstartPage() {
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
     } catch (err) {
-      console.error("Gagal menyalin teks", err);
+      console.error("Failed to copy text", err);
     }
   };
 
-  // Komponen Terminal Kustom yang Ringan & Estetik
+  // Lightweight & Aesthetic Custom Terminal Component
   const TerminalWindow = ({
     filename,
     code,
@@ -61,7 +61,7 @@ export default function QuickstartPage() {
 
   return (
     <div className="space-y-8 pb-10">
-      {/* Header Halaman */}
+      {/* Page Header */}
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">
           Quick Start Guide
@@ -76,7 +76,7 @@ export default function QuickstartPage() {
 
       {/* VERTICAL STEPPER / TIMELINE */}
       <div className="relative border-l border-zinc-800 ml-2 md:ml-4 space-y-12">
-        {/* LANGKAH 1: Clone Repository */}
+        {/* STEP 1: Clone Repository */}
         <div className="relative pl-8">
           {/* Dot Indicator */}
           <div className="absolute -left-3 top-0 h-6 w-6 rounded-full bg-black border border-zinc-700 flex items-center justify-center">
@@ -84,11 +84,11 @@ export default function QuickstartPage() {
           </div>
 
           <h3 className="text-base font-bold text-white mb-1">
-            1. Kloning Repositori
+            1. Clone the Repository
           </h3>
           <p className="text-xs text-zinc-400 mb-3 leading-relaxed">
-            Unduh kode sumber WalSpace ke mesin lokal Anda dan masuk ke dalam
-            direktori proyek.
+            Download the WalSpace source code to your local machine and navigate
+            into the project directory.
           </p>
 
           <TerminalWindow
@@ -98,26 +98,26 @@ export default function QuickstartPage() {
           />
         </div>
 
-        {/* LANGKAH 2: Konfigurasi Environment (Smart Configurator) */}
+        {/* STEP 2: Environment Configuration (Smart Configurator) */}
         <div className="relative pl-8">
           <div className="absolute -left-3 top-0 h-6 w-6 rounded-full bg-black border border-zinc-800 flex items-center justify-center">
             <span className="w-2 h-2 rounded-full bg-zinc-600" />
           </div>
 
           <h3 className="text-base font-bold text-white mb-1">
-            2. Siapkan Environment
+            2. Set Up the Environment
           </h3>
           <p className="text-xs text-zinc-400 mb-4 leading-relaxed">
-            Salin file{" "}
+            Copy the{" "}
             <code className="text-sky-300 bg-sky-900/20 px-1 py-0.5 rounded">
               .env.example
             </code>{" "}
-            menjadi{" "}
+            file to{" "}
             <code className="text-sky-300 bg-sky-900/20 px-1 py-0.5 rounded">
               .env.local
             </code>
-            . Pilih jaringan Sui yang ingin Anda gunakan untuk otomatis
-            menyesuaikan konfigurasi di bawah:
+            . Select the Sui network you want to use to automatically adjust the
+            configuration below:
           </p>
 
           {/* Tab Switcher */}
@@ -155,18 +155,19 @@ export default function QuickstartPage() {
           />
         </div>
 
-        {/* LANGKAH 3: Jalankan Aplikasi */}
+        {/* STEP 3: Run the Application */}
         <div className="relative pl-8">
           <div className="absolute -left-3 top-0 h-6 w-6 rounded-full bg-black border border-zinc-800 flex items-center justify-center">
             <span className="w-2 h-2 rounded-full bg-zinc-600" />
           </div>
 
           <h3 className="text-base font-bold text-white mb-1">
-            3. Inisialisasi Sistem
+            3. Initialize the System
           </h3>
           <p className="text-xs text-zinc-400 mb-3 leading-relaxed">
-            Jalankan server pengembangan lokal. Sistem akan otomatis memvalidasi
-            koneksi ke node Walrus dan Tatum API sebelum *render* halaman.
+            Start the local development server. The system will automatically
+            validate the connection to the Walrus nodes and Tatum API before
+            rendering the page.
           </p>
 
           <TerminalWindow
