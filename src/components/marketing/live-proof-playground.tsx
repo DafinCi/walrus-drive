@@ -87,11 +87,11 @@ export function LiveProofPlayground() {
           />
           <UploadCloud className="h-8 w-8 text-zinc-600 group-hover/drop:text-sky-400 group-hover/drop:scale-105 transition-all mb-3" />
           <p className="text-xs font-medium text-zinc-300">
-            Seret berkas ke sini atau{" "}
-            <span className="text-sky-400">jelajahi</span>
+            Drag n Drop your file here or{" "}
+            <span className="text-sky-400">Explore</span>
           </p>
           <p className="text-[10px] text-zinc-500 mt-1">
-            Uji ekstraksi integritas data secara instan
+            Test data integrity extraction instantly
           </p>
         </div>
       )}

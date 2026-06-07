@@ -75,8 +75,8 @@ export function ShardingPipeline() {
       <div className="mt-4 pt-3 border-t border-zinc-900 text-center">
         <p className="text-[10px] font-mono text-zinc-500 group-hover:text-zinc-400 transition-colors">
           {isHovered
-            ? "File dipecah menjadi shards & disebar secara redundan"
-            : "Sentuh panel untuk melihat simulasi sharding"}
+            ? "File is split into shards and distributed redundantly"
+            : "Tap the panel to view the sharding simulation"}
         </p>
       </div>
     </div>
