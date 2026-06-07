@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation"; // Ditambahkan untuk deteksi halaman aktif
-import { Box } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils"; // Pastikan utilitas shadcn ini ada, atau ganti pakai string biasa
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 export function LandingNavbar() {
@@ -33,17 +32,8 @@ export function LandingNavbar() {
         {/* Sisi Tengah: Tautan Informasi Publik */}
         <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-zinc-400">
           {/* Tautan ke seksi landing page */}
-          <Link
-            href="/#features"
-            className="hover:text-white transition-colors"
-          >
-            Fitur Utama
-          </Link>
-          <Link
-            href="/#architecture"
-            className="hover:text-white transition-colors"
-          >
-            Arsitektur
+          <Link href="/" className="hover:text-white transition-colors">
+            Home
           </Link>
 
           {/* TAUTAN NAV DOCS BARU 🚀 */}

@@ -5,8 +5,8 @@ import { LiveProofPlayground } from "./live-proof-playground";
 
 export function HeroSection() {
   return (
-    <section className="w-full max-w-6xl mx-auto px-4 pt-20 pb-16 md:pt-28 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-      {/* Kolom Kiri: Copywriting */}
+    <section className="w-full max-w-6xl mx-auto px-4 pb-16 md:pt-28 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      {/* Left Column: Copywriting */}
       <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-zinc-900 border border-zinc-800 rounded-full text-[11px] font-medium text-zinc-300">
           <Terminal className="h-3.5 w-3.5 text-sky-400" />
@@ -21,9 +21,9 @@ export function HeroSection() {
         </h1>
 
         <p className="text-zinc-400 text-sm md:text-base max-w-xl leading-relaxed">
-          Unggah, verifikasi, dan bagikan berkas bersama tim Anda dalam ruang
-          kerja terdesentralisasi. Didukung oleh enkripsi penuh dan penyimpanan
-          blob tangguh Walrus Protocol.
+          Upload, verify, and share files with your team in a decentralized
+          workspace. Powered by full encryption and the resilient blob storage
+          of the Walrus Protocol.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto pt-2">
@@ -46,13 +46,13 @@ export function HeroSection() {
               href="https://github.com/DafinCi/walrus-drive"
               target="_blank"
             >
-              Dokumentasi GitHub
+              GitHub Documentation
             </Link>
           </Button>
         </div>
       </div>
 
-      {/* Kolom Kanan: Live Playground */}
+      {/* Right Column: Live Playground */}
       <div className="lg:col-span-5 flex justify-center lg:justify-end w-full animate-in fade-in slide-in-from-bottom-8 duration-500 delay-150">
         <LiveProofPlayground />
       </div>
